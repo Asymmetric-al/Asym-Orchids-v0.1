@@ -23,16 +23,16 @@ export const TaskItem = memo(function TaskItem({
   onMenuClick,
 }: TaskItemProps) {
   return (
-    <div className="flex items-center gap-4 px-6 py-3.5">
+    <div className="flex items-center gap-4 px-6 py-3.5 hover:bg-slate-50 transition-colors">
       <div className={cn('h-2 w-2 rounded-full shrink-0', priorityColors[priority])} />
       <div className="flex-1 min-w-0 space-y-0.5">
-        <p className="text-sm font-medium leading-none truncate">{title}</p>
-        <p className="text-xs text-muted-foreground">{dueDate}</p>
+        <p className="text-sm font-medium leading-none truncate text-slate-900">{title}</p>
+        <p className="text-xs text-slate-600">{dueDate}</p>
       </div>
       <Button
         variant="ghost"
         size="icon"
-        className="h-8 w-8 shrink-0 text-muted-foreground hover:text-foreground"
+        className="h-8 w-8 shrink-0 text-slate-500 hover:text-slate-900 hover:bg-slate-100"
         onClick={onMenuClick}
       >
         <MoreHorizontal className="h-4 w-4" />
