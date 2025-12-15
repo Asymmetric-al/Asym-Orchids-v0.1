@@ -7,7 +7,6 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +23,6 @@ import {
   CheckSquare,
   User,
   Mail,
-  Bell,
   Settings,
   Menu,
   LogOut,
@@ -57,11 +55,10 @@ function NavLink({ item, collapsed = false }: { item: typeof navItems[0]; collap
     <Link
       href={item.href}
       className={cn(
-        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200',
-        'hover:bg-accent/80',
+        'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
         isActive
-          ? 'bg-primary text-primary-foreground shadow-sm'
-          : 'text-muted-foreground hover:text-foreground',
+          ? 'bg-muted font-medium text-foreground'
+          : 'text-muted-foreground hover:bg-muted/50 hover:text-foreground',
         collapsed && 'justify-center px-2'
       )}
     >
@@ -73,13 +70,10 @@ function NavLink({ item, collapsed = false }: { item: typeof navItems[0]; collap
 
 function Sidebar({ className }: { className?: string }) {
   return (
-    <aside className={cn('flex h-full flex-col border-r bg-card', className)}>
-      <div className="flex h-16 items-center border-b px-4">
+    <aside className={cn('flex h-full flex-col border-r bg-background', className)}>
+      <div className="flex h-14 items-center border-b px-4">
         <Link href="/missionary-dashboard" className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-bold text-sm">
-            M
-          </div>
-          <span className="font-semibold tracking-tight">Missionary Dashboard</span>
+          <span className="font-semibold text-lg">Missionary Dashboard</span>
         </Link>
       </div>
 
@@ -91,7 +85,7 @@ function Sidebar({ className }: { className?: string }) {
         </nav>
       </ScrollArea>
 
-      <div className="border-t px-3 py-4">
+      <div className="border-t px-3 py-3">
         <nav className="flex flex-col gap-1">
           {bottomNavItems.map((item) => (
             <NavLink key={item.href} item={item} />
@@ -103,10 +97,8 @@ function Sidebar({ className }: { className?: string }) {
 }
 
 function TopBar() {
-  const [notificationCount] = React.useState(2)
-
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 px-4 lg:px-6">
+    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background px-4 lg:px-6">
       <div className="flex items-center gap-4 lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
@@ -121,35 +113,23 @@ function TopBar() {
       </div>
 
       <div className="hidden lg:flex lg:flex-1 lg:items-center lg:gap-4">
-        <div className="relative max-w-md flex-1">
+        <div className="relative max-w-sm flex-1">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="search"
-            placeholder="Search donors, tasks..."
-            className="h-9 w-full rounded-lg border bg-background pl-9 pr-4 text-sm outline-none focus:ring-2 focus:ring-ring/20"
+            placeholder="Search..."
+            className="h-9 w-full rounded-lg border bg-background pl-9 pr-4 text-sm focus:outline-none focus:ring-1 focus:ring-ring"
           />
         </div>
       </div>
 
       <div className="flex items-center gap-2">
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          {notificationCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -right-0.5 -top-0.5 h-4 min-w-4 rounded-full px-1 text-[10px]"
-            >
-              {notificationCount}
-            </Badge>
-          )}
-        </Button>
-
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-2 pl-2 pr-1">
-              <Avatar className="h-7 w-7">
+            <Button variant="ghost" className="flex items-center gap-2 px-2">
+              <Avatar className="h-8 w-8 border">
                 <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-xs">
+                <AvatarFallback className="bg-muted text-sm font-medium">
                   SM
                 </AvatarFallback>
               </Avatar>
@@ -194,10 +174,10 @@ export default function MissionaryDashboardLayout({
 }) {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar className="hidden w-64 lg:flex" />
+      <Sidebar className="hidden w-56 lg:flex" />
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto bg-muted/30">
           {children}
         </main>
       </div>
