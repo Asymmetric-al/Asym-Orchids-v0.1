@@ -67,14 +67,18 @@ export function QuickActionsRow() {
     .slice(0, 4)
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-3">
       {actions.map((action) => {
         if (!action) return null
         const Icon = action.icon ? getIcon(action.icon) : null
         return (
           <Link key={`${action.tile.id}-${action.label}`} href={`/mc${action.href}`}>
-            <Button variant="secondary" size="sm" className="h-9">
-              {Icon && <Icon className="mr-2 h-4 w-4" />}
+            <Button
+              variant="secondary"
+              size="sm"
+              className="h-10 rounded-xl border border-slate-200/60 bg-white px-4 text-sm font-medium text-slate-700 shadow-sm transition-all hover:border-slate-300 hover:bg-slate-50 hover:text-slate-900 hover:shadow-md hover:-translate-y-0.5"
+            >
+              {Icon && <Icon className="mr-2.5 h-4 w-4 text-slate-500 group-hover:text-slate-900" />}
               {action.label}
             </Button>
           </Link>
