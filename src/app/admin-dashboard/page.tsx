@@ -4,7 +4,7 @@ import { Users, Globe, DollarSign, TrendingUp, UserPlus, FileBarChart } from "lu
 
 export default function AdminDashboard() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-8">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Organization Overview</h2>
         <p className="text-muted-foreground">Monitor and manage your mission network.</p>
@@ -54,38 +54,6 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Activity</CardTitle>
-            <CardDescription>Latest donations and signups</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">$</div>
-              <div className="flex-1">
-                <p className="font-medium">New donation received</p>
-                <p className="text-sm text-muted-foreground">$250 from John D. to Maria K.</p>
-              </div>
-              <span className="text-xs text-muted-foreground">2m ago</span>
-            </div>
-            <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">+</div>
-              <div className="flex-1">
-                <p className="font-medium">New donor registered</p>
-                <p className="text-sm text-muted-foreground">Sarah M. joined the platform</p>
-              </div>
-              <span className="text-xs text-muted-foreground">15m ago</span>
-            </div>
-            <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">$</div>
-              <div className="flex-1">
-                <p className="font-medium">Monthly recurring processed</p>
-                <p className="text-sm text-muted-foreground">$4,850 across 38 donors</p>
-              </div>
-              <span className="text-xs text-muted-foreground">1h ago</span>
-            </div>
-          </CardContent>
-        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>

@@ -4,7 +4,7 @@ import { Heart, TrendingUp, Users, Calendar } from "lucide-react"
 
 export default function DonorDashboard() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 p-8">
       <div>
         <h2 className="text-3xl font-bold tracking-tight">Welcome back</h2>
         <p className="text-muted-foreground">Here's an overview of your giving activity.</p>
@@ -54,30 +54,6 @@ export default function DonorDashboard() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Recent Missionaries</CardTitle>
-            <CardDescription>Missionaries you're currently supporting</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">JD</div>
-              <div className="flex-1">
-                <p className="font-medium">John & Sarah Davis</p>
-                <p className="text-sm text-muted-foreground">Kenya, East Africa</p>
-              </div>
-              <Button variant="outline" size="sm">View</Button>
-            </div>
-            <div className="flex items-center gap-4 p-3 rounded-lg bg-muted/50">
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center text-primary font-medium">MK</div>
-              <div className="flex-1">
-                <p className="font-medium">Maria Kim</p>
-                <p className="text-sm text-muted-foreground">Seoul, South Korea</p>
-              </div>
-              <Button variant="outline" size="sm">View</Button>
-            </div>
-          </CardContent>
-        </Card>
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
