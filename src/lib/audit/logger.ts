@@ -12,6 +12,7 @@ export type AuditAction =
   | 'donation_completed'
   | 'donation_failed'
   | 'donation_refunded'
+  | 'donation_initiated'
   | 'post_created'
   | 'post_deleted'
   | 'profile_updated'
@@ -71,14 +72,18 @@ export function createAuditLogger(context: AuthenticatedContext, request?: Reque
         userAgent,
       }),
 
-    logDonation: (donationId: string, action: 'donation_created' | 'donation_completed' | 'donation_failed' | 'donation_refunded', amount: number, missionaryId: string) =>
+    logDonation: (
+      donationId: string,
+      action: 'donation_created' | 'donation_completed' | 'donation_failed' | 'donation_refunded' | 'donation_initiated',
+      details?: Record<string, unknown>
+    ) =>
       logAuditEvent({
         tenantId: context.tenantId,
         userId: context.userId,
         action,
         resourceType: 'donation',
         resourceId: donationId,
-        details: { amount, missionaryId },
+        details,
         ipAddress,
         userAgent,
       }),
