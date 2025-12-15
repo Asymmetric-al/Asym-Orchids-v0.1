@@ -39,31 +39,31 @@ interface AppSidebarProps {
 }
 
 const donorNavItems = [
-  { title: 'Dashboard', href: '/dashboard', icon: Home },
-  { title: 'Feed', href: '/feed', icon: Newspaper },
-  { title: 'My Giving', href: '/giving', icon: Heart },
-  { title: 'Missionaries', href: '/missionaries', icon: Users },
-  { title: 'Giving History', href: '/history', icon: FileText },
-  { title: 'Profile', href: '/profile', icon: UserCircle },
+  { title: 'Dashboard', href: '/donor-dashboard', icon: Home },
+  { title: 'Feed', href: '/donor-dashboard', icon: Newspaper },
+  { title: 'My Giving', href: '/donor-dashboard', icon: Heart },
+  { title: 'Missionaries', href: '/donor-dashboard', icon: Users },
+  { title: 'Giving History', href: '/donor-dashboard', icon: FileText },
+  { title: 'Profile', href: '/donor-dashboard', icon: UserCircle },
 ]
 
 const missionaryNavItems = [
-  { title: 'Dashboard', href: '/dashboard', icon: Home },
-  { title: 'My Feed', href: '/feed', icon: Newspaper },
-  { title: 'My Supporters', href: '/supporters', icon: Users },
-  { title: 'Funding Goals', href: '/goals', icon: BarChart3 },
-  { title: 'Updates', href: '/updates', icon: FileText },
-  { title: 'Profile', href: '/profile', icon: UserCircle },
+  { title: 'Dashboard', href: '/missionary-dashboard', icon: Home },
+  { title: 'My Feed', href: '/missionary-dashboard', icon: Newspaper },
+  { title: 'My Supporters', href: '/missionary-dashboard', icon: Users },
+  { title: 'Funding Goals', href: '/missionary-dashboard', icon: BarChart3 },
+  { title: 'Updates', href: '/missionary-dashboard', icon: FileText },
+  { title: 'Profile', href: '/missionary-dashboard', icon: UserCircle },
 ]
 
 const adminNavItems = [
-  { title: 'Dashboard', href: '/dashboard', icon: Home },
-  { title: 'Missionaries', href: '/missionaries', icon: Globe },
-  { title: 'Donors', href: '/donors', icon: Users },
-  { title: 'Donations', href: '/donations', icon: CreditCard },
-  { title: 'Reports', href: '/reports', icon: BarChart3 },
-  { title: 'Organization', href: '/organization', icon: Building2 },
-  { title: 'Settings', href: '/settings', icon: Settings },
+  { title: 'Dashboard', href: '/mc', icon: Home },
+  { title: 'Missionaries', href: '/mc/missionaries', icon: Globe },
+  { title: 'Donors', href: '/mc/donors', icon: Users },
+  { title: 'Donations', href: '/mc/contributions', icon: CreditCard },
+  { title: 'Reports', href: '/mc/reports', icon: BarChart3 },
+  { title: 'Organization', href: '/mc/organization', icon: Building2 },
+  { title: 'Settings', href: '/mc/settings', icon: Settings },
 ]
 
 function getNavItems(role: UserRole) {
