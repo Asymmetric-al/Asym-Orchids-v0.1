@@ -1,6 +1,7 @@
 'use client'
 
-import { Bell } from '../icons'
+import { memo, useMemo } from 'react'
+import { Bell } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -11,13 +12,34 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 
-const STUB_NOTIFICATIONS = [
+interface Notification {
+  id: string
+  title: string
+  description: string
+  time: string
+}
+
+const STUB_NOTIFICATIONS: Notification[] = [
   { id: '1', title: 'New donation received', description: '$500 from John Smith', time: '2m ago' },
   { id: '2', title: 'Background check complete', description: 'Sarah Johnson - Approved', time: '1h ago' },
   { id: '3', title: 'Event registration', description: '15 new registrations', time: '3h ago' },
 ]
 
-export function NotificationsMenu() {
+const NotificationItem = memo(function NotificationItem({ notification }: { notification: Notification }) {
+  return (
+    <DropdownMenuItem className="flex flex-col items-start gap-1 px-3 py-3 cursor-pointer">
+      <div className="flex w-full items-start justify-between gap-2">
+        <span className="text-sm font-medium">{notification.title}</span>
+        <span className="shrink-0 text-[10px] text-muted-foreground">{notification.time}</span>
+      </div>
+      <span className="text-xs text-muted-foreground">{notification.description}</span>
+    </DropdownMenuItem>
+  )
+})
+
+export const NotificationsMenu = memo(function NotificationsMenu() {
+  const notifications = useMemo(() => STUB_NOTIFICATIONS, [])
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -32,19 +54,17 @@ export function NotificationsMenu() {
       <DropdownMenuContent align="end" className="w-80">
         <DropdownMenuLabel className="flex items-center justify-between py-2">
           <span className="text-sm font-semibold">Notifications</span>
-          <Button variant="ghost" size="sm" className="h-auto px-2 py-1 text-xs text-muted-foreground hover:text-foreground">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-auto px-2 py-1 text-xs text-muted-foreground hover:text-foreground"
+          >
             Mark all read
           </Button>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {STUB_NOTIFICATIONS.map((notification) => (
-          <DropdownMenuItem key={notification.id} className="flex flex-col items-start gap-1 px-3 py-3 cursor-pointer">
-            <div className="flex w-full items-start justify-between gap-2">
-              <span className="text-sm font-medium">{notification.title}</span>
-              <span className="shrink-0 text-[10px] text-muted-foreground">{notification.time}</span>
-            </div>
-            <span className="text-xs text-muted-foreground">{notification.description}</span>
-          </DropdownMenuItem>
+        {notifications.map((notification) => (
+          <NotificationItem key={notification.id} notification={notification} />
         ))}
         <DropdownMenuSeparator />
         <DropdownMenuItem className="justify-center py-2 text-sm font-medium text-muted-foreground hover:text-foreground">
@@ -53,4 +73,4 @@ export function NotificationsMenu() {
       </DropdownMenuContent>
     </DropdownMenu>
   )
-}
+})

@@ -1,8 +1,8 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo, memo } from 'react'
 import { useRouter } from 'next/navigation'
-import { Search } from '../icons'
+import { Search } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   CommandDialog,
@@ -16,7 +16,7 @@ import { TILES } from '@/lib/mission-control/tiles'
 import { getIcon } from '../icons'
 import { useMC } from '@/lib/mission-control/context'
 
-export function GlobalSearch() {
+export const GlobalSearch = memo(function GlobalSearch() {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const { role } = useMC()
@@ -32,13 +32,21 @@ export function GlobalSearch() {
     return () => document.removeEventListener('keydown', down)
   }, [])
 
-  const filteredTiles = TILES.filter((tile) => tile.roles.includes(role))
+  const filteredTiles = useMemo(() => TILES.filter((tile) => tile.roles.includes(role)), [role])
+
+  const handleSelect = useCallback(
+    (path: string) => {
+      router.push(path)
+      setOpen(false)
+    },
+    [router]
+  )
 
   return (
     <>
       <Button
         variant="outline"
-        className="relative h-8 w-56 justify-start rounded-md border-input bg-transparent px-3 text-sm text-muted-foreground shadow-none hover:bg-accent hover:text-accent-foreground"
+        className="relative h-8 w-56 justify-start rounded-lg border-input bg-transparent px-3 text-sm text-muted-foreground shadow-none hover:bg-accent hover:text-accent-foreground"
         onClick={() => setOpen(true)}
       >
         <Search className="mr-2 h-3.5 w-3.5" />
@@ -55,13 +63,7 @@ export function GlobalSearch() {
             {filteredTiles.map((tile) => {
               const Icon = getIcon(tile.icon)
               return (
-                <CommandItem
-                  key={tile.id}
-                  onSelect={() => {
-                    router.push(`/mc${tile.route}`)
-                    setOpen(false)
-                  }}
-                >
+                <CommandItem key={tile.id} onSelect={() => handleSelect(`/mc${tile.route}`)}>
                   <Icon className="mr-2 h-4 w-4" />
                   <span>{tile.title}</span>
                 </CommandItem>
@@ -75,10 +77,7 @@ export function GlobalSearch() {
                 return (
                   <CommandItem
                     key={`${tile.id}-${action.label}`}
-                    onSelect={() => {
-                      router.push(`/mc${action.href}`)
-                      setOpen(false)
-                    }}
+                    onSelect={() => handleSelect(`/mc${action.href}`)}
                   >
                     <Icon className="mr-2 h-4 w-4" />
                     <span>{action.label}</span>
@@ -92,4 +91,4 @@ export function GlobalSearch() {
       </CommandDialog>
     </>
   )
-}
+})

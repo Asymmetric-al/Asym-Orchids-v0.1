@@ -1,6 +1,7 @@
 'use client'
 
-import { LogOut, Settings, User, ChevronDown } from '../icons'
+import { memo, useCallback, useMemo } from 'react'
+import { LogOut, Settings, User, ChevronDown } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -20,15 +21,22 @@ import { useMC, useRole } from '@/lib/mission-control/context'
 import { ROLE_LABELS } from '@/lib/mission-control/roles'
 import type { Role } from '@/lib/mission-control/types'
 
-export function ProfileMenu() {
+export const ProfileMenu = memo(function ProfileMenu() {
   const { user, isDevMode, signOut } = useMC()
   const { role, setRole, roleLabel } = useRole()
 
-  const initials = user?.name
-    ?.split(' ')
-    .map((n) => n[0])
-    .join('')
-    .toUpperCase() || 'U'
+  const initials = useMemo(
+    () =>
+      user?.name
+        ?.split(' ')
+        .map((n) => n[0])
+        .join('')
+        .toUpperCase() || 'U',
+    [user?.name]
+  )
+
+  const handleRoleChange = useCallback((v: string) => setRole(v as Role), [setRole])
+  const handleSignOut = useCallback(() => signOut(), [signOut])
 
   return (
     <DropdownMenu>
@@ -66,7 +74,7 @@ export function ProfileMenu() {
                 [Dev] Switch Role ({roleLabel})
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
-                <DropdownMenuRadioGroup value={role} onValueChange={(v) => setRole(v as Role)}>
+                <DropdownMenuRadioGroup value={role} onValueChange={handleRoleChange}>
                   {(Object.keys(ROLE_LABELS) as Role[]).map((r) => (
                     <DropdownMenuRadioItem key={r} value={r} className="text-sm">
                       {ROLE_LABELS[r]}
@@ -78,11 +86,11 @@ export function ProfileMenu() {
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive" onClick={() => signOut()}>
+        <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive" onClick={handleSignOut}>
           <LogOut className="h-4 w-4" />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )
-}
+})

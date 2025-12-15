@@ -1,7 +1,7 @@
 'use client'
 
-import { useState } from 'react'
-import { Building2, ChevronsUpDown, Check } from '../icons'
+import { useState, useCallback, useMemo, memo } from 'react'
+import { Building2, ChevronsUpDown, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -20,20 +20,22 @@ const STUB_TENANTS: Tenant[] = [
   { id: '00000000-0000-0000-0000-000000000001', name: 'asymmetric.al', slug: 'asymmetric-al' },
 ]
 
-export function TenantSwitcher() {
+export const TenantSwitcher = memo(function TenantSwitcher() {
   const [open, setOpen] = useState(false)
   const { tenant } = useMC()
   const [selectedTenant, setSelectedTenant] = useState(tenant)
 
+  const tenants = useMemo(() => STUB_TENANTS, [])
+
+  const handleSelect = useCallback((t: Tenant) => {
+    setSelectedTenant(t)
+    setOpen(false)
+  }, [])
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="h-9 w-48 justify-between"
-        >
+        <Button variant="outline" role="combobox" aria-expanded={open} className="h-9 w-48 justify-between">
           <div className="flex items-center gap-2 truncate">
             <Building2 className="h-4 w-4 shrink-0" />
             <span className="truncate">{selectedTenant?.name || 'Select tenant...'}</span>
@@ -47,19 +49,10 @@ export function TenantSwitcher() {
           <CommandList>
             <CommandEmpty>No tenant found.</CommandEmpty>
             <CommandGroup>
-              {STUB_TENANTS.map((t: Tenant) => (
-                <CommandItem
-                  key={t.id}
-                  onSelect={() => {
-                    setSelectedTenant(t)
-                    setOpen(false)
-                  }}
-                >
+              {tenants.map((t) => (
+                <CommandItem key={t.id} onSelect={() => handleSelect(t)}>
                   <Check
-                    className={cn(
-                      'mr-2 h-4 w-4',
-                      selectedTenant?.id === t.id ? 'opacity-100' : 'opacity-0'
-                    )}
+                    className={cn('mr-2 h-4 w-4', selectedTenant?.id === t.id ? 'opacity-100' : 'opacity-0')}
                   />
                   {t.name}
                 </CommandItem>
@@ -70,4 +63,4 @@ export function TenantSwitcher() {
       </PopoverContent>
     </Popover>
   )
-}
+})

@@ -1,424 +1,337 @@
 'use client'
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Users, DollarSign, Activity, Globe, ArrowUpRight, ArrowDownRight, Bell, Calendar, Plus, TrendingUp, MoreHorizontal, ChevronRight } from "lucide-react"
+import { Suspense, lazy, memo, useCallback, useMemo } from 'react'
+import dynamic from 'next/dynamic'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 import { useMC } from '@/lib/mission-control/context'
-import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, Bar, BarChart } from "recharts"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Separator } from "@/components/ui/separator"
+import { StatCard } from '@/components/dashboard/stat-card'
+import { ActivityItem } from '@/components/dashboard/activity-item'
+import { TaskItem } from '@/components/dashboard/task-item'
+import { QuickActionCard } from '@/components/dashboard/quick-action-card'
+import {
+  Users,
+  DollarSign,
+  Activity,
+  Globe,
+  Bell,
+  Calendar,
+  Plus,
+  TrendingUp,
+  MoreHorizontal,
+  ChevronRight,
+} from 'lucide-react'
 
-const revenueData = [
-  { name: "Jan", revenue: 2400, donors: 145 },
-  { name: "Feb", revenue: 1398, donors: 132 },
-  { name: "Mar", revenue: 9800, donors: 201 },
-  { name: "Apr", revenue: 3908, donors: 178 },
-  { name: "May", revenue: 4800, donors: 189 },
-  { name: "Jun", revenue: 3800, donors: 167 },
-  { name: "Jul", revenue: 4300, donors: 195 },
-]
+const RevenueChart = dynamic(
+  () => import('@/components/dashboard/charts/revenue-chart').then(mod => ({ default: mod.RevenueChart })),
+  { 
+    ssr: false,
+    loading: () => <ChartSkeleton height={280} />
+  }
+)
 
-const weeklyData = [
-  { day: "Mon", amount: 1200 },
-  { day: "Tue", amount: 900 },
-  { day: "Wed", amount: 1600 },
-  { day: "Thu", amount: 1100 },
-  { day: "Fri", amount: 2100 },
-  { day: "Sat", amount: 800 },
-  { day: "Sun", amount: 1400 },
-]
+const WeeklyChart = dynamic(
+  () => import('@/components/dashboard/charts/weekly-chart').then(mod => ({ default: mod.WeeklyChart })),
+  { 
+    ssr: false,
+    loading: () => <ChartSkeleton height={200} />
+  }
+)
 
-const recentActivity = [
-  { id: 1, initials: "SJ", name: "Sarah Johnson", action: "New Donation", detail: "$150.00", time: "2 min ago", color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
-  { id: 2, initials: "JD", name: "John Doe", action: "Missionary Approved", detail: "South East Asia", time: "1 hour ago", color: "bg-blue-500/10 text-blue-600 dark:text-blue-400" },
-  { id: 3, initials: "CW", name: "Clean Water", action: "Goal Reached", detail: "$10,000", time: "3 hours ago", color: "bg-violet-500/10 text-violet-600 dark:text-violet-400" },
-  { id: 4, initials: "MK", name: "Mike Kim", action: "Report Submitted", detail: "Q4 Summary", time: "5 hours ago", color: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
-]
+const ChartSkeleton = memo(function ChartSkeleton({ height }: { height: number }) {
+  return (
+    <div className="space-y-3" style={{ height }}>
+      <div className="flex items-end justify-between gap-2">
+        {[60, 40, 80, 55, 70, 45, 65].map((h, i) => (
+          <Skeleton key={i} className="flex-1" style={{ height: `${h}%` }} />
+        ))}
+      </div>
+    </div>
+  )
+})
 
-const upcomingTasks = [
-  { id: 1, title: "Review missionary applications", dueDate: "Today", priority: "high" },
-  { id: 2, title: "Send monthly newsletter", dueDate: "Tomorrow", priority: "medium" },
-  { id: 3, title: "Quarterly donor report", dueDate: "Dec 20", priority: "low" },
-]
+const REVENUE_DATA = [
+  { name: 'Jan', revenue: 2400, donors: 145 },
+  { name: 'Feb', revenue: 1398, donors: 132 },
+  { name: 'Mar', revenue: 9800, donors: 201 },
+  { name: 'Apr', revenue: 3908, donors: 178 },
+  { name: 'May', revenue: 4800, donors: 189 },
+  { name: 'Jun', revenue: 3800, donors: 167 },
+  { name: 'Jul', revenue: 4300, donors: 195 },
+] as const
+
+const WEEKLY_DATA = [
+  { day: 'Mon', amount: 1200 },
+  { day: 'Tue', amount: 900 },
+  { day: 'Wed', amount: 1600 },
+  { day: 'Thu', amount: 1100 },
+  { day: 'Fri', amount: 2100 },
+  { day: 'Sat', amount: 800 },
+  { day: 'Sun', amount: 1400 },
+] as const
+
+const ACTIVITY_DATA = [
+  { id: 1, initials: 'SJ', name: 'Sarah Johnson', action: 'New Donation', detail: '$150.00', time: '2 min ago', colorVariant: 'emerald' as const },
+  { id: 2, initials: 'JD', name: 'John Doe', action: 'Missionary Approved', detail: 'South East Asia', time: '1 hour ago', colorVariant: 'blue' as const },
+  { id: 3, initials: 'CW', name: 'Clean Water', action: 'Goal Reached', detail: '$10,000', time: '3 hours ago', colorVariant: 'violet' as const },
+  { id: 4, initials: 'MK', name: 'Mike Kim', action: 'Report Submitted', detail: 'Q4 Summary', time: '5 hours ago', colorVariant: 'amber' as const },
+] as const
+
+const TASKS_DATA = [
+  { id: 1, title: 'Review missionary applications', dueDate: 'Today', priority: 'high' as const },
+  { id: 2, title: 'Send monthly newsletter', dueDate: 'Tomorrow', priority: 'medium' as const },
+  { id: 3, title: 'Quarterly donor report', dueDate: 'Dec 20', priority: 'low' as const },
+] as const
+
+const StatsGrid = memo(function StatsGrid() {
+  const stats = useMemo(() => [
+    {
+      title: 'Total Revenue',
+      value: '$45,231.89',
+      change: { value: '20.1%', type: 'increase' as const, label: 'from last month' },
+      icon: DollarSign,
+      iconColor: 'emerald' as const,
+    },
+    {
+      title: 'Active Missionaries',
+      value: '24',
+      change: { value: '2 new', type: 'increase' as const, label: 'this month' },
+      icon: Globe,
+      iconColor: 'blue' as const,
+    },
+    {
+      title: 'Active Donors',
+      value: '573',
+      change: { value: '12%', type: 'increase' as const, label: 'since last quarter' },
+      icon: Users,
+      iconColor: 'violet' as const,
+    },
+    {
+      title: 'Active Projects',
+      value: '12',
+      change: { value: '1', type: 'decrease' as const, label: 'completed recently' },
+      icon: Activity,
+      iconColor: 'amber' as const,
+    },
+  ], [])
+
+  return (
+    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {stats.map((stat, i) => (
+        <div key={stat.title} className={`animate-fade-in-up stagger-${i + 1}`} style={{ opacity: 0 }}>
+          <StatCard {...stat} />
+        </div>
+      ))}
+    </div>
+  )
+})
+
+const RevenueSection = memo(function RevenueSection() {
+  return (
+    <Card className="lg:col-span-4">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <div className="space-y-1">
+          <CardTitle className="text-base font-semibold">Revenue Overview</CardTitle>
+          <CardDescription className="text-sm">Monthly revenue for the current year</CardDescription>
+        </div>
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <RevenueChart data={[...REVENUE_DATA]} />
+        <Separator className="my-4" />
+        <div className="flex items-center justify-between text-sm">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <TrendingUp className="h-4 w-4 text-emerald-500" />
+            <span>
+              Trending up by <span className="font-medium text-foreground">5.2%</span> this month
+            </span>
+          </div>
+          <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium">
+            View Report
+            <ChevronRight className="h-3 w-3" />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+})
+
+const WeeklySection = memo(function WeeklySection() {
+  const weeklyTotal = useMemo(
+    () => WEEKLY_DATA.reduce((sum, d) => sum + d.amount, 0),
+    []
+  )
+
+  return (
+    <Card className="lg:col-span-3">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <div className="space-y-1">
+          <CardTitle className="text-base font-semibold">This Week</CardTitle>
+          <CardDescription className="text-sm">Daily donation totals</CardDescription>
+        </div>
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <WeeklyChart data={[...WEEKLY_DATA]} />
+        <Separator className="my-4" />
+        <div className="flex items-center justify-between">
+          <div className="text-sm text-muted-foreground">
+            Total: <span className="font-semibold text-foreground">${weeklyTotal.toLocaleString()}</span>
+          </div>
+          <Badge variant="secondary" className="text-xs font-medium">+23% vs last week</Badge>
+        </div>
+      </CardContent>
+    </Card>
+  )
+})
+
+const ActivitySection = memo(function ActivitySection() {
+  const handleActivityClick = useCallback((id: number) => {
+    console.log('Activity clicked:', id)
+  }, [])
+
+  return (
+    <Card className="lg:col-span-4">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <div className="space-y-1">
+          <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
+          <CardDescription className="text-sm">Latest actions across your organization</CardDescription>
+        </div>
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+          <Bell className="h-4 w-4" />
+        </Button>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="divide-y divide-border">
+          {ACTIVITY_DATA.map((item) => (
+            <ActivityItem
+              key={item.id}
+              {...item}
+              onClick={() => handleActivityClick(item.id)}
+            />
+          ))}
+        </div>
+        <div className="border-t p-4">
+          <Button variant="ghost" className="w-full text-sm font-medium" size="sm">
+            View all activity
+            <ChevronRight className="ml-1 h-4 w-4" />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+})
+
+const TasksSection = memo(function TasksSection() {
+  const handleTaskMenu = useCallback((id: number) => {
+    console.log('Task menu:', id)
+  }, [])
+
+  return (
+    <Card className="lg:col-span-3">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+        <div className="space-y-1">
+          <CardTitle className="text-base font-semibold">Upcoming Tasks</CardTitle>
+          <CardDescription className="text-sm">Your scheduled items</CardDescription>
+        </div>
+        <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium">
+          <Plus className="h-3 w-3" />
+          Add
+        </Button>
+      </CardHeader>
+      <CardContent className="p-0">
+        <div className="divide-y divide-border">
+          {TASKS_DATA.map((task) => (
+            <TaskItem
+              key={task.id}
+              {...task}
+              onMenuClick={() => handleTaskMenu(task.id)}
+            />
+          ))}
+        </div>
+        <div className="border-t p-4">
+          <Button variant="ghost" className="w-full text-sm font-medium" size="sm">
+            View all tasks
+            <ChevronRight className="ml-1 h-4 w-4" />
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  )
+})
+
+const QuickActionsGrid = memo(function QuickActionsGrid() {
+  const actions = useMemo(() => [
+    { icon: Users, title: 'Invite Team Members', description: 'Collaborate with your team', buttonLabel: 'Send Invite' },
+    { icon: Globe, title: 'Add Missionary', description: 'Expand your mission reach', buttonLabel: 'Get Started' },
+    { icon: Activity, title: 'Create Campaign', description: 'Launch a new fundraiser', buttonLabel: 'Create Now' },
+  ], [])
+
+  return (
+    <div className="grid gap-4 sm:grid-cols-3">
+      {actions.map((action, i) => (
+        <div key={action.title} className={`animate-fade-in-up stagger-${i + 4}`} style={{ opacity: 0 }}>
+          <QuickActionCard {...action} />
+        </div>
+      ))}
+    </div>
+  )
+})
+
+const DashboardHeader = memo(function DashboardHeader({ userName }: { userName: string }) {
+  const today = useMemo(() => {
+    return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  }, [])
+
+  return (
+    <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-semibold tracking-tight">
+          Welcome back, {userName}
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Here&apos;s what&apos;s happening with your mission today.
+        </p>
+      </div>
+      <div className="flex items-center gap-2">
+        <Button variant="outline" size="sm" className="h-9 text-sm">
+          <Calendar className="mr-2 h-4 w-4" />
+          {today}
+        </Button>
+        <Button size="sm" className="h-9 text-sm">
+          <Plus className="mr-2 h-4 w-4" />
+          New Update
+        </Button>
+      </div>
+    </header>
+  )
+})
 
 export default function MissionControlPage() {
   const { user } = useMC()
+  const userName = user?.name?.split(' ')[0] || 'User'
 
   return (
     <div className="flex-1 p-6 lg:p-8">
       <div className="mx-auto max-w-7xl space-y-8">
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-          <div className="space-y-1">
-            <h1 className="text-2xl font-semibold tracking-tight">
-              Welcome back, {user?.name?.split(' ')[0] || 'User'}
-            </h1>
-            <p className="text-sm text-muted-foreground">
-              Here&apos;s what&apos;s happening with your mission today.
-            </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="h-9">
-              <Calendar className="mr-2 h-4 w-4" />
-              Dec 15, 2025
-            </Button>
-            <Button size="sm" className="h-9">
-              <Plus className="mr-2 h-4 w-4" />
-              New Update
-            </Button>
-          </div>
-        </header>
-        
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          <Card className="group relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Total Revenue</CardTitle>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500/10">
-                <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">$45,231.89</div>
-              <div className="mt-1 flex items-center gap-1 text-xs">
-                <Badge variant="secondary" className="gap-1 rounded-md bg-emerald-500/10 px-1.5 py-0.5 font-medium text-emerald-600 hover:bg-emerald-500/10 dark:text-emerald-400">
-                  <ArrowUpRight className="h-3 w-3" />
-                  20.1%
-                </Badge>
-                <span className="text-muted-foreground">from last month</span>
-              </div>
-            </CardContent>
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          </Card>
-
-          <Card className="group relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active Missionaries</CardTitle>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-500/10">
-                <Globe className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">24</div>
-              <div className="mt-1 flex items-center gap-1 text-xs">
-                <Badge variant="secondary" className="gap-1 rounded-md bg-blue-500/10 px-1.5 py-0.5 font-medium text-blue-600 hover:bg-blue-500/10 dark:text-blue-400">
-                  <ArrowUpRight className="h-3 w-3" />
-                  2 new
-                </Badge>
-                <span className="text-muted-foreground">this month</span>
-              </div>
-            </CardContent>
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-blue-500/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          </Card>
-
-          <Card className="group relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active Donors</CardTitle>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500/10">
-                <Users className="h-4 w-4 text-violet-600 dark:text-violet-400" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">573</div>
-              <div className="mt-1 flex items-center gap-1 text-xs">
-                <Badge variant="secondary" className="gap-1 rounded-md bg-violet-500/10 px-1.5 py-0.5 font-medium text-violet-600 hover:bg-violet-500/10 dark:text-violet-400">
-                  <ArrowUpRight className="h-3 w-3" />
-                  12%
-                </Badge>
-                <span className="text-muted-foreground">since last quarter</span>
-              </div>
-            </CardContent>
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-violet-500/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          </Card>
-
-          <Card className="group relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-              <CardTitle className="text-sm font-medium text-muted-foreground">Active Projects</CardTitle>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-500/10">
-                <Activity className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold">12</div>
-              <div className="mt-1 flex items-center gap-1 text-xs">
-                <Badge variant="secondary" className="gap-1 rounded-md bg-rose-500/10 px-1.5 py-0.5 font-medium text-rose-600 hover:bg-rose-500/10 dark:text-rose-400">
-                  <ArrowDownRight className="h-3 w-3" />
-                  1
-                </Badge>
-                <span className="text-muted-foreground">completed recently</span>
-              </div>
-            </CardContent>
-            <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-          </Card>
-        </div>
-
+        <DashboardHeader userName={userName} />
+        <StatsGrid />
         <div className="grid gap-4 lg:grid-cols-7">
-          <Card className="lg:col-span-4">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-base font-semibold">Revenue Overview</CardTitle>
-                <CardDescription className="text-sm">Monthly revenue for the current year</CardDescription>
-              </div>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[280px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart data={revenueData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                    <defs>
-                      <linearGradient id="revenueGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="#18181b" stopOpacity={0.12}/>
-                        <stop offset="100%" stopColor="#18181b" stopOpacity={0}/>
-                      </linearGradient>
-                    </defs>
-                    <XAxis 
-                      dataKey="name" 
-                      stroke="#a1a1aa" 
-                      fontSize={12} 
-                      tickLine={false} 
-                      axisLine={false}
-                      dy={8}
-                    />
-                    <YAxis 
-                      stroke="#a1a1aa" 
-                      fontSize={12} 
-                      tickLine={false} 
-                      axisLine={false} 
-                      tickFormatter={(value) => `$${(value / 1000).toFixed(0)}k`}
-                      dx={-8}
-                    />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'var(--background)', 
-                        borderColor: 'var(--border)', 
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                        fontSize: '13px'
-                      }}
-                      itemStyle={{ color: 'var(--foreground)' }}
-                      formatter={(value: number) => [`$${value.toLocaleString()}`, 'Revenue']}
-                    />
-                    <Area 
-                      type="monotone" 
-                      dataKey="revenue" 
-                      stroke="#18181b"
-                      strokeWidth={2}
-                      fill="url(#revenueGradient)"
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
-              </div>
-              <Separator className="my-4" />
-              <div className="flex items-center justify-between text-sm">
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <TrendingUp className="h-4 w-4 text-emerald-500" />
-                  <span>Trending up by <span className="font-medium text-foreground">5.2%</span> this month</span>
-                </div>
-                <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs">
-                  View Report
-                  <ChevronRight className="h-3 w-3" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="lg:col-span-3">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-base font-semibold">This Week</CardTitle>
-                <CardDescription className="text-sm">Daily donation totals</CardDescription>
-              </div>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <MoreHorizontal className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="h-[200px]">
-                <ResponsiveContainer width="100%" height="100%">
-                  <BarChart data={weeklyData} margin={{ top: 8, right: 8, left: 0, bottom: 0 }}>
-                    <XAxis 
-                      dataKey="day" 
-                      stroke="#a1a1aa" 
-                      fontSize={12} 
-                      tickLine={false} 
-                      axisLine={false}
-                      dy={8}
-                    />
-                    <YAxis 
-                      stroke="#a1a1aa" 
-                      fontSize={12} 
-                      tickLine={false} 
-                      axisLine={false} 
-                      tickFormatter={(value) => `$${value}`}
-                      dx={-8}
-                    />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'var(--background)', 
-                        borderColor: 'var(--border)', 
-                        borderRadius: '8px',
-                        boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)',
-                        fontSize: '13px'
-                      }}
-                      formatter={(value: number) => [`$${value.toLocaleString()}`, 'Donations']}
-                    />
-                    <Bar 
-                      dataKey="amount" 
-                      fill="#18181b"
-                      radius={[4, 4, 0, 0]}
-                      className="fill-primary"
-                    />
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-              <Separator className="my-4" />
-              <div className="flex items-center justify-between">
-                <div className="text-sm text-muted-foreground">
-                  Total: <span className="font-semibold text-foreground">$9,100</span>
-                </div>
-                <Badge variant="secondary" className="text-xs">
-                  +23% vs last week
-                </Badge>
-              </div>
-            </CardContent>
-          </Card>
+          <RevenueSection />
+          <WeeklySection />
         </div>
-
         <div className="grid gap-4 lg:grid-cols-7">
-          <Card className="lg:col-span-4">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
-                <CardDescription className="text-sm">Latest actions across your organization</CardDescription>
-              </div>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
-                <Bell className="h-4 w-4" />
-              </Button>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="divide-y">
-                {recentActivity.map((item, index) => (
-                  <div 
-                    key={item.id} 
-                    className="flex items-center gap-4 px-6 py-4 transition-colors hover:bg-muted/50"
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <Avatar className="h-10 w-10 border">
-                      <AvatarFallback className={item.color}>{item.initials}</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <p className="text-sm font-medium leading-none">{item.action}</p>
-                        <Badge variant="outline" className="px-1.5 py-0 text-[10px] font-normal">
-                          {item.time}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-muted-foreground">
-                        <span className="font-medium text-foreground">{item.detail}</span>
-                        {item.name && ` from ${item.name}`}
-                      </p>
-                    </div>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
-                      <ChevronRight className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t p-4">
-                <Button variant="ghost" className="w-full text-sm" size="sm">
-                  View all activity
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card className="lg:col-span-3">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle className="text-base font-semibold">Upcoming Tasks</CardTitle>
-                <CardDescription className="text-sm">Your scheduled items</CardDescription>
-              </div>
-              <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs">
-                <Plus className="h-3 w-3" />
-                Add
-              </Button>
-            </CardHeader>
-            <CardContent className="p-0">
-              <div className="divide-y">
-                {upcomingTasks.map((task) => (
-                  <div key={task.id} className="flex items-center gap-4 px-6 py-4">
-                    <div className={`h-2 w-2 rounded-full ${
-                      task.priority === 'high' ? 'bg-rose-500' : 
-                      task.priority === 'medium' ? 'bg-amber-500' : 'bg-emerald-500'
-                    }`} />
-                    <div className="flex-1 space-y-1">
-                      <p className="text-sm font-medium leading-none">{task.title}</p>
-                      <p className="text-xs text-muted-foreground">{task.dueDate}</p>
-                    </div>
-                    <Button variant="ghost" size="icon" className="h-8 w-8 shrink-0">
-                      <MoreHorizontal className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-              </div>
-              <div className="border-t p-4">
-                <Button variant="ghost" className="w-full text-sm" size="sm">
-                  View all tasks
-                  <ChevronRight className="ml-1 h-4 w-4" />
-                </Button>
-              </div>
-            </CardContent>
-          </Card>
+          <ActivitySection />
+          <TasksSection />
         </div>
-
-        <div className="grid gap-4 sm:grid-cols-3">
-          <Card className="group relative overflow-hidden border-dashed">
-            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                <Users className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <h3 className="font-medium">Invite Team Members</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Collaborate with your team
-              </p>
-              <Button variant="outline" size="sm" className="mt-4">
-                Send Invite
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="group relative overflow-hidden border-dashed">
-            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                <Globe className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <h3 className="font-medium">Add Missionary</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Expand your mission reach
-              </p>
-              <Button variant="outline" size="sm" className="mt-4">
-                Get Started
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="group relative overflow-hidden border-dashed">
-            <CardContent className="flex flex-col items-center justify-center py-8 text-center">
-              <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-muted">
-                <Activity className="h-6 w-6 text-muted-foreground" />
-              </div>
-              <h3 className="font-medium">Create Campaign</h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Launch a new fundraiser
-              </p>
-              <Button variant="outline" size="sm" className="mt-4">
-                Create Now
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
+        <QuickActionsGrid />
       </div>
     </div>
   )

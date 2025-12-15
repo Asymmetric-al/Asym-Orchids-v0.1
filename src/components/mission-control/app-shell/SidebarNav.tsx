@@ -1,5 +1,6 @@
 'use client'
 
+import { memo, useCallback, useMemo } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
@@ -9,148 +10,172 @@ import { getIcon, ChevronLeft, ChevronRight, LayoutDashboard } from '../icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import type { NavItem } from '@/lib/mission-control/types'
 
-export function SidebarNav() {
+interface NavLinkProps {
+  item: NavItem
+  isActive: boolean
+  collapsed: boolean
+}
+
+const NavLink = memo(function NavLink({ item, isActive, collapsed }: NavLinkProps) {
+  const Icon = getIcon(item.icon)
+  const href = item.route === '/' ? '/mc' : `/mc${item.route}`
+
+  const linkContent = (
+    <Link
+      href={href}
+      className={cn(
+        'group flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-all duration-150',
+        isActive
+          ? 'bg-secondary text-foreground'
+          : 'text-muted-foreground hover:bg-secondary/60 hover:text-foreground',
+        collapsed && 'justify-center px-2'
+      )}
+    >
+      <Icon
+        className={cn(
+          'h-4 w-4 shrink-0 transition-colors',
+          isActive ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+        )}
+      />
+      {!collapsed && <span className="truncate">{item.title}</span>}
+    </Link>
+  )
+
+  if (collapsed) {
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>{linkContent}</TooltipTrigger>
+        <TooltipContent side="right" sideOffset={8} className="text-xs font-medium">
+          {item.title}
+        </TooltipContent>
+      </Tooltip>
+    )
+  }
+
+  return linkContent
+})
+
+const NavSection = memo(function NavSection({
+  items,
+  label,
+  collapsed,
+  checkActive,
+}: {
+  items: NavItem[]
+  label?: string
+  collapsed: boolean
+  checkActive: (route: string) => boolean
+}) {
+  if (items.length === 0) return null
+
+  return (
+    <>
+      {label && !collapsed && (
+        <span className="mb-1.5 mt-4 px-3 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/60">
+          {label}
+        </span>
+      )}
+      {label && collapsed && <div className="my-2 mx-2 h-px bg-border" />}
+      {items.map((item) => (
+        <NavLink key={item.id} item={item} isActive={checkActive(item.route)} collapsed={collapsed} />
+      ))}
+    </>
+  )
+})
+
+const SidebarHeader = memo(function SidebarHeader({ collapsed }: { collapsed: boolean }) {
+  return (
+    <div
+      className={cn(
+        'flex h-14 items-center border-b border-border',
+        collapsed ? 'justify-center px-2' : 'justify-between px-4'
+      )}
+    >
+      {!collapsed ? (
+        <Link href="/mc" className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground text-background">
+            <LayoutDashboard className="h-4 w-4" />
+          </div>
+          <span className="text-sm font-semibold tracking-tight">Mission Control</span>
+        </Link>
+      ) : (
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground text-background">
+          <LayoutDashboard className="h-4 w-4" />
+        </div>
+      )}
+    </div>
+  )
+})
+
+const CollapseButton = memo(function CollapseButton({
+  collapsed,
+  onToggle,
+}: {
+  collapsed: boolean
+  onToggle: () => void
+}) {
+  return (
+    <div className="border-t border-border p-2">
+      <Button
+        variant="ghost"
+        size="sm"
+        className={cn(
+          'w-full justify-center text-muted-foreground hover:text-foreground',
+          !collapsed && 'justify-start px-3'
+        )}
+        onClick={onToggle}
+      >
+        {collapsed ? (
+          <ChevronRight className="h-4 w-4" />
+        ) : (
+          <>
+            <ChevronLeft className="h-4 w-4 mr-2" />
+            <span className="text-xs font-medium">Collapse</span>
+          </>
+        )}
+      </Button>
+    </div>
+  )
+})
+
+export const SidebarNav = memo(function SidebarNav() {
   const pathname = usePathname()
   const { role, sidebarCollapsed, setSidebarCollapsed } = useMC()
 
-  const mainItems = getMainNavItems(role)
-  const toolsItems = getToolsNavItems(role)
+  const mainItems = useMemo(() => getMainNavItems(role), [role])
+  const toolsItems = useMemo(() => getToolsNavItems(role), [role])
 
-  const isActive = (route: string) => {
-    if (route === '/') return pathname === '/mc' || pathname === '/mc/'
-    return pathname.startsWith(`/mc${route}`)
-  }
+  const checkActive = useCallback(
+    (route: string) => {
+      if (route === '/') return pathname === '/mc' || pathname === '/mc/'
+      return pathname.startsWith(`/mc${route}`)
+    },
+    [pathname]
+  )
+
+  const handleToggle = useCallback(() => {
+    setSidebarCollapsed(!sidebarCollapsed)
+  }, [sidebarCollapsed, setSidebarCollapsed])
 
   return (
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          'flex flex-col border-r border-border bg-background transition-all duration-200',
+          'flex flex-col border-r border-border bg-background transition-all duration-200 ease-out',
           sidebarCollapsed ? 'w-[60px]' : 'w-[240px]'
         )}
       >
-        <div className={cn(
-          'flex h-14 items-center border-b border-border',
-          sidebarCollapsed ? 'justify-center px-2' : 'justify-between px-4'
-        )}>
-          {!sidebarCollapsed && (
-            <Link href="/mc" className="flex items-center gap-2.5">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground text-background">
-                <LayoutDashboard className="h-3.5 w-3.5" />
-              </div>
-              <span className="font-semibold text-sm tracking-tight">Mission Control</span>
-            </Link>
-          )}
-          {sidebarCollapsed && (
-            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground text-background">
-              <LayoutDashboard className="h-3.5 w-3.5" />
-            </div>
-          )}
-        </div>
-
-        <ScrollArea className="flex-1">
-          <nav className="flex flex-col gap-0.5 p-2">
-            {mainItems.map((item) => {
-              const Icon = getIcon(item.icon)
-              const active = isActive(item.route)
-              return (
-                <Tooltip key={item.id}>
-                  <TooltipTrigger asChild>
-                    <Link
-                      href={item.route === '/' ? '/mc' : `/mc${item.route}`}
-                      className={cn(
-                        'group flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-all',
-                        active
-                          ? 'bg-secondary font-medium text-foreground'
-                          : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground',
-                        sidebarCollapsed && 'justify-center px-2'
-                      )}
-                    >
-                      <Icon className={cn(
-                        'h-4 w-4 shrink-0 transition-colors',
-                        active ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
-                      )} />
-                      {!sidebarCollapsed && <span>{item.title}</span>}
-                    </Link>
-                  </TooltipTrigger>
-                  {sidebarCollapsed && (
-                    <TooltipContent side="right" className="font-medium text-xs">
-                      {item.title}
-                    </TooltipContent>
-                  )}
-                </Tooltip>
-              )
-            })}
-
-            {toolsItems.length > 0 && (
-              <>
-                <div className={cn(
-                  'my-2 h-px bg-border',
-                  sidebarCollapsed && 'mx-2'
-                )} />
-                {!sidebarCollapsed && (
-                  <span className="mb-1 px-2.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
-                    Tools
-                  </span>
-                )}
-                {toolsItems.map((item) => {
-                  const Icon = getIcon(item.icon)
-                  const active = isActive(item.route)
-                  return (
-                    <Tooltip key={item.id}>
-                      <TooltipTrigger asChild>
-                        <Link
-                          href={`/mc${item.route}`}
-                          className={cn(
-                            'group flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-all',
-                            active
-                              ? 'bg-secondary font-medium text-foreground'
-                              : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground',
-                            sidebarCollapsed && 'justify-center px-2'
-                          )}
-                        >
-                          <Icon className={cn(
-                            'h-4 w-4 shrink-0 transition-colors',
-                            active ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
-                          )} />
-                          {!sidebarCollapsed && <span>{item.title}</span>}
-                        </Link>
-                      </TooltipTrigger>
-                      {sidebarCollapsed && (
-                        <TooltipContent side="right" className="font-medium text-xs">
-                          {item.title}
-                        </TooltipContent>
-                      )}
-                    </Tooltip>
-                  )
-                })}
-              </>
-            )}
+        <SidebarHeader collapsed={sidebarCollapsed} />
+        <ScrollArea className="flex-1 px-2">
+          <nav className="flex flex-col gap-0.5 py-2">
+            <NavSection items={mainItems} collapsed={sidebarCollapsed} checkActive={checkActive} />
+            <NavSection items={toolsItems} label="Tools" collapsed={sidebarCollapsed} checkActive={checkActive} />
           </nav>
         </ScrollArea>
-
-        <div className="border-t border-border p-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            className={cn(
-              'w-full justify-center text-muted-foreground hover:text-foreground',
-              !sidebarCollapsed && 'justify-start px-2.5'
-            )}
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          >
-            {sidebarCollapsed ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <>
-                <ChevronLeft className="h-4 w-4 mr-2" />
-                <span className="text-xs">Collapse</span>
-              </>
-            )}
-          </Button>
-        </div>
+        <CollapseButton collapsed={sidebarCollapsed} onToggle={handleToggle} />
       </aside>
     </TooltipProvider>
   )
-}
+})
