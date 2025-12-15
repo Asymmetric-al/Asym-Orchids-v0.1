@@ -87,7 +87,7 @@ function FundingProgress() {
       <CardHeader className='flex flex-row items-center justify-between gap-1 pb-0'>
         <div className='flex items-center gap-3'>
           <Avatar className='size-8.5 rounded-sm'>
-            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+            <AvatarFallback className='bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 shrink-0 rounded-sm'>
               <TargetIcon className='size-5' />
             </AvatarFallback>
           </Avatar>
@@ -96,33 +96,33 @@ function FundingProgress() {
             <p className='text-muted-foreground text-sm'>Monthly progress</p>
           </div>
         </div>
-        <Badge className='bg-primary/10 text-primary border-0 text-xs font-semibold'>
+        <Badge className='bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 border-0 text-xs font-semibold'>
           {stats.percentFunded}% Funded
         </Badge>
       </CardHeader>
       <CardContent className='pt-4'>
         <div className='space-y-4'>
           <div className='flex items-baseline justify-between'>
-            <span className='text-2xl font-medium'>${stats.monthlySupport.toLocaleString()}</span>
+            <span className='text-2xl font-semibold'>${stats.monthlySupport.toLocaleString()}</span>
             <span className='text-muted-foreground text-sm font-medium'>
               of ${stats.monthlyGoal.toLocaleString()} goal
             </span>
           </div>
           <Progress value={stats.percentFunded} className='h-2.5' />
           <div className='grid grid-cols-3 gap-3'>
-            <div className='rounded-md border px-3 py-2 text-center'>
-              <p className='text-muted-foreground text-sm font-medium'>Remaining</p>
-              <p className='text-lg font-medium'>${(stats.monthlyGoal - stats.monthlySupport).toLocaleString()}</p>
+            <div className='bg-muted/50 rounded-lg px-3 py-2 text-center'>
+              <p className='text-muted-foreground text-xs font-medium'>Remaining</p>
+              <p className='text-base font-semibold'>${(stats.monthlyGoal - stats.monthlySupport).toLocaleString()}</p>
             </div>
-            <div className='rounded-md border px-3 py-2 text-center'>
-              <p className='text-muted-foreground text-sm font-medium'>Trend</p>
-              <p className='text-primary flex items-center justify-center gap-1 text-lg font-medium'>
+            <div className='bg-muted/50 rounded-lg px-3 py-2 text-center'>
+              <p className='text-muted-foreground text-xs font-medium'>Trend</p>
+              <p className='text-emerald-600 dark:text-emerald-400 flex items-center justify-center gap-1 text-base font-semibold'>
                 <TrendingUpIcon className='size-4' /> +12%
               </p>
             </div>
-            <div className='rounded-md border px-3 py-2 text-center'>
-              <p className='text-muted-foreground text-sm font-medium'>Days Left</p>
-              <p className='text-lg font-medium'>16</p>
+            <div className='bg-muted/50 rounded-lg px-3 py-2 text-center'>
+              <p className='text-muted-foreground text-xs font-medium'>Days Left</p>
+              <p className='text-base font-semibold'>16</p>
             </div>
           </div>
         </div>
@@ -133,23 +133,23 @@ function FundingProgress() {
 
 function BalanceCard() {
   return (
-    <Card className='flex flex-col justify-between overflow-hidden border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg'>
+    <Card className='flex flex-col justify-between overflow-hidden border-0 bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white shadow-lg'>
       <CardHeader className='pb-0'>
         <div className='flex items-center gap-2'>
-          <WalletIcon className='size-4 text-slate-300' />
-          <CardTitle className='text-xs font-medium text-slate-200'>Available Balance</CardTitle>
+          <WalletIcon className='size-4 text-zinc-400' />
+          <CardTitle className='text-xs font-medium text-zinc-300'>Available Balance</CardTitle>
         </div>
       </CardHeader>
       <CardContent className='space-y-4 pt-2'>
         <div>
-          <h3 className='text-2xl font-medium tracking-tight text-white'>${stats.currentBalance.toLocaleString()}</h3>
-          <p className='text-muted-foreground mt-0.5 text-sm text-slate-300'>Updated today at 9:41 AM</p>
+          <h3 className='text-2xl font-semibold tracking-tight text-white'>${stats.currentBalance.toLocaleString()}</h3>
+          <p className='mt-0.5 text-sm text-zinc-400'>Updated today at 9:41 AM</p>
         </div>
         <div className='flex gap-2'>
           <Button size='sm' className='h-8 flex-1 rounded-lg border-0 bg-white/15 text-xs font-medium text-white hover:bg-white/25'>
             Withdraw
           </Button>
-          <Button size='sm' className='h-8 flex-1 rounded-lg border-0 bg-white text-xs font-medium text-slate-900 hover:bg-slate-100'>
+          <Button size='sm' className='h-8 flex-1 rounded-lg border-0 bg-white text-xs font-medium text-zinc-900 hover:bg-zinc-100'>
             View History
           </Button>
         </div>
@@ -163,7 +163,7 @@ function AlertsSection() {
     <Card className='shadow-none'>
       <CardHeader className='flex flex-row items-center gap-3 pb-2'>
         <Avatar className='size-8.5 rounded-sm'>
-          <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+          <AvatarFallback className='bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400 shrink-0 rounded-sm'>
             <AlertCircleIcon className='size-5' />
           </AvatarFallback>
         </Avatar>
@@ -174,17 +174,17 @@ function AlertsSection() {
           <Link 
             key={alert.id} 
             href={`/missionary-dashboard/donors?filter=${alert.type}`}
-            className='group flex items-center justify-between rounded-md border px-4 py-2 transition-colors hover:bg-muted/50'
+            className='group flex items-center justify-between rounded-lg bg-muted/50 px-4 py-2.5 transition-colors hover:bg-muted'
           >
             <div className='flex items-center gap-3'>
-              <div className={`size-2 rounded-full ${
+              <div className={`size-2.5 rounded-full ${
                 alert.type === 'at-risk' ? 'bg-amber-500' : 
                 alert.type === 'new' ? 'bg-emerald-500' : 'bg-rose-500'
               }`} />
               <span className='text-sm font-medium'>{alert.label}</span>
             </div>
             <div className='flex items-center gap-2'>
-              <Badge variant='secondary' className='text-xs font-medium'>
+              <Badge variant='secondary' className='bg-background text-foreground text-xs font-semibold'>
                 {alert.count}
               </Badge>
               <ChevronRightIcon className='text-muted-foreground size-4 transition-colors group-hover:text-foreground' />
@@ -202,7 +202,7 @@ function ActivityFeed() {
       <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
         <div className='flex items-center gap-3'>
           <Avatar className='size-8.5 rounded-sm'>
-            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+            <AvatarFallback className='bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400 shrink-0 rounded-sm'>
               <SparklesIcon className='size-5' />
             </AvatarFallback>
           </Avatar>
@@ -221,8 +221,8 @@ function ActivityFeed() {
         <div className='divide-y'>
           {recentActivity.map((activity) => (
             <div key={activity.id} className='flex items-center gap-3 px-6 py-3 transition-colors hover:bg-muted/50'>
-              <Avatar className='size-8 border'>
-                <AvatarFallback className={`text-xs font-medium ${activity.type === 'gift' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-700'}`}>
+              <Avatar className='size-9 border'>
+                <AvatarFallback className={`text-xs font-semibold ${activity.type === 'gift' ? 'bg-rose-100 text-rose-700 dark:bg-rose-900/30 dark:text-rose-400' : 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400'}`}>
                   {activity.donor.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
@@ -230,7 +230,7 @@ function ActivityFeed() {
                 <div className='flex items-center gap-2'>
                   <p className='truncate text-sm font-medium'>{activity.donor}</p>
                   {activity.isNew && (
-                    <Badge className='bg-primary/10 text-primary h-4 border-0 px-1 text-[10px] font-medium'>
+                    <Badge className='bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400 h-5 border-0 px-1.5 text-[10px] font-semibold'>
                       New
                     </Badge>
                   )}
@@ -239,7 +239,7 @@ function ActivityFeed() {
                   {activity.type === 'gift' ? 'One-time' : 'Monthly'} · {activity.date}
                 </p>
               </div>
-              <p className='text-primary text-sm font-medium'>+${activity.amount}</p>
+              <p className='text-emerald-600 dark:text-emerald-400 text-sm font-semibold'>+${activity.amount}</p>
             </div>
           ))}
         </div>
@@ -254,7 +254,7 @@ function TasksPreview() {
       <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
         <div className='flex items-center gap-3'>
           <Avatar className='size-8.5 rounded-sm'>
-            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+            <AvatarFallback className='bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400 shrink-0 rounded-sm'>
               <CheckSquareIcon className='size-5' />
             </AvatarFallback>
           </Avatar>
@@ -269,12 +269,12 @@ function TasksPreview() {
       </CardHeader>
       <CardContent className='space-y-2'>
         {pendingTasks.map((task) => (
-          <div key={task.id} className='group flex cursor-pointer items-start gap-3 rounded-md border px-4 py-2 transition-all hover:border-primary/50 hover:shadow-sm'>
-            <div className={`mt-1 size-2 shrink-0 rounded-full ${
+          <div key={task.id} className='group flex cursor-pointer items-start gap-3 rounded-lg bg-muted/50 px-4 py-2.5 transition-all hover:bg-muted'>
+            <div className={`mt-1.5 size-2.5 shrink-0 rounded-full ${
               task.priority === 'high' ? 'bg-rose-500' : 'bg-amber-500'
             }`} />
             <div className='min-w-0 flex-1'>
-              <p className='text-sm font-medium transition-colors group-hover:text-primary'>{task.title}</p>
+              <p className='text-sm font-medium'>{task.title}</p>
               <div className='text-muted-foreground mt-0.5 flex items-center gap-1 text-xs'>
                 <ClockIcon className='size-3' />
                 <span>{task.dueDate}</span>
@@ -295,10 +295,10 @@ function TasksPreview() {
 
 function QuickActions() {
   const actions = [
-    { icon: RssIcon, label: 'Post Update', href: '/missionary-dashboard/feed/new' },
-    { icon: UsersIcon, label: 'Add Donor', href: '/missionary-dashboard/donors/new' },
-    { icon: MailIcon, label: 'Newsletter', href: '/missionary-dashboard/newsletter' },
-    { icon: CheckSquareIcon, label: 'New Task', href: '/missionary-dashboard/tasks/new' },
+    { icon: RssIcon, label: 'Post Update', href: '/missionary-dashboard/feed/new', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' },
+    { icon: UsersIcon, label: 'Add Donor', href: '/missionary-dashboard/donors/new', color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400' },
+    { icon: MailIcon, label: 'Newsletter', href: '/missionary-dashboard/newsletter', color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' },
+    { icon: CheckSquareIcon, label: 'New Task', href: '/missionary-dashboard/tasks/new', color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-400' },
   ]
 
   return (
@@ -311,10 +311,10 @@ function QuickActions() {
           <Link
             key={action.label}
             href={action.href}
-            className='group flex flex-col items-center justify-center gap-2 rounded-md border px-4 py-3 transition-all hover:border-primary/50 hover:shadow-sm'
+            className='group flex flex-col items-center justify-center gap-2 rounded-lg bg-muted/50 px-4 py-4 transition-all hover:bg-muted'
           >
-            <Avatar className='size-8.5 rounded-sm transition-transform group-hover:scale-105'>
-              <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+            <Avatar className='size-10 rounded-lg transition-transform group-hover:scale-105'>
+              <AvatarFallback className={`${action.color} shrink-0 rounded-lg`}>
                 <action.icon className='size-5' />
               </AvatarFallback>
             </Avatar>
@@ -350,16 +350,16 @@ export default function MissionaryDashboardPage() {
         {MetricsData.map((metric, index) => (
           <Card key={index} className='shadow-none'>
             <CardContent className='flex items-center gap-3 px-4 py-3'>
-              <Avatar className='size-8.5 rounded-sm'>
-                <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <Avatar className='size-10 rounded-lg'>
+                <AvatarFallback className='bg-muted shrink-0 rounded-lg'>
                   {metric.icons}
                 </AvatarFallback>
               </Avatar>
               <div className='flex flex-col gap-0.5'>
-                <span className='text-muted-foreground text-sm font-medium'>{metric.title}</span>
-                <span className='text-lg font-medium'>{metric.value}</span>
+                <span className='text-muted-foreground text-xs font-medium'>{metric.title}</span>
+                <span className='text-lg font-semibold'>{metric.value}</span>
                 {metric.subtitle && (
-                  <div className='text-primary flex items-center gap-1 text-xs font-medium'>
+                  <div className='text-emerald-600 dark:text-emerald-400 flex items-center gap-1 text-xs font-medium'>
                     <TrendingUpIcon className='size-3' />
                     <span>{metric.subtitle}</span>
                   </div>
