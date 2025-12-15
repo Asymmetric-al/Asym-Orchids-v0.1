@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { createClient } from '@/lib/supabase/client'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Sparkles } from 'lucide-react'
 
 const DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000001'
 
@@ -24,6 +24,69 @@ export default function RegisterPage() {
     password: '',
     role: ''
   })
+
+  async function handleDemoAccount(role: 'admin' | 'missionary' | 'donor') {
+    setLoading(true)
+    setError(null)
+
+    const timestamp = Date.now()
+    const demoEmail = `demo-${role}-${timestamp}@asymmetric.al`
+    const demoPassword = 'demo1234'
+    const demoData = {
+      admin: { firstName: 'Admin', lastName: 'Demo' },
+      missionary: { firstName: 'Missionary', lastName: 'Demo' },
+      donor: { firstName: 'Donor', lastName: 'Demo' }
+    }
+
+    const supabase = createClient()
+
+    const { data: authData, error: authError } = await supabase.auth.signUp({
+      email: demoEmail,
+      password: demoPassword,
+      options: {
+        data: {
+          first_name: demoData[role].firstName,
+          last_name: demoData[role].lastName,
+          role: role
+        }
+      }
+    })
+
+    if (authError) {
+      setError(authError.message)
+      setLoading(false)
+      return
+    }
+
+    if (authData.user) {
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .insert({
+          user_id: authData.user.id,
+          tenant_id: DEFAULT_TENANT_ID,
+          first_name: demoData[role].firstName,
+          last_name: demoData[role].lastName,
+          email: demoEmail,
+          role: role
+        })
+
+      if (profileError) {
+        setError(profileError.message)
+        setLoading(false)
+        return
+      }
+
+      if (role === 'admin') {
+        router.push('/mc')
+      } else if (role === 'missionary') {
+        router.push('/missionary-dashboard')
+      } else {
+        router.push('/donor-dashboard')
+      }
+    }
+
+    setLoading(false)
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -87,7 +150,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Create Account</CardTitle>
@@ -163,6 +226,53 @@ export default function RegisterPage() {
               Create Account
             </Button>
           </form>
+
+          <div className="mt-6 space-y-3">
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <span className="w-full border-t" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-background px-2 text-muted-foreground">
+                  Or try a demo
+                </span>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-3 gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleDemoAccount('admin')}
+                disabled={loading}
+                className="text-xs"
+              >
+                <Sparkles className="mr-1 h-3 w-3" />
+                Admin
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleDemoAccount('missionary')}
+                disabled={loading}
+                className="text-xs"
+              >
+                <Sparkles className="mr-1 h-3 w-3" />
+                Missionary
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handleDemoAccount('donor')}
+                disabled={loading}
+                className="text-xs"
+              >
+                <Sparkles className="mr-1 h-3 w-3" />
+                Donor
+              </Button>
+            </div>
+          </div>
+
           <p className="mt-4 text-center text-sm text-muted-foreground">
             Already have an account?{" "}
             <Link href="/login" className="text-primary hover:underline">
