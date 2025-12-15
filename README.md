@@ -4,61 +4,152 @@ A modern Next.js 15 application for mission-focused organizations. Built with Re
 
 ## Design & UI Specifications
 
-### Design System
+### Design System (shadcn-studio Template)
 
 **Typography**
 - Primary Font: Inter (`--font-inter`) + SF Pro Display fallbacks
 - Monospace: Geist Mono (`--font-geist-mono`)
-- Headings: Bold (700), Semibold (600)
-- Body: Regular (400), Medium (500)
+- Headings: Semibold (600), sizes `text-xl`, `text-lg`, `text-2xl`
+- Body: Medium (500), Regular (400)
+- Muted text: `text-muted-foreground`
 
 **Color Palette**
-- Background: `#fafafa` (zinc-50) / Dark: `#0b0b0f` (zinc-950)
-- Foreground: `#09090b` (zinc-950) / Dark: `#f4f4f5` (zinc-100)
-- Primary: `#18181b` (zinc-900) / Dark: `#f4f4f5`
-- Muted: `#f4f4f5` (zinc-100) / Dark: `#18181b`
-- Border: `#e4e4e7` (zinc-200) / Dark: `#27272a`
-- Accent colors: Emerald for success states, Rose for alerts
+- Background: `bg-background` / `bg-card` / `bg-muted`
+- Foreground: `text-foreground`
+- Primary: `text-primary` / `bg-primary`
+- Muted: `text-muted-foreground` / `bg-muted`
+- Accent colors: `bg-primary/10 text-primary` for icon backgrounds
+- Status: Emerald (success), Amber (warning), Rose (error/high priority)
 
 **Border Radius**
-- Base: `0.75rem` (12px)
-- Small: `calc(var(--radius) - 4px)`
-- Large: `var(--radius)`
-- 2XL: `calc(var(--radius) + 8px)`
+- Cards: `rounded-md` / `rounded-sm`
+- Buttons: Default shadcn radius
+- Avatars: `rounded-sm` for icon containers, default for user avatars
 
 **Shadows**
-- Cards: `shadow-sm` on hover
-- Header: `shadow-md` on scroll with backdrop blur
+- Cards: `shadow-none` (flat design)
+- Hover: `hover:shadow-sm` with `hover:border-primary/50`
 
-### Component Patterns
+### Component Patterns (shadcn-studio Style)
 
-**Header**
-- Fixed position with backdrop blur on scroll
-- Navigation menu with dropdown support
-- Social links + CTA button
-- Mobile hamburger menu
+**Metric Cards**
+```tsx
+<Card className='shadow-none'>
+  <CardContent className='flex items-center gap-3 px-4 py-3'>
+    <Avatar className='size-8.5 rounded-sm'>
+      <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+        <IconName className='size-5' />
+      </AvatarFallback>
+    </Avatar>
+    <div className='flex flex-col gap-0.5'>
+      <span className='text-muted-foreground text-sm font-medium'>{title}</span>
+      <span className='text-lg font-medium'>{value}</span>
+      <div className='text-primary flex items-center gap-1 text-xs font-medium'>
+        <TrendingUpIcon className='size-3' />
+        <span>{subtitle}</span>
+      </div>
+    </div>
+  </CardContent>
+</Card>
+```
 
-**Hero Section**
-- Full viewport height with muted background
-- Animated rotating text (flip animation)
-- Motion-preset animations (fade, slide)
-- Trusted by logos section
+**Card Headers with Icons**
+```tsx
+<CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
+  <div className='flex items-center gap-3'>
+    <Avatar className='size-8.5 rounded-sm'>
+      <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+        <IconName className='size-5' />
+      </AvatarFallback>
+    </Avatar>
+    <div className='flex flex-col gap-0.5'>
+      <CardTitle className='text-lg font-semibold'>{title}</CardTitle>
+      <p className='text-muted-foreground text-sm'>{subtitle}</p>
+    </div>
+  </div>
+  <Button variant='ghost' size='sm' className='h-7 text-xs'>
+    View All <ArrowUpRightIcon className='ml-1 size-3' />
+  </Button>
+</CardHeader>
+```
 
-**Cards**
-- Border: `border-border/50`
-- Background: `bg-card`
-- Hover: `hover:border-border hover:shadow-sm`
-- Rounded: `rounded-2xl` or `rounded-3xl`
+**List Items**
+```tsx
+<div className='flex items-center gap-3 px-6 py-3 transition-colors hover:bg-muted/50'>
+  <Avatar className='size-8 border'>
+    <AvatarFallback className='bg-rose-100 text-rose-700 text-xs font-medium'>
+      {initials}
+    </AvatarFallback>
+  </Avatar>
+  <div className='min-w-0 flex-1'>
+    <p className='truncate text-sm font-medium'>{name}</p>
+    <p className='text-muted-foreground text-xs'>{subtitle}</p>
+  </div>
+  <Badge className='bg-primary/10 text-primary h-4 border-0 px-1 text-[10px] font-medium'>
+    {label}
+  </Badge>
+</div>
+```
 
-**Buttons**
-- Primary: Dark fill with light text
-- Outline: Border with transparent bg
-- Ghost: No border, hover background
-- Sizes: `sm`, `default`, `lg`
+**Quick Action Cards**
+```tsx
+<Card className='group cursor-pointer shadow-none transition-all hover:border-primary/50 hover:shadow-sm'>
+  <CardContent className='flex flex-col items-center justify-center gap-2 px-4 py-6 text-center'>
+    <Avatar className='size-10 rounded-sm transition-transform group-hover:scale-105'>
+      <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+        <IconName className='size-5' />
+      </AvatarFallback>
+    </Avatar>
+    <div className='flex flex-col gap-0.5'>
+      <h3 className='text-sm font-medium transition-colors group-hover:text-primary'>{title}</h3>
+      <p className='text-muted-foreground max-w-[180px] text-xs'>{description}</p>
+    </div>
+  </CardContent>
+</Card>
+```
+
+**Bordered List Items**
+```tsx
+<div className='group flex items-center gap-3 rounded-md border px-4 py-2 transition-all hover:border-primary/50 hover:shadow-sm'>
+  {/* content */}
+</div>
+```
+
+### Icon Conventions
+- Import icons with `Icon` suffix: `TrendingUpIcon`, `UsersIcon`, `CalendarIcon`
+- Icon sizes: `size-5` in avatars, `size-3` to `size-4` inline
+- Icon colors: `text-primary` in avatars, `text-muted-foreground` for secondary
+
+### Spacing System
+- Container max-width: `max-w-7xl` (1280px)
+- Page padding: `p-4 md:p-6`
+- Section gap: `space-y-4`
+- Card padding: `px-4 py-3` for metrics, `p-0` with `px-6 py-3` for list items
+- Gap between elements: `gap-0.5` (tight), `gap-2`, `gap-3`, `gap-4`
+
+### Page Headers
+```tsx
+<div className='flex flex-col gap-2 md:flex-row md:items-center md:justify-between'>
+  <div>
+    <h1 className='text-xl font-semibold'>{title}</h1>
+    <p className='text-muted-foreground text-sm'>{subtitle}</p>
+  </div>
+  <div className='flex items-center gap-2'>
+    <Button variant='outline' size='sm' className='h-8 gap-1.5'>
+      <FilterIcon className='size-3.5' />
+      <span className='hidden sm:inline'>Filter</span>
+    </Button>
+    <Button size='sm' className='h-8 gap-1.5'>
+      <PlusIcon className='size-3.5' />
+      <span className='hidden sm:inline'>New</span>
+    </Button>
+  </div>
+</div>
+```
 
 ### Animation Specifications
 
-**Flip Animation**
+**Flip Animation** (Hero section)
 ```css
 @keyframes flip {
   0%, 20% { transform: rotateX(0deg); }
@@ -67,21 +158,11 @@ A modern Next.js 15 application for mission-focused organizations. Built with Re
   100% { transform: rotateX(360deg); }
 }
 ```
-Duration: 6s, Timing: ease, Iteration: infinite
 
 **Motion Presets**
 - Fade: opacity 0 → 1
 - Slide: translateX/Y with configurable offset
-- Zoom: scale 0.5 → 1
-- Blur: filter blur(10px) → blur(0px)
-
-Transition: Spring animation with stiffness: 200, damping: 20
-
-### Spacing System
-- Container max-width: `max-w-7xl` (1280px)
-- Section padding: `py-20 md:py-28`
-- Card padding: `p-6` or `p-8`
-- Gap between elements: `gap-4` to `gap-8`
+- Transition: Spring animation with stiffness: 200, damping: 20
 
 ## Tech Stack
 

@@ -1,32 +1,33 @@
 'use client'
 
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import dynamic from 'next/dynamic'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Separator } from '@/components/ui/separator'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
 import { StatCard } from '@/components/dashboard/stat-card'
 import { ActivityItem } from '@/components/dashboard/activity-item'
 import { TaskItem } from '@/components/dashboard/task-item'
-import { QuickActionCard } from '@/components/dashboard/quick-action-card'
 import {
-  Users,
-  DollarSign,
-  Activity,
-  Globe,
-  Bell,
-  Calendar,
-  Plus,
-  TrendingUp,
-  MoreHorizontal,
-  ChevronRight,
+  UsersIcon,
+  DollarSignIcon,
+  ActivityIcon,
+  GlobeIcon,
+  BellIcon,
+  CalendarIcon,
+  PlusIcon,
+  TrendingUpIcon,
+  ChevronRightIcon,
+  ArrowUpRightIcon,
+  FilterIcon
 } from 'lucide-react'
 
 const RevenueChart = dynamic(
   () => import('@/components/dashboard/charts/revenue-chart').then(mod => ({ default: mod.RevenueChart })),
-  { 
+  {
     ssr: false,
     loading: () => <ChartSkeleton height={280} />
   }
@@ -34,7 +35,7 @@ const RevenueChart = dynamic(
 
 const WeeklyChart = dynamic(
   () => import('@/components/dashboard/charts/weekly-chart').then(mod => ({ default: mod.WeeklyChart })),
-  { 
+  {
     ssr: false,
     loading: () => <ChartSkeleton height={200} />
   }
@@ -42,10 +43,10 @@ const WeeklyChart = dynamic(
 
 const ChartSkeleton = memo(function ChartSkeleton({ height }: { height: number }) {
   return (
-    <div className="space-y-3" style={{ height }}>
-      <div className="flex items-end justify-between gap-2">
+    <div className='space-y-3' style={{ height }}>
+      <div className='flex items-end justify-between gap-2'>
         {[60, 40, 80, 55, 70, 45, 65].map((h, i) => (
-          <Skeleton key={i} className="flex-1" style={{ height: `${h}%` }} />
+          <Skeleton key={i} className='flex-1' style={{ height: `${h}%` }} />
         ))}
       </div>
     </div>
@@ -59,7 +60,7 @@ const REVENUE_DATA = [
   { name: 'Apr', revenue: 3908, donors: 178 },
   { name: 'May', revenue: 4800, donors: 189 },
   { name: 'Jun', revenue: 3800, donors: 167 },
-  { name: 'Jul', revenue: 4300, donors: 195 },
+  { name: 'Jul', revenue: 4300, donors: 195 }
 ] as const
 
 const WEEKLY_DATA = [
@@ -69,60 +70,57 @@ const WEEKLY_DATA = [
   { day: 'Thu', amount: 1100 },
   { day: 'Fri', amount: 2100 },
   { day: 'Sat', amount: 800 },
-  { day: 'Sun', amount: 1400 },
+  { day: 'Sun', amount: 1400 }
 ] as const
 
 const ACTIVITY_DATA = [
   { id: 1, initials: 'SJ', name: 'Sarah Johnson', action: 'New Donation', detail: '$150.00', time: '2 min ago', colorVariant: 'emerald' as const },
   { id: 2, initials: 'JD', name: 'John Doe', action: 'Missionary Approved', detail: 'South East Asia', time: '1 hour ago', colorVariant: 'blue' as const },
   { id: 3, initials: 'CW', name: 'Clean Water', action: 'Goal Reached', detail: '$10,000', time: '3 hours ago', colorVariant: 'violet' as const },
-  { id: 4, initials: 'MK', name: 'Mike Kim', action: 'Report Submitted', detail: 'Q4 Summary', time: '5 hours ago', colorVariant: 'amber' as const },
+  { id: 4, initials: 'MK', name: 'Mike Kim', action: 'Report Submitted', detail: 'Q4 Summary', time: '5 hours ago', colorVariant: 'amber' as const }
 ] as const
 
 const TASKS_DATA = [
   { id: 1, title: 'Review missionary applications', dueDate: 'Today', priority: 'high' as const },
   { id: 2, title: 'Send monthly newsletter', dueDate: 'Tomorrow', priority: 'medium' as const },
-  { id: 3, title: 'Quarterly donor report', dueDate: 'Dec 20', priority: 'low' as const },
+  { id: 3, title: 'Quarterly donor report', dueDate: 'Dec 20', priority: 'low' as const }
 ] as const
 
 const StatsGrid = memo(function StatsGrid() {
-  const stats = useMemo(() => [
-    {
-      title: 'Total Revenue',
-      value: '$45,231.89',
-      change: { value: '20.1%', type: 'increase' as const, label: 'from last month' },
-      icon: DollarSign,
-      iconColor: 'emerald' as const,
-    },
-    {
-      title: 'Active Missionaries',
-      value: '24',
-      change: { value: '2 new', type: 'increase' as const, label: 'this month' },
-      icon: Globe,
-      iconColor: 'blue' as const,
-    },
-    {
-      title: 'Active Donors',
-      value: '573',
-      change: { value: '12%', type: 'increase' as const, label: 'since last quarter' },
-      icon: Users,
-      iconColor: 'violet' as const,
-    },
-    {
-      title: 'Active Projects',
-      value: '12',
-      change: { value: '1', type: 'decrease' as const, label: 'completed recently' },
-      icon: Activity,
-      iconColor: 'amber' as const,
-    },
-  ], [])
+  const stats = useMemo(
+    () => [
+      {
+        title: 'Total Revenue',
+        value: '$45,231.89',
+        change: { value: '20.1%', type: 'increase' as const, label: 'from last month' },
+        icon: DollarSignIcon
+      },
+      {
+        title: 'Active Missionaries',
+        value: '24',
+        change: { value: '2 new', type: 'increase' as const, label: 'this month' },
+        icon: GlobeIcon
+      },
+      {
+        title: 'Active Donors',
+        value: '573',
+        change: { value: '12%', type: 'increase' as const, label: 'since last quarter' },
+        icon: UsersIcon
+      },
+      {
+        title: 'Active Projects',
+        value: '12',
+        change: { value: '1', type: 'decrease' as const, label: 'completed recently' },
+        icon: ActivityIcon
+      }
+    ],
+    []
+  )
 
   return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-      {stats.map((stat, i) => (
-        <div key={stat.title} className={`animate-fade-in-up stagger-${i + 1}`} style={{ opacity: 0 }}>
-          <StatCard {...stat} />
-        </div>
+    <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+      {stats.map((stat) => (
+        <StatCard key={stat.title} {...stat} />
       ))}
     </div>
   )
@@ -130,30 +128,34 @@ const StatsGrid = memo(function StatsGrid() {
 
 const RevenueSection = memo(function RevenueSection() {
   return (
-    <Card className="lg:col-span-4 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-base font-semibold">Revenue Overview</CardTitle>
-          <CardDescription className="text-sm text-slate-600">Monthly revenue for the current year</CardDescription>
+    <Card className='shadow-none lg:col-span-4'>
+      <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
+        <div className='flex items-center gap-3'>
+          <Avatar className='size-8.5 rounded-sm'>
+            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <TrendingUpIcon className='size-5' />
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col gap-0.5'>
+            <CardTitle className='text-lg font-semibold'>Revenue Overview</CardTitle>
+            <p className='text-muted-foreground text-sm'>Monthly revenue for the current year</p>
+          </div>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-          <MoreHorizontal className="h-4 w-4" />
+        <Button variant='ghost' size='sm' className='h-7 text-xs' asChild>
+          <Link href='/mc/reports'>
+            View Report <ArrowUpRightIcon className='ml-1 size-3' />
+          </Link>
         </Button>
       </CardHeader>
       <CardContent>
         <RevenueChart data={[...REVENUE_DATA]} />
-        <Separator className="my-4" />
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2 text-slate-700">
-            <TrendingUp className="h-4 w-4 text-emerald-500" />
+        <div className='mt-4 flex items-center justify-between border-t pt-4 text-sm'>
+          <div className='text-primary flex items-center gap-2'>
+            <TrendingUpIcon className='size-4' />
             <span>
-              Trending up by <span className="font-medium text-slate-900">5.2%</span> this month
+              Trending up by <span className='font-medium'>5.2%</span> this month
             </span>
           </div>
-          <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900">
-            View Report
-            <ChevronRight className="h-3 w-3" />
-          </Button>
         </div>
       </CardContent>
     </Card>
@@ -161,30 +163,30 @@ const RevenueSection = memo(function RevenueSection() {
 })
 
 const WeeklySection = memo(function WeeklySection() {
-  const weeklyTotal = useMemo(
-    () => WEEKLY_DATA.reduce((sum, d) => sum + d.amount, 0),
-    []
-  )
+  const weeklyTotal = useMemo(() => WEEKLY_DATA.reduce((sum, d) => sum + d.amount, 0), [])
 
   return (
-    <Card className="lg:col-span-3 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-base font-semibold">This Week</CardTitle>
-          <CardDescription className="text-sm text-slate-600">Daily donation totals</CardDescription>
+    <Card className='shadow-none lg:col-span-3'>
+      <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
+        <div className='flex items-center gap-3'>
+          <Avatar className='size-8.5 rounded-sm'>
+            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <CalendarIcon className='size-5' />
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col gap-0.5'>
+            <CardTitle className='text-lg font-semibold'>This Week</CardTitle>
+            <p className='text-muted-foreground text-sm'>Daily donation totals</p>
+          </div>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-          <MoreHorizontal className="h-4 w-4" />
-        </Button>
       </CardHeader>
       <CardContent>
         <WeeklyChart data={[...WEEKLY_DATA]} />
-        <Separator className="my-4" />
-        <div className="flex items-center justify-between">
-          <div className="text-sm text-slate-700">
-            Total: <span className="font-semibold text-slate-900">${weeklyTotal.toLocaleString()}</span>
+        <div className='mt-4 flex items-center justify-between border-t pt-4'>
+          <div className='text-sm'>
+            Total: <span className='font-semibold'>${weeklyTotal.toLocaleString()}</span>
           </div>
-          <Badge variant="secondary" className="text-xs font-medium text-slate-800">+23% vs last week</Badge>
+          <Badge className='bg-primary/10 text-primary border-0 text-xs font-medium'>+23% vs last week</Badge>
         </div>
       </CardContent>
     </Card>
@@ -192,35 +194,38 @@ const WeeklySection = memo(function WeeklySection() {
 })
 
 const ActivitySection = memo(function ActivitySection() {
-  const handleActivityClick = useCallback((id: number) => {
-    console.log('Activity clicked:', id)
-  }, [])
-
   return (
-    <Card className="lg:col-span-4 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
-          <CardDescription className="text-sm text-slate-600">Latest actions across your organization</CardDescription>
+    <Card className='shadow-none lg:col-span-4'>
+      <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
+        <div className='flex items-center gap-3'>
+          <Avatar className='size-8.5 rounded-sm'>
+            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <BellIcon className='size-5' />
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col gap-0.5'>
+            <CardTitle className='text-lg font-semibold'>Recent Activity</CardTitle>
+            <p className='text-muted-foreground text-sm'>Latest actions across your organization</p>
+          </div>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
-          <Bell className="h-4 w-4" />
+        <Button variant='ghost' size='sm' className='h-7 text-xs' asChild>
+          <Link href='/mc/reports'>
+            View All <ArrowUpRightIcon className='ml-1 size-3' />
+          </Link>
         </Button>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="divide-y divide-border">
+      <CardContent className='p-0'>
+        <div className='divide-y'>
           {ACTIVITY_DATA.map((item) => (
-            <ActivityItem
-              key={item.id}
-              {...item}
-              onClick={() => handleActivityClick(item.id)}
-            />
+            <ActivityItem key={item.id} {...item} />
           ))}
         </div>
-        <div className="border-t p-4">
-          <Button variant="ghost" className="w-full text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900" size="sm">
-            View all activity
-            <ChevronRight className="ml-1 h-4 w-4" />
+        <div className='border-t p-4'>
+          <Button variant='outline' size='sm' className='h-8 w-full border-dashed text-xs' asChild>
+            <Link href='/mc/reports'>
+              View all activity
+              <ChevronRightIcon className='ml-1 size-3' />
+            </Link>
           </Button>
         </div>
       </CardContent>
@@ -229,36 +234,34 @@ const ActivitySection = memo(function ActivitySection() {
 })
 
 const TasksSection = memo(function TasksSection() {
-  const handleTaskMenu = useCallback((id: number) => {
-    console.log('Task menu:', id)
-  }, [])
-
   return (
-    <Card className="lg:col-span-3 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <div className="space-y-1">
-          <CardTitle className="text-base font-semibold">Upcoming Tasks</CardTitle>
-          <CardDescription className="text-sm text-slate-600">Your scheduled items</CardDescription>
+    <Card className='shadow-none lg:col-span-3'>
+      <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
+        <div className='flex items-center gap-3'>
+          <Avatar className='size-8.5 rounded-sm'>
+            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <ActivityIcon className='size-5' />
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col gap-0.5'>
+            <CardTitle className='text-lg font-semibold'>Upcoming Tasks</CardTitle>
+            <p className='text-muted-foreground text-sm'>Your scheduled items</p>
+          </div>
         </div>
-        <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900">
-          <Plus className="h-3 w-3" />
-          Add
+        <Button variant='ghost' size='icon' className='size-7'>
+          <PlusIcon className='size-4' />
         </Button>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="divide-y divide-border">
+      <CardContent className='p-0'>
+        <div className='divide-y'>
           {TASKS_DATA.map((task) => (
-            <TaskItem
-              key={task.id}
-              {...task}
-              onMenuClick={() => handleTaskMenu(task.id)}
-            />
+            <TaskItem key={task.id} {...task} />
           ))}
         </div>
-        <div className="border-t p-4">
-          <Button variant="ghost" className="w-full text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900" size="sm">
+        <div className='border-t p-4'>
+          <Button variant='outline' size='sm' className='h-8 w-full border-dashed text-xs'>
             View all tasks
-            <ChevronRight className="ml-1 h-4 w-4" />
+            <ChevronRightIcon className='ml-1 size-3' />
           </Button>
         </div>
       </CardContent>
@@ -267,65 +270,75 @@ const TasksSection = memo(function TasksSection() {
 })
 
 const QuickActionsGrid = memo(function QuickActionsGrid() {
-  const actions = useMemo(() => [
-    { icon: Users, title: 'Invite Team Members', description: 'Collaborate with your team', buttonLabel: 'Send Invite' },
-    { icon: Globe, title: 'Add Missionary', description: 'Expand your mission reach', buttonLabel: 'Get Started' },
-    { icon: Activity, title: 'Create Campaign', description: 'Launch a new fundraiser', buttonLabel: 'Create Now' },
-  ], [])
+  const actions = [
+    { icon: UsersIcon, title: 'Invite Team Members', description: 'Collaborate with your team', href: '/mc/admin' },
+    { icon: GlobeIcon, title: 'Add Missionary', description: 'Expand your mission reach', href: '/mc/crm' },
+    { icon: ActivityIcon, title: 'Create Campaign', description: 'Launch a new fundraiser', href: '/mc/contributions' }
+  ]
 
   return (
-    <div className="grid gap-4 sm:grid-cols-3">
-      {actions.map((action, i) => (
-        <div key={action.title} className={`animate-fade-in-up stagger-${i + 4}`} style={{ opacity: 0 }}>
-          <QuickActionCard {...action} />
-        </div>
+    <div className='grid gap-4 sm:grid-cols-3'>
+      {actions.map((action) => (
+        <Link key={action.title} href={action.href}>
+          <Card className='group cursor-pointer shadow-none transition-all hover:border-primary/50 hover:shadow-sm'>
+            <CardContent className='flex flex-col items-center justify-center gap-2 px-4 py-6 text-center'>
+              <Avatar className='size-10 rounded-sm transition-transform group-hover:scale-105'>
+                <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+                  <action.icon className='size-5' />
+                </AvatarFallback>
+              </Avatar>
+              <div className='flex flex-col gap-0.5'>
+                <h3 className='text-sm font-medium transition-colors group-hover:text-primary'>{action.title}</h3>
+                <p className='text-muted-foreground max-w-[180px] text-xs'>{action.description}</p>
+              </div>
+            </CardContent>
+          </Card>
+        </Link>
       ))}
     </div>
   )
 })
 
-const DashboardHeader = memo(function DashboardHeader() {
+export default function MissionControlPage() {
   const today = useMemo(() => {
     return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   }, [])
 
   return (
-    <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Dashboard Overview
-        </h1>
-        <p className="text-sm text-slate-600">
-          Here&apos;s what&apos;s happening with your mission today.
-        </p>
+    <div className='min-h-full space-y-4 p-4 md:p-6'>
+      <div className='flex flex-col gap-2 md:flex-row md:items-center md:justify-between'>
+        <div>
+          <h1 className='text-xl font-semibold'>Dashboard Overview</h1>
+          <p className='text-muted-foreground text-sm'>Here&apos;s what&apos;s happening with your mission today</p>
+        </div>
+        <div className='flex items-center gap-2'>
+          <Button variant='outline' size='sm' className='h-8 gap-1.5'>
+            <CalendarIcon className='size-3.5' />
+            {today}
+          </Button>
+          <Button variant='outline' size='sm' className='h-8 gap-1.5'>
+            <FilterIcon className='size-3.5' />
+            <span className='hidden sm:inline'>Filter</span>
+          </Button>
+          <Button size='sm' className='h-8 gap-1.5'>
+            <PlusIcon className='size-3.5' />
+            <span className='hidden sm:inline'>New Update</span>
+          </Button>
+        </div>
       </div>
-      <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="h-9 text-sm border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-slate-900">
-          <Calendar className="mr-2 h-4 w-4" />
-          {today}
-        </Button>
-        <Button size="sm" className="h-9 text-sm bg-slate-900 text-white hover:bg-slate-800">
-          <Plus className="mr-2 h-4 w-4" />
-          New Update
-        </Button>
-      </div>
-    </header>
-  )
-})
 
-export default function MissionControlPage() {
-  return (
-    <div className="space-y-8">
-      <DashboardHeader />
       <StatsGrid />
-      <div className="grid gap-4 lg:grid-cols-7">
+
+      <div className='grid gap-4 lg:grid-cols-7'>
         <RevenueSection />
         <WeeklySection />
       </div>
-      <div className="grid gap-4 lg:grid-cols-7">
+
+      <div className='grid gap-4 lg:grid-cols-7'>
         <ActivitySection />
         <TasksSection />
       </div>
+
       <QuickActionsGrid />
     </div>
   )

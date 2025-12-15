@@ -1,8 +1,9 @@
+'use client'
+
 import { memo } from 'react'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRightIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export interface ActivityItemProps {
@@ -11,15 +12,16 @@ export interface ActivityItemProps {
   action: string
   detail: string
   time: string
-  colorVariant: 'emerald' | 'blue' | 'violet' | 'amber'
+  colorVariant: 'emerald' | 'blue' | 'violet' | 'amber' | 'rose'
   onClick?: () => void
 }
 
 const colorClasses = {
-  emerald: 'bg-emerald-500/10 text-emerald-700 dark:text-emerald-400',
-  blue: 'bg-blue-500/10 text-blue-700 dark:text-blue-400',
-  violet: 'bg-violet-500/10 text-violet-700 dark:text-violet-400',
-  amber: 'bg-amber-500/10 text-amber-700 dark:text-amber-400',
+  emerald: 'bg-emerald-100 text-emerald-700',
+  blue: 'bg-blue-100 text-blue-700',
+  violet: 'bg-violet-100 text-violet-700',
+  amber: 'bg-amber-100 text-amber-700',
+  rose: 'bg-rose-100 text-rose-700'
 } as const
 
 export const ActivityItem = memo(function ActivityItem({
@@ -29,35 +31,31 @@ export const ActivityItem = memo(function ActivityItem({
   detail,
   time,
   colorVariant,
-  onClick,
+  onClick
 }: ActivityItemProps) {
   return (
-    <div className="flex items-center gap-4 px-6 py-3.5 transition-colors hover:bg-slate-50">
-      <Avatar className="h-10 w-10 border border-slate-200">
+    <div
+      className='group flex cursor-pointer items-center gap-3 px-6 py-3 transition-colors hover:bg-muted/50'
+      onClick={onClick}
+    >
+      <Avatar className='size-8 border'>
         <AvatarFallback className={cn('text-xs font-medium', colorClasses[colorVariant])}>
           {initials}
         </AvatarFallback>
       </Avatar>
-      <div className="flex-1 min-w-0 space-y-0.5">
-        <div className="flex items-center gap-2">
-          <p className="text-sm font-medium leading-none truncate text-slate-900">{action}</p>
-          <Badge variant="outline" className="shrink-0 px-1.5 py-0 text-[10px] font-normal text-slate-600 border-slate-300">
+      <div className='min-w-0 flex-1'>
+        <div className='flex items-center gap-2'>
+          <p className='truncate text-sm font-medium'>{action}</p>
+          <Badge className='bg-primary/10 text-primary h-4 border-0 px-1 text-[10px] font-medium'>
             {time}
           </Badge>
         </div>
-        <p className="text-sm text-slate-600 truncate">
-          <span className="font-medium text-slate-800">{detail}</span>
+        <p className='text-muted-foreground text-xs'>
+          <span className='font-medium text-foreground'>{detail}</span>
           {name && <span> from {name}</span>}
         </p>
       </div>
-      <Button
-        variant="ghost"
-        size="icon"
-        className="h-8 w-8 shrink-0 text-slate-500 hover:text-slate-900 hover:bg-slate-100"
-        onClick={onClick}
-      >
-        <ChevronRight className="h-4 w-4" />
-      </Button>
+      <ChevronRightIcon className='text-muted-foreground size-4 transition-colors group-hover:text-foreground' />
     </div>
   )
 })
