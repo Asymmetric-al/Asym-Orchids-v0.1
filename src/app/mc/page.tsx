@@ -131,13 +131,13 @@ const StatsGrid = memo(function StatsGrid() {
 
 const RevenueSection = memo(function RevenueSection() {
   return (
-    <Card className="lg:col-span-4 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
+    <Card className="lg:col-span-4 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">Revenue Overview</CardTitle>
-          <CardDescription className="text-sm">Monthly revenue for the current year</CardDescription>
+          <CardDescription className="text-sm text-slate-600">Monthly revenue for the current year</CardDescription>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </CardHeader>
@@ -145,13 +145,13 @@ const RevenueSection = memo(function RevenueSection() {
         <RevenueChart data={[...REVENUE_DATA]} />
         <Separator className="my-4" />
         <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center gap-2 text-slate-700">
             <TrendingUp className="h-4 w-4 text-emerald-500" />
             <span>
-              Trending up by <span className="font-medium text-foreground">5.2%</span> this month
+              Trending up by <span className="font-medium text-slate-900">5.2%</span> this month
             </span>
           </div>
-          <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium">
+          <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900">
             View Report
             <ChevronRight className="h-3 w-3" />
           </Button>
@@ -168,13 +168,13 @@ const WeeklySection = memo(function WeeklySection() {
   )
 
   return (
-    <Card className="lg:col-span-3 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
+    <Card className="lg:col-span-3 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">This Week</CardTitle>
-          <CardDescription className="text-sm">Daily donation totals</CardDescription>
+          <CardDescription className="text-sm text-slate-600">Daily donation totals</CardDescription>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
           <MoreHorizontal className="h-4 w-4" />
         </Button>
       </CardHeader>
@@ -182,10 +182,10 @@ const WeeklySection = memo(function WeeklySection() {
         <WeeklyChart data={[...WEEKLY_DATA]} />
         <Separator className="my-4" />
         <div className="flex items-center justify-between">
-          <div className="text-sm text-muted-foreground">
-            Total: <span className="font-semibold text-foreground">${weeklyTotal.toLocaleString()}</span>
+          <div className="text-sm text-slate-700">
+            Total: <span className="font-semibold text-slate-900">${weeklyTotal.toLocaleString()}</span>
           </div>
-          <Badge variant="secondary" className="text-xs font-medium">+23% vs last week</Badge>
+          <Badge variant="secondary" className="text-xs font-medium text-slate-800">+23% vs last week</Badge>
         </div>
       </CardContent>
     </Card>
@@ -198,13 +198,13 @@ const ActivitySection = memo(function ActivitySection() {
   }, [])
 
   return (
-    <Card className="lg:col-span-4 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
+    <Card className="lg:col-span-4 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
-          <CardDescription className="text-sm">Latest actions across your organization</CardDescription>
+          <CardDescription className="text-sm text-slate-600">Latest actions across your organization</CardDescription>
         </div>
-        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-600 hover:bg-slate-100 hover:text-slate-900">
           <Bell className="h-4 w-4" />
         </Button>
       </CardHeader>
@@ -219,7 +219,7 @@ const ActivitySection = memo(function ActivitySection() {
           ))}
         </div>
         <div className="border-t p-4">
-          <Button variant="ghost" className="w-full text-sm font-medium" size="sm">
+          <Button variant="ghost" className="w-full text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900" size="sm">
             View all activity
             <ChevronRight className="ml-1 h-4 w-4" />
           </Button>
@@ -235,13 +235,13 @@ const TasksSection = memo(function TasksSection() {
   }, [])
 
   return (
-    <Card className="lg:col-span-3 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
+    <Card className="lg:col-span-3 overflow-hidden border-slate-200/80 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">Upcoming Tasks</CardTitle>
-          <CardDescription className="text-sm">Your scheduled items</CardDescription>
+          <CardDescription className="text-sm text-slate-600">Your scheduled items</CardDescription>
         </div>
-        <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium">
+        <Button variant="ghost" size="sm" className="h-8 gap-1 text-xs font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900">
           <Plus className="h-3 w-3" />
           Add
         </Button>
@@ -257,7 +257,7 @@ const TasksSection = memo(function TasksSection() {
           ))}
         </div>
         <div className="border-t p-4">
-          <Button variant="ghost" className="w-full text-sm font-medium" size="sm">
+          <Button variant="ghost" className="w-full text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900" size="sm">
             View all tasks
             <ChevronRight className="ml-1 h-4 w-4" />
           </Button>
@@ -296,16 +296,16 @@ const DashboardHeader = memo(function DashboardHeader({ userName }: { userName: 
         <h1 className="text-2xl font-semibold tracking-tight">
           Welcome back, {userName}
         </h1>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-slate-600">
           Here&apos;s what&apos;s happening with your mission today.
         </p>
       </div>
       <div className="flex items-center gap-2">
-        <Button variant="outline" size="sm" className="h-9 text-sm">
+        <Button variant="outline" size="sm" className="h-9 text-sm border-slate-300 text-slate-700 hover:bg-slate-100 hover:text-slate-900">
           <Calendar className="mr-2 h-4 w-4" />
           {today}
         </Button>
-        <Button size="sm" className="h-9 text-sm">
+        <Button size="sm" className="h-9 text-sm bg-slate-900 text-white hover:bg-slate-800">
           <Plus className="mr-2 h-4 w-4" />
           New Update
         </Button>

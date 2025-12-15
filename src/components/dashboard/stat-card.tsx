@@ -59,7 +59,7 @@ export const StatCard = memo(function StatCard({
   return (
     <Card className={cn('group relative overflow-hidden', className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
+        <CardTitle className="text-sm font-medium text-slate-700 dark:text-slate-200">
           {title}
         </CardTitle>
         <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', colors.bg)}>
@@ -90,7 +90,7 @@ export const StatCard = memo(function StatCard({
               )}
               {change.value}
             </Badge>
-            <span className="text-muted-foreground">{change.label}</span>
+            <span className="text-slate-600 dark:text-slate-300">{change.label}</span>
           </div>
         )}
       </CardContent>
