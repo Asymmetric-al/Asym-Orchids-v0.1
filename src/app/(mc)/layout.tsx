@@ -1,10 +1,19 @@
 import { MCProvider } from '@/lib/mission-control/context'
 import { AppShell } from '@/components/mission-control/app-shell/AppShell'
+import { ThemeProvider } from '@/providers/theme-provider'
 
 export default function MCLayout({ children }: { children: React.ReactNode }) {
   return (
-    <MCProvider>
-      <AppShell>{children}</AppShell>
-    </MCProvider>
+    <ThemeProvider
+      attribute="class"
+      defaultTheme="light"
+      forcedTheme="light"
+      enableSystem={false}
+      disableTransitionOnChange
+    >
+      <MCProvider>
+        <AppShell>{children}</AppShell>
+      </MCProvider>
+    </ThemeProvider>
   )
 }

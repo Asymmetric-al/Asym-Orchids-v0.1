@@ -10,8 +10,8 @@ import { Separator } from '@/components/ui/separator'
 
 export const TopBar = memo(function TopBar() {
   return (
-    <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-background px-4">
-      <div className="flex items-center gap-3">
+    <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-slate-200/60 bg-white/80 px-6 backdrop-blur-md">
+      <div className="flex items-center gap-4">
         <MobileSidebar />
         <GlobalSearch />
       </div>
