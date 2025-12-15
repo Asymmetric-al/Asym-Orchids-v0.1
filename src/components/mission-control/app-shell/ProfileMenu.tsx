@@ -1,6 +1,6 @@
 'use client'
 
-import { LogOut, Settings, User } from '../icons'
+import { LogOut, Settings, User, ChevronDown } from '../icons'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import {
@@ -33,42 +33,42 @@ export function ProfileMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-9 w-9 rounded-full">
-          <Avatar className="h-8 w-8">
-            <AvatarFallback className="bg-primary text-primary-foreground text-xs">
+        <Button variant="ghost" className="h-8 gap-2 px-2 hover:bg-secondary">
+          <Avatar className="h-6 w-6">
+            <AvatarFallback className="bg-foreground text-background text-[10px] font-medium">
               {initials}
             </AvatarFallback>
           </Avatar>
+          <ChevronDown className="h-3 w-3 text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium">{user?.name}</p>
-            <p className="text-xs text-muted-foreground">{user?.email}</p>
-            <p className="text-xs text-muted-foreground">{roleLabel}</p>
+            <p className="text-sm font-medium leading-none">{user?.name}</p>
+            <p className="text-xs leading-none text-muted-foreground">{user?.email}</p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <User className="mr-2 h-4 w-4" />
+        <DropdownMenuItem className="gap-2">
+          <User className="h-4 w-4" />
           Profile
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Settings className="mr-2 h-4 w-4" />
+        <DropdownMenuItem className="gap-2">
+          <Settings className="h-4 w-4" />
           Settings
         </DropdownMenuItem>
         {isDevMode && (
           <>
             <DropdownMenuSeparator />
             <DropdownMenuSub>
-              <DropdownMenuSubTrigger>
-                <span className="text-xs text-amber-600">[Dev] Switch Role</span>
+              <DropdownMenuSubTrigger className="text-xs text-amber-600 dark:text-amber-400">
+                [Dev] Switch Role ({roleLabel})
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent>
                 <DropdownMenuRadioGroup value={role} onValueChange={(v) => setRole(v as Role)}>
                   {(Object.keys(ROLE_LABELS) as Role[]).map((r) => (
-                    <DropdownMenuRadioItem key={r} value={r}>
+                    <DropdownMenuRadioItem key={r} value={r} className="text-sm">
                       {ROLE_LABELS[r]}
                     </DropdownMenuRadioItem>
                   ))}
@@ -78,8 +78,8 @@ export function ProfileMenu() {
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive" onClick={() => signOut()}>
-          <LogOut className="mr-2 h-4 w-4" />
+        <DropdownMenuItem className="gap-2 text-destructive focus:text-destructive" onClick={() => signOut()}>
+          <LogOut className="h-4 w-4" />
           Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>

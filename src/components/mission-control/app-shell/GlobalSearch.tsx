@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { Command, Search } from '../icons'
+import { Search } from '../icons'
 import { Button } from '@/components/ui/button'
 import {
   CommandDialog,
@@ -12,7 +12,6 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command'
-import { NAV_ITEMS } from '@/lib/mission-control/nav'
 import { TILES } from '@/lib/mission-control/tiles'
 import { getIcon } from '../icons'
 import { useMC } from '@/lib/mission-control/context'
@@ -39,13 +38,13 @@ export function GlobalSearch() {
     <>
       <Button
         variant="outline"
-        className="relative h-9 w-64 justify-start text-sm text-muted-foreground"
+        className="relative h-8 w-56 justify-start rounded-md border-input bg-transparent px-3 text-sm text-muted-foreground shadow-none hover:bg-accent hover:text-accent-foreground"
         onClick={() => setOpen(true)}
       >
-        <Search className="mr-2 h-4 w-4" />
-        <span>Search...</span>
-        <kbd className="pointer-events-none absolute right-2 hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-xs font-medium opacity-100 sm:flex">
-          <Command className="h-3 w-3" />K
+        <Search className="mr-2 h-3.5 w-3.5" />
+        <span className="hidden sm:inline-flex">Search...</span>
+        <kbd className="pointer-events-none absolute right-1.5 hidden h-5 select-none items-center gap-0.5 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+          <span className="text-xs">⌘</span>K
         </kbd>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>

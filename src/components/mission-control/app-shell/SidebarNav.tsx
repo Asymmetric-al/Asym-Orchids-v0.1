@@ -9,7 +9,6 @@ import { getIcon, ChevronLeft, ChevronRight, LayoutDashboard } from '../icons'
 import { Button } from '@/components/ui/button'
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Separator } from '@/components/ui/separator'
 
 export function SidebarNav() {
   const pathname = usePathname()
@@ -27,35 +26,31 @@ export function SidebarNav() {
     <TooltipProvider delayDuration={0}>
       <aside
         className={cn(
-          'flex flex-col border-r border-border bg-sidebar transition-all duration-200',
-          sidebarCollapsed ? 'w-16' : 'w-64'
+          'flex flex-col border-r border-border bg-background transition-all duration-200',
+          sidebarCollapsed ? 'w-[60px]' : 'w-[240px]'
         )}
       >
-        <div className="flex h-14 items-center justify-between border-b border-border px-3">
+        <div className={cn(
+          'flex h-14 items-center border-b border-border',
+          sidebarCollapsed ? 'justify-center px-2' : 'justify-between px-4'
+        )}>
           {!sidebarCollapsed && (
-            <Link href="/mc" className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                <LayoutDashboard className="h-4 w-4" />
+            <Link href="/mc" className="flex items-center gap-2.5">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground text-background">
+                <LayoutDashboard className="h-3.5 w-3.5" />
               </div>
-              <span className="font-semibold text-sm">Mission Control</span>
+              <span className="font-semibold text-sm tracking-tight">Mission Control</span>
             </Link>
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 shrink-0"
-            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-          >
-            {sidebarCollapsed ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <ChevronLeft className="h-4 w-4" />
-            )}
-          </Button>
+          {sidebarCollapsed && (
+            <div className="flex h-7 w-7 items-center justify-center rounded-md bg-foreground text-background">
+              <LayoutDashboard className="h-3.5 w-3.5" />
+            </div>
+          )}
         </div>
 
-        <ScrollArea className="flex-1 py-2">
-          <nav className="flex flex-col gap-1 px-2">
+        <ScrollArea className="flex-1">
+          <nav className="flex flex-col gap-0.5 p-2">
             {mainItems.map((item) => {
               const Icon = getIcon(item.icon)
               const active = isActive(item.route)
@@ -65,20 +60,22 @@ export function SidebarNav() {
                     <Link
                       href={item.route === '/' ? '/mc' : `/mc${item.route}`}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                        'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                        'group flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-all',
                         active
-                          ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                          : 'text-sidebar-foreground',
+                          ? 'bg-secondary font-medium text-foreground'
+                          : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground',
                         sidebarCollapsed && 'justify-center px-2'
                       )}
                     >
-                      <Icon className="h-4 w-4 shrink-0" />
+                      <Icon className={cn(
+                        'h-4 w-4 shrink-0 transition-colors',
+                        active ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                      )} />
                       {!sidebarCollapsed && <span>{item.title}</span>}
                     </Link>
                   </TooltipTrigger>
                   {sidebarCollapsed && (
-                    <TooltipContent side="right" className="font-medium">
+                    <TooltipContent side="right" className="font-medium text-xs">
                       {item.title}
                     </TooltipContent>
                   )}
@@ -88,9 +85,12 @@ export function SidebarNav() {
 
             {toolsItems.length > 0 && (
               <>
-                <Separator className="my-2" />
+                <div className={cn(
+                  'my-2 h-px bg-border',
+                  sidebarCollapsed && 'mx-2'
+                )} />
                 {!sidebarCollapsed && (
-                  <span className="px-3 py-1 text-xs font-medium text-muted-foreground">
+                  <span className="mb-1 px-2.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground/70">
                     Tools
                   </span>
                 )}
@@ -103,20 +103,22 @@ export function SidebarNav() {
                         <Link
                           href={`/mc${item.route}`}
                           className={cn(
-                            'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                            'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                            'group flex items-center gap-2.5 rounded-md px-2.5 py-2 text-sm transition-all',
                             active
-                              ? 'bg-sidebar-accent text-sidebar-accent-foreground'
-                              : 'text-sidebar-foreground',
+                              ? 'bg-secondary font-medium text-foreground'
+                              : 'text-muted-foreground hover:bg-secondary/50 hover:text-foreground',
                             sidebarCollapsed && 'justify-center px-2'
                           )}
                         >
-                          <Icon className="h-4 w-4 shrink-0" />
+                          <Icon className={cn(
+                            'h-4 w-4 shrink-0 transition-colors',
+                            active ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'
+                          )} />
                           {!sidebarCollapsed && <span>{item.title}</span>}
                         </Link>
                       </TooltipTrigger>
                       {sidebarCollapsed && (
-                        <TooltipContent side="right" className="font-medium">
+                        <TooltipContent side="right" className="font-medium text-xs">
                           {item.title}
                         </TooltipContent>
                       )}
@@ -127,6 +129,27 @@ export function SidebarNav() {
             )}
           </nav>
         </ScrollArea>
+
+        <div className="border-t border-border p-2">
+          <Button
+            variant="ghost"
+            size="sm"
+            className={cn(
+              'w-full justify-center text-muted-foreground hover:text-foreground',
+              !sidebarCollapsed && 'justify-start px-2.5'
+            )}
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          >
+            {sidebarCollapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <>
+                <ChevronLeft className="h-4 w-4 mr-2" />
+                <span className="text-xs">Collapse</span>
+              </>
+            )}
+          </Button>
+        </div>
       </aside>
     </TooltipProvider>
   )
