@@ -10,56 +10,69 @@ import {
   Globe, 
   Shield, 
   Zap, 
-  Sparkles,
-  TrendingUp,
-  Calendar,
   ChevronRight,
   MapPin,
-  Search,
-  BarChart3
+  BarChart3,
+  ArrowUpRight,
+  Play
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 
 const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0, y: 24 },
   animate: { opacity: 1, y: 0 },
 };
 
 const staggerContainer = {
   animate: {
     transition: {
-      staggerChildren: 0.1,
+      staggerChildren: 0.08,
     },
   },
 };
 
+const scaleIn = {
+  initial: { opacity: 0, scale: 0.95 },
+  animate: { opacity: 1, scale: 1 },
+};
+
 const missionaries = [
-  { name: "John & Jane Doe", location: "Chiang Mai, Thailand", status: "On Field", avatar: "/avatars/1.jpg" },
-  { name: "Sarah Smith", location: "Nairobi, Kenya", status: "On Field", avatar: "/avatars/2.jpg" },
-  { name: "David & Ruth Miller", location: "Chicago, USA", status: "Furlough", avatar: "/avatars/3.jpg" },
-  { name: "Paul Chen", location: "X City, East Asia", status: "On Field", avatar: "/avatars/4.jpg" },
+  { name: "John & Jane Doe", location: "Chiang Mai, Thailand", status: "On Field" },
+  { name: "Sarah Smith", location: "Nairobi, Kenya", status: "On Field" },
 ];
+
+const stats = [
+  { value: "500+", label: "Missionaries" },
+  { value: "100+", label: "Countries" },
+  { value: "$2.4M", label: "Given" },
+  { value: "12.8k", label: "Transactions" },
+];
+
+const trustedBy = ["Crossworld", "ABWE", "ReachGlobal", "Pioneers", "Ethnos360"];
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen flex-col bg-background font-sans selection:bg-primary/10 selection:text-primary">
-      <header className="sticky top-0 z-50 border-b border-border/50 bg-background/95 backdrop-blur-xl supports-[backdrop-filter]:bg-background/80">
-        <div className="container mx-auto flex h-16 items-center justify-between px-6">
-          <Link href="/" className="flex items-center gap-3 transition-all hover:opacity-90">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
-              <span className="font-bold text-lg">A</span>
+    <div className="flex min-h-screen flex-col bg-background font-sans antialiased selection:bg-foreground/5">
+      <header className="sticky top-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-80">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-foreground">
+              <span className="font-semibold text-background text-sm">A</span>
             </div>
-            <span className="text-xl font-semibold tracking-tight text-foreground">asymmetric.al</span>
+            <span className="text-lg font-semibold tracking-tight">asymmetric.al</span>
           </Link>
-          <nav className="flex items-center gap-3">
+          <nav className="flex items-center gap-2">
             <Link href="/login">
-              <Button variant="ghost" size="sm" className="hidden sm:flex font-medium">Sign In</Button>
+              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
+                Sign In
+              </Button>
             </Link>
             <Link href="/register">
-              <Button size="sm" className="shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 transition-all font-medium">
+              <Button size="sm" className="rounded-full px-4">
                 Get Started
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Button>
             </Link>
           </nav>
@@ -67,162 +80,151 @@ export default function Home() {
       </header>
 
       <main className="flex-1">
-        <section className="relative px-6 py-20 md:py-28 lg:py-36 overflow-hidden">
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full blur-3xl animate-pulse-slow" />
-            <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-accent/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: "2s" }} />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(var(--primary)_/_0.03)_0%,transparent_50%)]" />
-            <div className="absolute inset-0" style={{
-              backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--foreground) / 0.03) 1px, transparent 0)`,
-              backgroundSize: "32px 32px"
-            }} />
-          </div>
+        <section className="relative overflow-hidden px-6 py-24 md:py-32">
+          <div className="bg-grid absolute inset-0 -z-10" />
+          <div className="absolute inset-0 -z-10 bg-gradient-to-b from-background via-background to-transparent" />
           
           <motion.div 
-            className="container mx-auto max-w-5xl text-center"
+            className="mx-auto max-w-4xl text-center"
             initial="initial"
             animate="animate"
             variants={staggerContainer}
           >
-            <motion.div variants={fadeInUp} transition={{ duration: 0.6 }}>
-              <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-sm font-medium border-0 bg-primary/10 text-primary">
-                <Sparkles className="w-3.5 h-3.5 mr-1.5" />
-                Mission-Focused Platform
-              </Badge>
+            <motion.div 
+              variants={fadeInUp} 
+              transition={{ duration: 0.5 }}
+              className="mb-8 flex justify-center"
+            >
+              <div className="inline-flex items-center gap-2 rounded-full border border-border/60 bg-card px-4 py-2 text-sm">
+                <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
+                <span className="text-muted-foreground">Mission-focused platform</span>
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+              </div>
             </motion.div>
             
             <motion.h1 
               variants={fadeInUp}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-5xl font-bold tracking-tight text-foreground sm:text-6xl md:text-7xl leading-[1.1]"
+              transition={{ duration: 0.5, delay: 0.05 }}
+              className="text-4xl font-semibold tracking-tight text-foreground sm:text-5xl md:text-6xl text-balance leading-[1.1]"
             >
-              Empowering
-              <span className="relative mx-3">
-                <span className="relative z-10 bg-gradient-to-r from-primary via-primary to-chart-2 bg-clip-text text-transparent">
-                  Kingdom
-                </span>
-                <span className="absolute -bottom-2 left-0 right-0 h-3 bg-primary/10 -rotate-1 rounded" />
-              </span>
-              <br className="hidden sm:block" />
+              Empowering Kingdom
+              <br />
               Impact Worldwide
             </motion.h1>
             
             <motion.p 
               variants={fadeInUp}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mx-auto mt-8 max-w-2xl text-lg text-muted-foreground leading-relaxed"
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="mx-auto mt-6 max-w-xl text-base text-muted-foreground leading-relaxed md:text-lg"
             >
-              Connect donors with missionaries. Manage support, track giving, and empower mission work around the globe with a platform built for transformation.
+              Connect donors with missionaries. Manage support, track giving, and empower mission work around the globe.
             </motion.p>
             
             <motion.div 
               variants={fadeInUp}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
+              transition={{ duration: 0.5, delay: 0.15 }}
+              className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row"
             >
-              <Link href="/register" className="w-full sm:w-auto">
-                <Button size="lg" className="w-full h-12 px-8 text-base shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/30 transition-all hover:-translate-y-0.5 font-medium">
+              <Link href="/register">
+                <Button size="lg" className="h-12 rounded-full px-6 text-base">
                   Start Your Journey
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
-              <Link href="/login" className="w-full sm:w-auto">
-                <Button variant="outline" size="lg" className="w-full h-12 px-8 text-base font-medium border-border/60 hover:bg-secondary/80">
-                  Sign In
-                </Button>
-              </Link>
+              <Button variant="outline" size="lg" className="h-12 rounded-full px-6 text-base border-border/60">
+                <Play className="mr-2 h-4 w-4" />
+                Watch Demo
+              </Button>
             </motion.div>
 
             <motion.div 
               variants={fadeInUp}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="mt-16 flex items-center justify-center gap-8 text-sm text-muted-foreground"
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-16 flex flex-wrap items-center justify-center gap-8 text-sm text-muted-foreground"
             >
-              <div className="flex items-center gap-2">
-                <div className="flex -space-x-2">
-                  {[1, 2, 3, 4].map((i) => (
-                    <Avatar key={i} className="h-8 w-8 border-2 border-background">
-                      <AvatarFallback className="bg-primary/10 text-primary text-xs">
-                        {String.fromCharCode(64 + i)}
-                      </AvatarFallback>
-                    </Avatar>
-                  ))}
-                </div>
-                <span>500+ missionaries supported</span>
-              </div>
-              <div className="hidden sm:flex items-center gap-2">
-                <Globe className="h-4 w-4 text-primary" />
-                <span>100+ countries</span>
-              </div>
+              <span className="text-xs uppercase tracking-wider">Trusted by</span>
+              {trustedBy.map((name) => (
+                <span key={name} className="font-medium text-foreground/70">{name}</span>
+              ))}
             </motion.div>
           </motion.div>
         </section>
 
-        <section className="px-6 py-24 bg-gradient-to-b from-muted/30 to-background relative overflow-hidden">
-          <div className="absolute inset-0 -z-10" style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--foreground) / 0.02) 1px, transparent 0)`,
-            backgroundSize: "48px 48px"
-          }} />
-          
-          <div className="container mx-auto max-w-6xl">
+        <section className="px-6 py-12">
+          <div className="mx-auto max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="grid grid-cols-2 gap-4 sm:grid-cols-4"
+            >
+              {stats.map((stat, i) => (
+                <div 
+                  key={stat.label}
+                  className="group rounded-2xl border border-border/50 bg-card p-6 text-center transition-all hover:border-border hover:shadow-sm"
+                >
+                  <div className="text-2xl font-semibold tracking-tight md:text-3xl">{stat.value}</div>
+                  <div className="mt-1 text-sm text-muted-foreground">{stat.label}</div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+        </section>
+
+        <section className="px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-6xl">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="mb-14 text-center"
+              className="mb-12 text-center"
             >
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 Built for Every Role
               </h2>
-              <p className="mt-4 text-lg text-muted-foreground max-w-xl mx-auto">
-                Whether you're giving, serving, or leading, asymmetric.al provides the tools you need.
+              <p className="mt-3 text-muted-foreground">
+                Whether you're giving, serving, or leading—we have the tools you need.
               </p>
             </motion.div>
 
-            <div className="grid gap-5 md:grid-cols-6 lg:grid-cols-12 auto-rows-[minmax(180px,auto)]">
+            <div className="grid gap-4 md:grid-cols-3">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
-                className="md:col-span-6 lg:col-span-7 lg:row-span-2 group relative overflow-hidden rounded-3xl border border-border/50 bg-card p-8 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-500"
+                className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all hover:border-border hover:shadow-lg"
               >
-                <div className="absolute top-0 right-0 -mt-20 -mr-20 h-80 w-80 rounded-full bg-gradient-to-br from-primary/10 to-transparent blur-3xl transition-all duration-500 group-hover:from-primary/15" />
-                <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-60 w-60 rounded-full bg-gradient-to-tr from-chart-2/10 to-transparent blur-3xl" />
-                
-                <div className="relative h-full flex flex-col justify-between">
-                  <div>
-                    <div className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 text-primary">
-                      <Heart className="h-7 w-7" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-foreground">For Donors</h3>
-                    <p className="mt-4 text-muted-foreground leading-relaxed max-w-md">
-                      Browse missionary profiles, set up recurring gifts, track your giving history, and see the real impact of your generosity in one beautiful dashboard.
-                    </p>
-                    
-                    <div className="mt-8 p-4 rounded-2xl bg-muted/50 border border-border/50">
-                      <div className="flex items-center justify-between mb-3">
-                        <span className="text-sm font-medium">Monthly Giving</span>
-                        <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-0 text-xs">+12%</Badge>
-                      </div>
-                      <div className="flex items-end gap-1 h-16">
-                        {[40, 55, 45, 60, 75, 65, 80, 70, 85, 90, 78, 95].map((h, i) => (
-                          <div 
-                            key={i} 
-                            className="flex-1 bg-gradient-to-t from-primary/80 to-primary/40 rounded-sm transition-all duration-300 hover:from-primary hover:to-primary/60"
-                            style={{ height: `${h}%` }}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <Link href="/donor-dashboard" className="mt-6 inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors group/link">
-                    Access Donor Portal 
-                    <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover/link:translate-x-1" />
-                  </Link>
+                <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/5">
+                  <Heart className="h-6 w-6" />
                 </div>
+                <h3 className="text-lg font-semibold">For Donors</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  Browse missionary profiles, set up recurring gifts, track your giving history, and see the real impact of your generosity.
+                </p>
+                
+                <div className="mt-6 rounded-xl bg-muted/50 p-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="font-medium">Monthly Giving</span>
+                    <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-600 border-0 text-xs">+12%</Badge>
+                  </div>
+                  <div className="mt-3 flex items-end gap-1 h-12">
+                    {[40, 55, 45, 60, 75, 65, 80, 70, 85, 90, 78, 95].map((h, i) => (
+                      <div 
+                        key={i} 
+                        className="flex-1 bg-foreground/20 rounded-sm transition-colors group-hover:bg-foreground/30"
+                        style={{ height: `${h}%` }}
+                      />
+                    ))}
+                  </div>
+                </div>
+                
+                <Link href="/donor-dashboard" className="mt-6 inline-flex items-center text-sm font-medium hover:underline underline-offset-4">
+                  Donor Portal 
+                  <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+                </Link>
               </motion.div>
 
               <motion.div 
@@ -230,41 +232,37 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.1 }}
-                className="md:col-span-3 lg:col-span-5 group relative overflow-hidden rounded-3xl border border-border/50 bg-card p-6 shadow-sm hover:shadow-xl hover:border-primary/20 transition-all duration-500"
+                className="group relative overflow-hidden rounded-3xl border border-border/50 bg-card p-8 transition-all hover:border-border hover:shadow-lg"
               >
-                <div className="absolute top-0 right-0 -mt-16 -mr-16 h-48 w-48 rounded-full bg-gradient-to-br from-chart-2/10 to-transparent blur-3xl" />
-                
-                <div className="relative">
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-chart-2/20 to-chart-2/5 text-chart-2">
-                    <Users className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-bold text-foreground">For Missionaries</h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                    Manage support, share updates, and focus on your mission.
-                  </p>
-                  
-                  <div className="mt-4 space-y-2">
-                    {missionaries.slice(0, 2).map((m, i) => (
-                      <div key={i} className="flex items-center gap-3 p-2 rounded-xl bg-muted/40 hover:bg-muted/60 transition-colors">
-                        <Avatar className="h-8 w-8">
-                          <AvatarFallback className="bg-primary/10 text-primary text-xs">{m.name[0]}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium truncate">{m.name}</p>
-                          <p className="text-xs text-muted-foreground flex items-center gap-1">
-                            <MapPin className="h-3 w-3" />{m.location}
-                          </p>
-                        </div>
-                        <Badge variant="secondary" className="text-xs border-0 shrink-0">{m.status}</Badge>
-                      </div>
-                    ))}
-                  </div>
-                  
-                  <Link href="/missionary-dashboard" className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors group/link">
-                    Missionary Portal 
-                    <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover/link:translate-x-1" />
-                  </Link>
+                <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-foreground/5">
+                  <Users className="h-6 w-6" />
                 </div>
+                <h3 className="text-lg font-semibold">For Missionaries</h3>
+                <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                  Manage support, share updates with your team, and focus on your mission without the administrative burden.
+                </p>
+                
+                <div className="mt-6 space-y-2">
+                  {missionaries.map((m, i) => (
+                    <div key={i} className="flex items-center gap-3 rounded-xl bg-muted/50 p-3 transition-colors group-hover:bg-muted/70">
+                      <Avatar className="h-9 w-9">
+                        <AvatarFallback className="bg-foreground/10 text-xs font-medium">{m.name.split(' ').map(n => n[0]).join('').slice(0,2)}</AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium truncate">{m.name}</p>
+                        <p className="text-xs text-muted-foreground flex items-center gap-1">
+                          <MapPin className="h-3 w-3" />{m.location}
+                        </p>
+                      </div>
+                      <Badge variant="secondary" className="text-xs border-0 shrink-0">{m.status}</Badge>
+                    </div>
+                  ))}
+                </div>
+                
+                <Link href="/missionary-dashboard" className="mt-6 inline-flex items-center text-sm font-medium hover:underline underline-offset-4">
+                  Missionary Portal 
+                  <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+                </Link>
               </motion.div>
 
               <motion.div 
@@ -272,82 +270,71 @@ export default function Home() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="md:col-span-3 lg:col-span-5 group relative overflow-hidden rounded-3xl border border-border/50 bg-gradient-to-br from-primary to-primary/80 p-6 shadow-sm hover:shadow-xl transition-all duration-500"
+                className="group relative overflow-hidden rounded-3xl border border-transparent bg-foreground p-8 text-background"
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.15)_0%,transparent_50%)]" />
-                
-                <div className="relative">
-                  <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 text-white">
-                    <Building2 className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-xl font-bold text-white">For Organizations</h3>
-                  <p className="mt-2 text-sm text-white/80 leading-relaxed">
-                    Administer networks, generate reports, and gain insights.
-                  </p>
-                  
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
-                      <BarChart3 className="h-5 w-5 text-white/70 mb-1" />
-                      <p className="text-2xl font-bold text-white">12.8k</p>
-                      <p className="text-xs text-white/60">Transactions</p>
-                    </div>
-                    <div className="p-3 rounded-xl bg-white/10 backdrop-blur-sm">
-                      <TrendingUp className="h-5 w-5 text-white/70 mb-1" />
-                      <p className="text-2xl font-bold text-white">4.7</p>
-                      <p className="text-xs text-white/60">Satisfaction</p>
-                    </div>
-                  </div>
-                  
-                  <Link href="/mc" className="mt-4 inline-flex items-center text-sm font-semibold text-white hover:text-white/90 transition-colors group/link">
-                    Mission Control 
-                    <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover/link:translate-x-1" />
-                  </Link>
+                <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-background/10">
+                  <Building2 className="h-6 w-6" />
                 </div>
+                <h3 className="text-lg font-semibold">For Organizations</h3>
+                <p className="mt-2 text-sm text-background/70 leading-relaxed">
+                  Administer networks, generate reports, and gain insights into your mission's global impact.
+                </p>
+                
+                <div className="mt-6 grid grid-cols-2 gap-3">
+                  <div className="rounded-xl bg-background/10 p-4">
+                    <BarChart3 className="h-5 w-5 text-background/60 mb-2" />
+                    <p className="text-xl font-semibold">12.8k</p>
+                    <p className="text-xs text-background/50">Transactions</p>
+                  </div>
+                  <div className="rounded-xl bg-background/10 p-4">
+                    <div className="h-5 w-5 text-background/60 mb-2 flex items-center justify-center text-sm font-medium">4.7</div>
+                    <p className="text-xl font-semibold">98%</p>
+                    <p className="text-xs text-background/50">Satisfaction</p>
+                  </div>
+                </div>
+                
+                <Link href="/mc" className="mt-6 inline-flex items-center text-sm font-medium text-background hover:underline underline-offset-4">
+                  Mission Control 
+                  <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
+                </Link>
               </motion.div>
             </div>
           </div>
         </section>
         
-        <section className="px-6 py-24 relative overflow-hidden">
-          <div className="absolute inset-0 -z-10">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-to-r from-primary/5 via-transparent to-chart-2/5 rounded-full blur-3xl" />
-          </div>
-          
-          <div className="container mx-auto max-w-5xl">
+        <section className="px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-5xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
-              className="text-center mb-16"
+              className="text-center mb-12"
             >
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 Why Choose Us
               </h2>
-              <p className="mt-4 text-muted-foreground max-w-lg mx-auto">
+              <p className="mt-3 text-muted-foreground">
                 Built with purpose, designed with care
               </p>
             </motion.div>
             
-            <div className="grid gap-8 sm:grid-cols-3">
+            <div className="grid gap-6 sm:grid-cols-3">
               {[
                 {
                   icon: Globe,
                   title: "Global Reach",
-                  description: "Supporting missions across 6 continents and 100+ countries.",
-                  gradient: "from-blue-500/10 to-cyan-500/10"
+                  description: "Supporting missions across 6 continents and 100+ countries worldwide.",
                 },
                 {
                   icon: Shield,
                   title: "Secure & Reliable",
-                  description: "Bank-grade security ensures your data and donations are safe.",
-                  gradient: "from-green-500/10 to-emerald-500/10"
+                  description: "Bank-grade security ensures your data and donations are always safe.",
                 },
                 {
                   icon: Zap,
                   title: "Instant Updates",
                   description: "Real-time reporting and notifications keep you connected.",
-                  gradient: "from-amber-500/10 to-orange-500/10"
                 }
               ].map((feature, i) => (
                 <motion.div
@@ -356,48 +343,44 @@ export default function Home() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: i * 0.1 }}
-                  className="group text-center p-8 rounded-3xl border border-border/50 bg-card hover:shadow-xl hover:border-primary/20 transition-all duration-500"
+                  className="group rounded-2xl border border-border/50 bg-card p-6 transition-all hover:border-border hover:shadow-sm"
                 >
-                  <div className={`mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${feature.gradient} group-hover:scale-110 transition-transform duration-300`}>
-                    <feature.icon className="h-8 w-8 text-foreground" />
+                  <div className="mb-4 inline-flex h-10 w-10 items-center justify-center rounded-xl bg-foreground/5 transition-colors group-hover:bg-foreground/10">
+                    <feature.icon className="h-5 w-5" />
                   </div>
-                  <h3 className="text-lg font-bold">{feature.title}</h3>
-                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
+                  <h3 className="font-semibold">{feature.title}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{feature.description}</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="px-6 py-24 bg-muted/30 relative overflow-hidden">
-          <div className="absolute inset-0 -z-10" style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, hsl(var(--foreground) / 0.015) 1px, transparent 0)`,
-            backgroundSize: "40px 40px"
-          }} />
-          
-          <div className="container mx-auto max-w-4xl text-center">
+        <section className="px-6 py-20 md:py-28">
+          <div className="mx-auto max-w-3xl">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
+              className="rounded-3xl border border-border/50 bg-card p-8 text-center md:p-12"
             >
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-4">
+              <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">
                 Ready to Make an Impact?
               </h2>
-              <p className="text-lg text-muted-foreground max-w-xl mx-auto mb-10">
+              <p className="mt-4 text-muted-foreground max-w-md mx-auto">
                 Join thousands of donors and missionaries using asymmetric.al to transform lives around the world.
               </p>
               
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
                 <Link href="/register">
-                  <Button size="lg" className="h-12 px-8 text-base shadow-xl shadow-primary/25 hover:shadow-2xl hover:shadow-primary/30 transition-all hover:-translate-y-0.5 font-medium">
+                  <Button size="lg" className="h-12 rounded-full px-6 text-base">
                     Get Started Free
                     <ArrowRight className="ml-2 h-4 w-4" />
                   </Button>
                 </Link>
                 <Link href="/login">
-                  <Button variant="outline" size="lg" className="h-12 px-8 text-base font-medium">
+                  <Button variant="outline" size="lg" className="h-12 rounded-full px-6 text-base border-border/60">
                     Contact Sales
                   </Button>
                 </Link>
@@ -407,14 +390,14 @@ export default function Home() {
         </section>
       </main>
 
-      <footer className="border-t border-border/50 bg-card py-12">
-        <div className="container mx-auto px-6">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <div className="flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
-                <span className="font-bold text-base">A</span>
+      <footer className="border-t border-border/40 py-8">
+        <div className="mx-auto max-w-7xl px-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2.5">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground">
+                <span className="font-semibold text-background text-xs">A</span>
               </div>
-              <span className="text-lg font-semibold tracking-tight text-foreground">asymmetric.al</span>
+              <span className="font-medium">asymmetric.al</span>
             </div>
             <p className="text-sm text-muted-foreground">
               &copy; {new Date().getFullYear()} asymmetric.al. All rights reserved.
