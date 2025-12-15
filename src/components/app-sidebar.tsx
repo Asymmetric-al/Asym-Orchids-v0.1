@@ -13,6 +13,7 @@ import {
   CreditCard,
   FileText,
   Globe,
+  Newspaper,
 } from 'lucide-react'
 import {
   Sidebar,
@@ -39,6 +40,7 @@ interface AppSidebarProps {
 
 const donorNavItems = [
   { title: 'Dashboard', href: '/dashboard', icon: Home },
+  { title: 'Feed', href: '/feed', icon: Newspaper },
   { title: 'My Giving', href: '/giving', icon: Heart },
   { title: 'Missionaries', href: '/missionaries', icon: Users },
   { title: 'Giving History', href: '/history', icon: FileText },
@@ -47,6 +49,7 @@ const donorNavItems = [
 
 const missionaryNavItems = [
   { title: 'Dashboard', href: '/dashboard', icon: Home },
+  { title: 'My Feed', href: '/feed', icon: Newspaper },
   { title: 'My Supporters', href: '/supporters', icon: Users },
   { title: 'Funding Goals', href: '/goals', icon: BarChart3 },
   { title: 'Updates', href: '/updates', icon: FileText },

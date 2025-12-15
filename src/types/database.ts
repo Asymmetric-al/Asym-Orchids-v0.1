@@ -69,3 +69,56 @@ export interface Donation {
   status: 'pending' | 'completed' | 'failed' | 'refunded'
   created_at: string
 }
+
+export interface MediaItem {
+  url: string
+  type: 'image' | 'video'
+  width?: number
+  height?: number
+}
+
+export interface Post {
+  id: string
+  tenant_id: string
+  missionary_id: string
+  content: string
+  media: MediaItem[]
+  like_count: number
+  prayer_count: number
+  comment_count: number
+  created_at: string
+  updated_at: string
+}
+
+export interface PostLike {
+  id: string
+  post_id: string
+  user_id: string
+  created_at: string
+}
+
+export interface PostPrayer {
+  id: string
+  post_id: string
+  user_id: string
+  created_at: string
+}
+
+export interface PostComment {
+  id: string
+  post_id: string
+  user_id: string
+  content: string
+  created_at: string
+}
+
+export interface PostWithAuthor extends Post {
+  author: {
+    id: string
+    first_name: string
+    last_name: string
+    avatar_url: string | null
+  }
+  user_liked?: boolean
+  user_prayed?: boolean
+}
