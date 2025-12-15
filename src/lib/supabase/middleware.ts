@@ -49,7 +49,7 @@ export async function updateSession(request: NextRequest) {
     if (profile?.role === 'admin' || profile?.role === 'staff') {
       url.pathname = '/mc'
     } else if (profile?.role === 'missionary') {
-      url.pathname = '/donor-dashboard'
+      url.pathname = '/missionary-dashboard'
     } else {
       url.pathname = '/donor-dashboard'
     }

@@ -17,7 +17,7 @@ import { useMC } from '@/lib/mission-control/context'
 import type { Tenant } from '@/lib/mission-control/types'
 
 const STUB_TENANTS: Tenant[] = [
-  { id: '00000000-0000-0000-0000-000000000001', name: 'Orchids Platform', slug: 'orchids-platform' },
+  { id: '00000000-0000-0000-0000-000000000001', name: 'asymmetric.al', slug: 'asymmetric-al' },
 ]
 
 export function TenantSwitcher() {

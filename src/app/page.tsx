@@ -13,9 +13,9 @@ export default function Home() {
         <div className="container mx-auto flex h-16 items-center justify-between px-6">
           <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-90">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-lg shadow-primary/20">
-              <span className="font-bold text-lg">O</span>
+              <span className="font-bold text-lg">A</span>
             </div>
-            <span className="text-xl font-bold tracking-tight text-foreground">Orchids</span>
+            <span className="text-xl font-bold tracking-tight text-foreground">asymmetric.al</span>
           </Link>
           <nav className="flex items-center gap-4">
             <Link href="/login">
@@ -87,7 +87,7 @@ export default function Home() {
                 Built for Every Role
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                Whether you're giving, serving, or leading, Orchids provides the tools you need.
+                Whether you're giving, serving, or leading, asymmetric.al provides the tools you need.
               </p>
             </div>
 
@@ -112,7 +112,7 @@ export default function Home() {
                     </p>
                   </div>
                   <div className="mt-8">
-                    <Link href="/dashboard" className="inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
+                    <Link href="/donor-dashboard" className="inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
                       Access Donor Portal <ArrowRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                     </Link>
                   </div>
@@ -135,7 +135,7 @@ export default function Home() {
                 <p className="mt-2 text-sm text-muted-foreground">
                   Manage support, share updates, and focus on your mission.
                 </p>
-                <Link href="/dashboard" className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
+                <Link href="/missionary-dashboard" className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
                   Missionary Portal <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
                 </Link>
               </motion.div>
@@ -196,7 +196,7 @@ export default function Home() {
 
       <footer className="border-t border-border/40 bg-background py-12">
         <div className="container mx-auto px-6 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Orchids Platform. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} asymmetric.al. All rights reserved.</p>
         </div>
       </footer>
     </div>

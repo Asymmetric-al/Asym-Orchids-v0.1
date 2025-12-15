@@ -21,8 +21,8 @@ const MCContext = createContext<MCContextValue | null>(null)
 
 const DEFAULT_TENANT: Tenant = {
   id: '00000000-0000-0000-0000-000000000001',
-  name: 'Orchids Platform',
-  slug: 'orchids-platform'
+  name: 'asymmetric.al',
+  slug: 'asymmetric-al'
 }
 
 function mapProfileRoleToMCRole(profileRole: string): Role {

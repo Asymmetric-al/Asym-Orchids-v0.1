@@ -79,7 +79,7 @@ function getNavItems(role: UserRole) {
   }
 }
 
-export function AppSidebar({ role = 'donor', tenantLogo, tenantName = 'Orchids' }: AppSidebarProps) {
+export function AppSidebar({ role = 'donor', tenantLogo, tenantName = 'asymmetric.al' }: AppSidebarProps) {
   const pathname = usePathname()
   const navItems = getNavItems(role)
 

@@ -1,7 +1,7 @@
 /**
  * MULTI-TENANCY APPROACH
  * 
- * Orchids Platform uses Row Level Security (RLS) with tenant_id for data isolation.
+ * asymmetric.al Platform uses Row Level Security (RLS) with tenant_id for data isolation.
  * 
  * Architecture:
  * - All tenant-scoped tables include a `tenant_id` column (UUID)

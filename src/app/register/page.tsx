@@ -77,7 +77,7 @@ export default function RegisterPage() {
       if (formData.role === 'admin' || formData.role === 'staff') {
         router.push('/mc')
       } else if (formData.role === 'missionary') {
-        router.push('/donor-dashboard')
+        router.push('/missionary-dashboard')
       } else {
         router.push('/donor-dashboard')
       }
@@ -91,7 +91,7 @@ export default function RegisterPage() {
       <Card className="w-full max-w-sm">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Create Account</CardTitle>
-          <CardDescription>Join Orchids Platform today</CardDescription>
+          <CardDescription>Join asymmetric.al today</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-4">
