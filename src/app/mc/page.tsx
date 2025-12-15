@@ -7,7 +7,6 @@ import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { useMC } from '@/features/mission-control'
 import { StatCard } from '@/components/dashboard/stat-card'
 import { ActivityItem } from '@/components/dashboard/activity-item'
 import { TaskItem } from '@/components/dashboard/task-item'
@@ -285,7 +284,7 @@ const QuickActionsGrid = memo(function QuickActionsGrid() {
   )
 })
 
-const DashboardHeader = memo(function DashboardHeader({ userName }: { userName: string }) {
+const DashboardHeader = memo(function DashboardHeader() {
   const today = useMemo(() => {
     return new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   }, [])
@@ -294,7 +293,7 @@ const DashboardHeader = memo(function DashboardHeader({ userName }: { userName: 
     <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="space-y-1">
         <h1 className="text-2xl font-semibold tracking-tight">
-          Welcome back, {userName}
+          Dashboard Overview
         </h1>
         <p className="text-sm text-slate-600">
           Here&apos;s what&apos;s happening with your mission today.
@@ -315,24 +314,19 @@ const DashboardHeader = memo(function DashboardHeader({ userName }: { userName: 
 })
 
 export default function MissionControlPage() {
-  const { user } = useMC()
-  const userName = user?.name?.split(' ')[0] || 'User'
-
   return (
-    <div className="flex-1 p-6 lg:p-8">
-      <div className="mx-auto max-w-7xl space-y-8">
-        <DashboardHeader userName={userName} />
-        <StatsGrid />
-        <div className="grid gap-4 lg:grid-cols-7">
-          <RevenueSection />
-          <WeeklySection />
-        </div>
-        <div className="grid gap-4 lg:grid-cols-7">
-          <ActivitySection />
-          <TasksSection />
-        </div>
-        <QuickActionsGrid />
+    <div className="space-y-8">
+      <DashboardHeader />
+      <StatsGrid />
+      <div className="grid gap-4 lg:grid-cols-7">
+        <RevenueSection />
+        <WeeklySection />
       </div>
+      <div className="grid gap-4 lg:grid-cols-7">
+        <ActivitySection />
+        <TasksSection />
+      </div>
+      <QuickActionsGrid />
     </div>
   )
 }
