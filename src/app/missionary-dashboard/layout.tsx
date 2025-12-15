@@ -70,7 +70,7 @@ function NavLink({ item, collapsed = false }: { item: typeof navItems[0]; collap
 
 function Sidebar({ className }: { className?: string }) {
   return (
-    <aside className={cn('flex h-full flex-col border-r bg-card', className)}>
+    <aside className={cn('flex h-full flex-col border-r bg-card/80 backdrop-blur supports-[backdrop-filter]:bg-card/70', className)}>
       <div className="flex h-14 items-center border-b px-4">
         <Link href="/missionary-dashboard" className="flex items-center gap-2">
           <span className="font-semibold text-lg">Missionary Dashboard</span>
@@ -98,7 +98,7 @@ function Sidebar({ className }: { className?: string }) {
 
 function TopBar() {
   return (
-    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background px-4 lg:px-6">
+    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b bg-background/80 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/70 lg:px-6">
       <div className="flex items-center gap-4 lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
@@ -173,11 +173,11 @@ export default function MissionaryDashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-screen overflow-hidden bg-background">
-      <Sidebar className="hidden w-56 lg:flex" />
+    <div className="flex h-screen overflow-hidden bg-muted/30">
+      <Sidebar className="hidden w-60 lg:flex" />
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar />
-        <main className="flex-1 overflow-y-auto bg-muted">
+        <main className="flex-1 overflow-y-auto bg-muted/20">
           {children}
         </main>
       </div>
