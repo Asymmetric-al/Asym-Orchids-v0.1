@@ -11,8 +11,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { createClient } from '@/lib/supabase/client'
 import { Loader2, Sparkles } from 'lucide-react'
 
-const DEFAULT_TENANT_ID = '00000000-0000-0000-0000-000000000001'
-
 export default function RegisterPage() {
   const router = useRouter()
   const [loading, setLoading] = useState(false)
@@ -29,49 +27,29 @@ export default function RegisterPage() {
     setLoading(true)
     setError(null)
 
-    const timestamp = Date.now()
-    const demoEmail = `demo-${role}-${timestamp}@asymmetric.al`
-    const demoPassword = 'demo1234'
-    const demoData = {
-      admin: { firstName: 'Admin', lastName: 'Demo' },
-      missionary: { firstName: 'Missionary', lastName: 'Demo' },
-      donor: { firstName: 'Donor', lastName: 'Demo' }
-    }
+    try {
+      const response = await fetch('/api/auth/demo-account', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role })
+      })
 
-    const supabase = createClient()
+      const data = await response.json()
 
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: demoEmail,
-      password: demoPassword,
-      options: {
-        data: {
-          first_name: demoData[role].firstName,
-          last_name: demoData[role].lastName,
-          role: role
-        }
+      if (!response.ok) {
+        setError(data.error || 'Failed to create demo account')
+        setLoading(false)
+        return
       }
-    })
 
-    if (authError) {
-      setError(authError.message)
-      setLoading(false)
-      return
-    }
+      const supabase = createClient()
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email: data.email,
+        password: data.password
+      })
 
-    if (authData.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          user_id: authData.user.id,
-          tenant_id: DEFAULT_TENANT_ID,
-          first_name: demoData[role].firstName,
-          last_name: demoData[role].lastName,
-          email: demoEmail,
-          role: role
-        })
-
-      if (profileError) {
-        setError(profileError.message)
+      if (signInError) {
+        setError(signInError.message)
         setLoading(false)
         return
       }
@@ -83,6 +61,8 @@ export default function RegisterPage() {
       } else {
         router.push('/donor-dashboard')
       }
+    } catch {
+      setError('Failed to create demo account')
     }
 
     setLoading(false)
@@ -120,23 +100,7 @@ export default function RegisterPage() {
     }
 
     if (authData.user) {
-      const { error: profileError } = await supabase
-        .from('profiles')
-        .insert({
-          user_id: authData.user.id,
-          tenant_id: DEFAULT_TENANT_ID,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          role: formData.role
-        })
-
-      if (profileError) {
-        setError(profileError.message)
-        setLoading(false)
-        return
-      }
-
+      // Profile is created automatically by database trigger
       if (formData.role === 'admin' || formData.role === 'staff') {
         router.push('/mc')
       } else if (formData.role === 'missionary') {
