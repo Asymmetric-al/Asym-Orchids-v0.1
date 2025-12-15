@@ -64,15 +64,15 @@ function StatCard({ title, value, subtitle, icon: Icon, iconBg, iconColor }: {
 }) {
   return (
     <Card className="overflow-hidden border-slate-200/80 bg-white shadow-sm hover:shadow-md transition-shadow">
-      <CardContent className="p-5">
+      <CardContent className="p-4">
         <div className="flex items-start justify-between">
           <div className="space-y-2">
-            <p className="text-sm font-medium text-slate-500">{title}</p>
+            <p className="text-sm font-medium text-slate-600">{title}</p>
             <p className="text-2xl font-bold text-slate-900">{value}</p>
             {subtitle && (
-              <div className="flex items-center gap-1.5 text-xs">
-                <TrendingUp className="h-3 w-3 text-emerald-500" />
-                <span className="text-emerald-600 font-medium">{subtitle}</span>
+              <div className="flex items-center gap-1.5 text-xs text-emerald-700">
+                <TrendingUp className="h-3 w-3" />
+                <span className="font-semibold">{subtitle}</span>
               </div>
             )}
           </div>
@@ -88,42 +88,42 @@ function StatCard({ title, value, subtitle, icon: Icon, iconBg, iconColor }: {
 function FundingProgress() {
   return (
     <Card className="col-span-2 border-slate-200/80 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-5 pb-0">
+      <CardHeader className="flex flex-row items-center justify-between p-4 pb-0">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50">
             <Target className="h-5 w-5 text-emerald-600" />
           </div>
           <div>
             <CardTitle className="text-base font-semibold text-slate-900">Funding Goal</CardTitle>
-            <p className="text-xs text-slate-500">Monthly progress</p>
+            <p className="text-xs text-slate-600">Monthly progress</p>
           </div>
         </div>
         <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50 border-0 font-medium">
           {stats.percentFunded}% Funded
         </Badge>
       </CardHeader>
-      <CardContent className="p-5 pt-4">
+      <CardContent className="p-4 pt-3">
         <div className="space-y-4">
           <div className="flex items-baseline justify-between">
             <span className="text-3xl font-bold text-slate-900">${stats.monthlySupport.toLocaleString()}</span>
-            <span className="text-sm text-slate-500">
+            <span className="text-sm text-slate-600">
               of ${stats.monthlyGoal.toLocaleString()} goal
             </span>
           </div>
           <Progress value={stats.percentFunded} className="h-3 bg-slate-100 [&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:to-teal-500" />
-          <div className="grid grid-cols-3 gap-4 pt-2">
+          <div className="grid grid-cols-3 gap-3 pt-2">
             <div className="text-center p-3 rounded-lg bg-slate-50">
-              <p className="text-xs font-medium text-slate-500 mb-1">Remaining</p>
+              <p className="text-xs font-medium text-slate-600 mb-1">Remaining</p>
               <p className="text-lg font-bold text-slate-900">${(stats.monthlyGoal - stats.monthlySupport).toLocaleString()}</p>
             </div>
             <div className="text-center p-3 rounded-lg bg-emerald-50">
-              <p className="text-xs font-medium text-slate-500 mb-1">Trend</p>
-              <p className="text-lg font-bold text-emerald-600 flex items-center justify-center gap-1">
+              <p className="text-xs font-medium text-slate-600 mb-1">Trend</p>
+              <p className="text-lg font-bold text-emerald-700 flex items-center justify-center gap-1">
                 <TrendingUp className="h-4 w-4" /> +12%
               </p>
             </div>
             <div className="text-center p-3 rounded-lg bg-slate-50">
-              <p className="text-xs font-medium text-slate-500 mb-1">Days Left</p>
+              <p className="text-xs font-medium text-slate-600 mb-1">Days Left</p>
               <p className="text-lg font-bold text-slate-900">16</p>
             </div>
           </div>
@@ -136,19 +136,19 @@ function FundingProgress() {
 function BalanceCard() {
   return (
     <Card className="flex flex-col justify-between overflow-hidden border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg">
-      <CardHeader className="p-5 pb-0">
+      <CardHeader className="p-4 pb-0">
         <div className="flex items-center gap-2">
-          <Wallet className="h-4 w-4 text-slate-400" />
-          <CardTitle className="text-sm font-medium text-slate-400">Available Balance</CardTitle>
+          <Wallet className="h-4 w-4 text-slate-300" />
+          <CardTitle className="text-sm font-medium text-slate-200">Available Balance</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="p-5 pt-3 space-y-4">
+      <CardContent className="p-4 pt-3 space-y-4">
         <div>
           <h3 className="text-3xl font-bold tracking-tight">${stats.currentBalance.toLocaleString()}</h3>
-          <p className="mt-1 text-xs text-slate-400">Updated today at 9:41 AM</p>
+          <p className="mt-1 text-xs text-slate-300">Updated today at 9:41 AM</p>
         </div>
         <div className="flex gap-2">
-          <Button size="sm" className="flex-1 h-9 bg-white/10 text-white hover:bg-white/20 border-0 rounded-lg text-xs font-medium">
+          <Button size="sm" className="flex-1 h-9 bg-white/12 text-white hover:bg-white/20 border-0 rounded-lg text-xs font-medium">
             Withdraw
           </Button>
           <Button size="sm" className="flex-1 h-9 bg-white text-slate-900 hover:bg-slate-100 border-0 rounded-lg text-xs font-medium">
@@ -163,7 +163,7 @@ function BalanceCard() {
 function AlertsSection() {
   return (
     <Card className="border-slate-200/80 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-5 pb-3">
+      <CardHeader className="flex flex-row items-center justify-between p-4 pb-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-amber-50">
             <AlertCircle className="h-5 w-5 text-amber-600" />
@@ -171,7 +171,7 @@ function AlertsSection() {
           <CardTitle className="text-base font-semibold text-slate-900">Alerts</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="p-5 pt-0 space-y-2">
+      <CardContent className="p-4 pt-0 space-y-2">
         {alerts.map((alert) => (
           <Link 
             key={alert.id} 
@@ -204,7 +204,7 @@ function AlertsSection() {
 function ActivityFeed() {
   return (
     <Card className="border-slate-200/80 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-5 pb-3">
+      <CardHeader className="flex flex-row items-center justify-between p-4 pb-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50">
             <Sparkles className="h-5 w-5 text-blue-600" />
@@ -223,7 +223,7 @@ function ActivityFeed() {
       <CardContent className="p-0">
         <div className="divide-y divide-slate-100">
           {recentActivity.map((activity) => (
-            <div key={activity.id} className="flex items-center gap-3 px-5 py-3 hover:bg-slate-50/50 transition-colors">
+            <div key={activity.id} className="flex items-center gap-3 px-4 py-3 hover:bg-slate-50/50 transition-colors">
               <Avatar className="h-9 w-9 border border-slate-200">
                 <AvatarFallback className={`text-xs font-semibold ${activity.type === 'gift' ? 'bg-rose-50 text-rose-600' : 'bg-blue-50 text-blue-600'}`}>
                   {activity.donor.split(' ').map(n => n[0]).join('')}
@@ -254,7 +254,7 @@ function ActivityFeed() {
 function TasksPreview() {
   return (
     <Card className="border-slate-200/80 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-5 pb-3">
+      <CardHeader className="flex flex-row items-center justify-between p-4 pb-3">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50">
             <CheckSquare className="h-5 w-5 text-violet-600" />
@@ -268,7 +268,7 @@ function TasksPreview() {
           <Plus className="h-4 w-4" />
         </Button>
       </CardHeader>
-      <CardContent className="p-5 pt-0 space-y-2">
+      <CardContent className="p-4 pt-0 space-y-2">
         {pendingTasks.map((task) => (
           <div key={task.id} className="flex items-start gap-3 p-3 rounded-lg border border-slate-200/80 bg-white hover:border-slate-300 hover:shadow-sm transition-all group cursor-pointer">
             <div className={`mt-1 h-2.5 w-2.5 rounded-full shrink-0 ${
@@ -286,7 +286,7 @@ function TasksPreview() {
             </Button>
           </div>
         ))}
-        <Button variant="outline" size="sm" className="w-full mt-2 h-9 text-xs border-dashed border-slate-300 text-slate-600 hover:text-slate-900 hover:border-slate-400" asChild>
+        <Button variant="outline" size="sm" className="w-full mt-2 h-9 text-xs border-dashed border-slate-300 text-slate-700 hover:text-slate-900 hover:border-slate-400" asChild>
           <Link href="/missionary-dashboard/tasks">View all tasks</Link>
         </Button>
       </CardContent>
@@ -304,10 +304,10 @@ function QuickActions() {
 
   return (
     <Card className="border-slate-200/80 bg-white shadow-sm">
-      <CardHeader className="p-5 pb-3">
+      <CardHeader className="p-4 pb-3">
         <CardTitle className="text-base font-semibold text-slate-900">Quick Actions</CardTitle>
       </CardHeader>
-      <CardContent className="p-5 pt-0 grid grid-cols-2 gap-2">
+      <CardContent className="p-4 pt-0 grid grid-cols-2 gap-2">
         {actions.map((action) => (
           <Link
             key={action.label}
@@ -327,14 +327,14 @@ function QuickActions() {
 
 export default function MissionaryDashboardPage() {
   return (
-    <div className="min-h-full p-6 space-y-6">
+    <div className="min-h-full p-4 md:p-6 space-y-5">
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-sm text-slate-500">Welcome back, here's your ministry overview</p>
+          <p className="text-sm text-slate-600">Welcome back, here's your ministry overview</p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-9 gap-2 border-slate-300 text-slate-600 hover:text-slate-900">
+          <Button variant="outline" size="sm" className="h-9 gap-2 border-slate-300 text-slate-700 hover:text-slate-900">
             <Filter className="h-4 w-4" />
             <span className="hidden sm:inline">Filter</span>
           </Button>

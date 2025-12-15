@@ -1,3 +1,5 @@
+'use client'
+
 import { MCProvider } from '@/lib/mission-control/context'
 import { AppShell } from '@/components/mission-control/app-shell/AppShell'
 import { ThemeProvider } from '@/providers/theme-provider'
