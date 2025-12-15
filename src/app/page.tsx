@@ -260,7 +260,7 @@ export default function Home() {
                 </div>
                 
                 <Link href="/missionary-dashboard" className="mt-6 inline-flex items-center text-sm font-medium hover:underline underline-offset-4">
-                  Missionary Portal 
+                  Missionary Dashboard 
                   <ArrowUpRight className="ml-1 h-3.5 w-3.5" />
                 </Link>
               </motion.div>

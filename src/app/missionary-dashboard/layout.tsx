@@ -79,7 +79,7 @@ function Sidebar({ className }: { className?: string }) {
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 text-white font-bold text-sm">
             M
           </div>
-          <span className="font-semibold tracking-tight">Missionary Hub</span>
+          <span className="font-semibold tracking-tight">Missionary Dashboard</span>
         </Link>
       </div>
 
