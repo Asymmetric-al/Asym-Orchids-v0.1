@@ -81,23 +81,23 @@ function ExportCard({ option }: { option: ExportOption }) {
   }
 
   return (
-    <Card>
+    <Card className="border shadow-none">
       <CardHeader className="pb-3">
-        <div className="flex items-start gap-3">
-          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Icon className="h-5 w-5 text-primary" />
+        <div className="flex items-start gap-4">
+          <div className="h-10 w-10 rounded-lg bg-[#e8ebe5] flex items-center justify-center shrink-0">
+            <Icon className="h-5 w-5 text-[#5d7052]" />
           </div>
           <div className="flex-1">
-            <CardTitle className="text-base">{option.title}</CardTitle>
-            <CardDescription>{option.description}</CardDescription>
+            <CardTitle className="text-base font-semibold">{option.title}</CardTitle>
+            <CardDescription className="mt-1">{option.description}</CardDescription>
           </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-3">
           {option.id !== 'donors' && (
-            <div className="space-y-2">
-              <Label className="text-xs">Time Period</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-muted-foreground">Time Period</Label>
               <Select value={dateRange} onValueChange={setDateRange}>
                 <SelectTrigger className="h-9">
                   <SelectValue />
@@ -111,8 +111,8 @@ function ExportCard({ option }: { option: ExportOption }) {
               </Select>
             </div>
           )}
-          <div className="space-y-2">
-            <Label className="text-xs">Format</Label>
+          <div className="space-y-1.5">
+            <Label className="text-xs font-medium text-muted-foreground">Format</Label>
             <Select value={format} onValueChange={setFormat}>
               <SelectTrigger className="h-9">
                 <SelectValue />
@@ -126,7 +126,7 @@ function ExportCard({ option }: { option: ExportOption }) {
           </div>
         </div>
         <Button 
-          className="w-full" 
+          className="w-full bg-black text-white hover:bg-black/90" 
           onClick={handleExport}
           disabled={isExporting}
         >
@@ -149,87 +149,88 @@ function ExportCard({ option }: { option: ExportOption }) {
 
 export default function ExportPage() {
   return (
-    <div className="space-y-6 p-4 md:p-6 lg:p-8">
+    <div className="space-y-8 p-6 max-w-5xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold tracking-tight">Export Data</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">Export Data</h1>
         <p className="text-muted-foreground">Download reports and data for offline use or analysis.</p>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-6 md:grid-cols-2">
         {exportOptions.map(option => (
           <ExportCard key={option.id} option={option} />
         ))}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <FileSpreadsheet className="h-5 w-5" />
-            Recent Exports
-          </CardTitle>
-          <CardDescription>Your previously generated files</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {recentExports.length > 0 ? (
-            <div className="space-y-2">
-              {recentExports.map(exp => (
-                <div 
-                  key={exp.id}
-                  className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-lg bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center">
-                      {exp.name.endsWith('.csv') ? (
-                        <FileSpreadsheet className="h-5 w-5 text-emerald-600" />
-                      ) : (
-                        <FileText className="h-5 w-5 text-emerald-600" />
-                      )}
-                    </div>
-                    <div>
-                      <p className="font-medium text-sm">{exp.name}</p>
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        <span>{exp.type}</span>
-                        <span>•</span>
-                        <span>{new Date(exp.createdAt).toLocaleDateString()}</span>
-                        <span>•</span>
-                        <span>{exp.size}</span>
+      <div className="grid gap-6 md:grid-cols-3">
+        <Card className="md:col-span-2 border shadow-none">
+          <CardHeader>
+            <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <FileSpreadsheet className="h-4 w-4" />
+              Recent Exports
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {recentExports.length > 0 ? (
+              <div className="space-y-2">
+                {recentExports.map(exp => (
+                  <div 
+                    key={exp.id}
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/30 transition-colors"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center">
+                        {exp.name.endsWith('.csv') ? (
+                          <FileSpreadsheet className="h-4 w-4 text-[#5d7052]" />
+                        ) : (
+                          <FileText className="h-4 w-4 text-[#5d7052]" />
+                        )}
+                      </div>
+                      <div>
+                        <p className="font-medium text-sm">{exp.name}</p>
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground mt-0.5">
+                          <span>{exp.type}</span>
+                          <span>•</span>
+                          <span>{new Date(exp.createdAt).toLocaleDateString()}</span>
+                          <span>•</span>
+                          <span>{exp.size}</span>
+                        </div>
                       </div>
                     </div>
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Download className="h-4 w-4" />
+                    </Button>
                   </div>
-                  <Button variant="ghost" size="sm">
-                    <Download className="h-4 w-4" />
-                  </Button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-8">
-              <FileText className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
-              <p className="text-muted-foreground">No recent exports</p>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8">
+                <FileText className="h-10 w-10 mx-auto text-muted-foreground/50 mb-3" />
+                <p className="text-sm text-muted-foreground">No recent exports</p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Export Tips</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3 text-sm">
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-            <p><strong>CSV files</strong> can be opened in Excel, Google Sheets, or any spreadsheet software</p>
-          </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-            <p><strong>PDF reports</strong> include your organization&apos;s branding and are ready to print</p>
-          </div>
-          <div className="flex items-start gap-2">
-            <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-            <p><strong>Fund statements</strong> are useful for tax purposes and financial planning</p>
-          </div>
-        </CardContent>
-      </Card>
+        <Card className="border shadow-none bg-[#f8f8f8]">
+          <CardHeader>
+            <CardTitle className="text-sm font-semibold">Export Tips</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4 text-sm">
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
+              <p className="text-muted-foreground"><strong>CSV files</strong> can be opened in Excel, Google Sheets, or any spreadsheet software</p>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
+              <p className="text-muted-foreground"><strong>PDF reports</strong> include your organization&apos;s branding and are ready to print</p>
+            </div>
+            <div className="flex items-start gap-2.5">
+              <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
+              <p className="text-muted-foreground"><strong>Fund statements</strong> are useful for tax purposes and financial planning</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

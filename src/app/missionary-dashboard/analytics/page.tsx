@@ -38,15 +38,15 @@ const monthlyData = [
 ]
 
 const donorSegments = [
-  { name: 'Active', value: 4, color: '#10b981' },
-  { name: 'New', value: 2, color: '#3b82f6' },
-  { name: 'At Risk', value: 1, color: '#f59e0b' },
-  { name: 'Lapsed', value: 1, color: '#ef4444' },
+  { name: 'Active', value: 4, color: '#5d7052' }, // Sage
+  { name: 'New', value: 2, color: '#8b9a7d' }, // Light Sage
+  { name: 'At Risk', value: 1, color: '#eab308' }, // Amber
+  { name: 'Lapsed', value: 1, color: '#737373' }, // Gray
 ]
 
 const givingTypeData = [
-  { name: 'Recurring', value: 76, color: '#3b82f6' },
-  { name: 'One-time', value: 24, color: '#10b981' },
+  { name: 'Recurring', value: 76, color: '#5d7052' },
+  { name: 'One-time', value: 24, color: '#8b9a7d' },
 ]
 
 const yearOverYear = [
@@ -81,17 +81,17 @@ function StatCard({ title, value, subtitle, trend, trendValue, icon: Icon }: {
   icon: React.ElementType
 }) {
   return (
-    <Card>
-      <CardContent className="p-5">
+    <Card className="border shadow-none">
+      <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{title}</p>
-            <p className="text-2xl font-bold">{value}</p>
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="text-2xl font-semibold tracking-tight">{value}</p>
             {(subtitle || trendValue) && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 mt-1">
                 {trend && trendValue && (
-                  <span className={`flex items-center text-xs font-medium ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
-                    {trend === 'up' ? <TrendingUp className="h-3 w-3 mr-0.5" /> : <TrendingDown className="h-3 w-3 mr-0.5" />}
+                  <span className={`flex items-center text-xs font-medium ${trend === 'up' ? 'text-[#5d7052]' : 'text-rose-600'}`}>
+                    {trend === 'up' ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
                     {trendValue}
                   </span>
                 )}
@@ -99,8 +99,8 @@ function StatCard({ title, value, subtitle, trend, trendValue, icon: Icon }: {
               </div>
             )}
           </div>
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
-            <Icon className="h-5 w-5 text-primary" />
+          <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center">
+            <Icon className="h-4 w-4 text-[#5d7052]" />
           </div>
         </div>
       </CardContent>
@@ -110,9 +110,9 @@ function StatCard({ title, value, subtitle, trend, trendValue, icon: Icon }: {
 
 function DonorSegmentChart() {
   return (
-    <Card>
+    <Card className="border shadow-none">
       <CardHeader>
-        <CardTitle className="text-lg">Donor Segmentation</CardTitle>
+        <CardTitle className="text-base font-semibold">Donor Segmentation</CardTitle>
         <CardDescription>Current supporter breakdown</CardDescription>
       </CardHeader>
       <CardContent>
@@ -125,23 +125,27 @@ function DonorSegmentChart() {
                 cy="50%"
                 innerRadius={60}
                 outerRadius={80}
-                paddingAngle={4}
+                paddingAngle={2}
                 dataKey="value"
+                strokeWidth={0}
               >
                 {donorSegments.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip />
+              <Tooltip 
+                 contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: 'none' }}
+                 itemStyle={{ fontSize: '12px' }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
         <div className="grid grid-cols-2 gap-3 mt-4">
           {donorSegments.map((segment) => (
             <div key={segment.name} className="flex items-center gap-2">
-              <div className="h-3 w-3 rounded-full" style={{ backgroundColor: segment.color }} />
-              <span className="text-sm">{segment.name}</span>
-              <span className="text-sm font-semibold ml-auto">{segment.value}</span>
+              <div className="h-2 w-2 rounded-full" style={{ backgroundColor: segment.color }} />
+              <span className="text-sm text-muted-foreground">{segment.name}</span>
+              <span className="text-sm font-medium ml-auto">{segment.value}</span>
             </div>
           ))}
         </div>
@@ -152,15 +156,15 @@ function DonorSegmentChart() {
 
 function MonthlyGivingChart() {
   return (
-    <Card className="lg:col-span-2">
+    <Card className="lg:col-span-2 border shadow-none">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-lg">Monthly Giving</CardTitle>
+            <CardTitle className="text-base font-semibold">Monthly Giving</CardTitle>
             <CardDescription>Last 6 months of donations</CardDescription>
           </div>
           <Select defaultValue="6m">
-            <SelectTrigger className="w-[100px]">
+            <SelectTrigger className="w-[110px] h-8 text-xs">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -172,26 +176,40 @@ function MonthlyGivingChart() {
         </div>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={monthlyData}>
-            <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-            <YAxis tick={{ fontSize: 12 }} tickFormatter={(value) => `$${value / 1000}k`} />
-            <Tooltip 
-              formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
-              contentStyle={{ borderRadius: '8px', border: '1px solid #e4e4e7' }}
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={monthlyData} barSize={32}>
+            <XAxis 
+              dataKey="month" 
+              tick={{ fontSize: 12, fill: '#737373' }} 
+              axisLine={false} 
+              tickLine={false} 
+              dy={10}
             />
-            <Bar dataKey="recurring" stackId="a" fill="#3b82f6" radius={[0, 0, 0, 0]} name="Recurring" />
-            <Bar dataKey="oneTime" stackId="a" fill="#10b981" radius={[4, 4, 0, 0]} name="One-time" />
+            <YAxis 
+              tick={{ fontSize: 12, fill: '#737373' }} 
+              tickFormatter={(value) => `$${value / 1000}k`} 
+              axisLine={false} 
+              tickLine={false}
+              dx={-10}
+            />
+            <Tooltip 
+              cursor={{ fill: '#f4f4f5' }}
+              formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
+              contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: 'none' }}
+              labelStyle={{ fontWeight: 600, marginBottom: '4px' }}
+            />
+            <Bar dataKey="recurring" stackId="a" fill="#5d7052" radius={[0, 0, 0, 0]} name="Recurring" />
+            <Bar dataKey="oneTime" stackId="a" fill="#d4dccb" radius={[4, 4, 0, 0]} name="One-time" />
           </BarChart>
         </ResponsiveContainer>
-        <div className="flex items-center justify-center gap-6 mt-4">
+        <div className="flex items-center justify-center gap-6 mt-6">
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-[#3b82f6]" />
-            <span className="text-sm text-muted-foreground">Recurring</span>
+            <div className="h-2 w-2 rounded-full bg-[#5d7052]" />
+            <span className="text-xs text-muted-foreground">Recurring</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-[#10b981]" />
-            <span className="text-sm text-muted-foreground">One-time</span>
+            <div className="h-2 w-2 rounded-full bg-[#d4dccb]" />
+            <span className="text-xs text-muted-foreground">One-time</span>
           </div>
         </div>
       </CardContent>
@@ -201,9 +219,9 @@ function MonthlyGivingChart() {
 
 function GivingTypeChart() {
   return (
-    <Card>
+    <Card className="border shadow-none">
       <CardHeader>
-        <CardTitle className="text-lg">Giving Breakdown</CardTitle>
+        <CardTitle className="text-base font-semibold">Giving Breakdown</CardTitle>
         <CardDescription>Recurring vs one-time gifts</CardDescription>
       </CardHeader>
       <CardContent>
@@ -218,23 +236,27 @@ function GivingTypeChart() {
                 outerRadius={80}
                 paddingAngle={2}
                 dataKey="value"
+                strokeWidth={0}
               >
                 {givingTypeData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip formatter={(value: number) => [`${value}%`, '']} />
+              <Tooltip 
+                formatter={(value: number) => [`${value}%`, '']}
+                contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: 'none' }}
+              />
             </PieChart>
           </ResponsiveContainer>
         </div>
-        <div className="flex justify-center gap-6 mt-4">
+        <div className="flex justify-center gap-8 mt-4">
           {givingTypeData.map((type) => (
             <div key={type.name} className="text-center">
-              <div className="flex items-center gap-2 justify-center">
-                <div className="h-3 w-3 rounded-full" style={{ backgroundColor: type.color }} />
-                <span className="text-sm font-medium">{type.name}</span>
+              <div className="flex items-center gap-2 justify-center mb-1">
+                <div className="h-2 w-2 rounded-full" style={{ backgroundColor: type.color }} />
+                <span className="text-xs text-muted-foreground uppercase tracking-wider">{type.name}</span>
               </div>
-              <p className="text-xl font-bold mt-1">{type.value}%</p>
+              <p className="text-xl font-bold">{type.value}%</p>
             </div>
           ))}
         </div>
@@ -245,50 +267,74 @@ function GivingTypeChart() {
 
 function YearComparisonChart() {
   return (
-    <Card className="lg:col-span-2">
+    <Card className="lg:col-span-2 border shadow-none">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-lg">Year-over-Year Comparison</CardTitle>
+            <CardTitle className="text-base font-semibold">Year-over-Year Comparison</CardTitle>
             <CardDescription>2024 vs 2023 monthly giving</CardDescription>
           </div>
-          <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">
+          <Badge variant="outline" className="bg-[#e8ebe5] text-[#5d7052] border-0">
             <TrendingUp className="h-3 w-3 mr-1" />
             +12% YTD
           </Badge>
         </div>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={250}>
+        <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={yearOverYear}>
             <defs>
               <linearGradient id="colorCurrent" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.2}/>
-                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
-              </linearGradient>
-              <linearGradient id="colorPrevious" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#94a3b8" stopOpacity={0.2}/>
-                <stop offset="95%" stopColor="#94a3b8" stopOpacity={0}/>
+                <stop offset="5%" stopColor="#5d7052" stopOpacity={0.1}/>
+                <stop offset="95%" stopColor="#5d7052" stopOpacity={0}/>
               </linearGradient>
             </defs>
-            <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-            <YAxis tick={{ fontSize: 12 }} tickFormatter={(value) => `$${value / 1000}k`} />
+            <XAxis 
+              dataKey="month" 
+              tick={{ fontSize: 12, fill: '#737373' }} 
+              axisLine={false} 
+              tickLine={false}
+              dy={10}
+            />
+            <YAxis 
+              tick={{ fontSize: 12, fill: '#737373' }} 
+              tickFormatter={(value) => `$${value / 1000}k`} 
+              axisLine={false} 
+              tickLine={false}
+              dx={-10}
+            />
             <Tooltip 
               formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
-              contentStyle={{ borderRadius: '8px', border: '1px solid #e4e4e7' }}
+              contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: 'none' }}
             />
-            <Area type="monotone" dataKey="current" stroke="#3b82f6" fillOpacity={1} fill="url(#colorCurrent)" strokeWidth={2} name="2024" />
-            <Area type="monotone" dataKey="previous" stroke="#94a3b8" fillOpacity={1} fill="url(#colorPrevious)" strokeWidth={2} name="2023" />
+            <Area 
+              type="monotone" 
+              dataKey="current" 
+              stroke="#5d7052" 
+              strokeWidth={2}
+              fillOpacity={1} 
+              fill="url(#colorCurrent)" 
+              name="2024" 
+            />
+            <Area 
+              type="monotone" 
+              dataKey="previous" 
+              stroke="#e5e5e5" 
+              strokeWidth={2}
+              strokeDasharray="4 4"
+              fill="transparent" 
+              name="2023" 
+            />
           </AreaChart>
         </ResponsiveContainer>
-        <div className="flex items-center justify-center gap-6 mt-4">
+        <div className="flex items-center justify-center gap-6 mt-6">
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-[#3b82f6]" />
-            <span className="text-sm text-muted-foreground">2024</span>
+            <div className="h-0.5 w-4 bg-[#5d7052]" />
+            <span className="text-xs text-muted-foreground">2024</span>
           </div>
           <div className="flex items-center gap-2">
-            <div className="h-3 w-3 rounded bg-[#94a3b8]" />
-            <span className="text-sm text-muted-foreground">2023</span>
+            <div className="h-0.5 w-4 bg-[#e5e5e5]" />
+            <span className="text-xs text-muted-foreground">2023</span>
           </div>
         </div>
       </CardContent>
@@ -298,28 +344,27 @@ function YearComparisonChart() {
 
 function RecurringHealthCard() {
   return (
-    <Card>
+    <Card className="border shadow-none">
       <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
-          <RefreshCcw className="h-5 w-5 text-blue-600" />
+        <CardTitle className="text-base font-semibold flex items-center gap-2">
           Recurring Health
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Monthly recurring</span>
-            <span className="font-semibold">$475</span>
+      <CardContent className="space-y-6">
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider">Monthly</span>
+            <p className="text-2xl font-bold">$475</p>
           </div>
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Projected annual</span>
-            <span className="font-semibold">$5,700</span>
+          <div className="space-y-1">
+            <span className="text-xs text-muted-foreground uppercase tracking-wider">Projected</span>
+            <p className="text-2xl font-bold">$5.7k</p>
           </div>
         </div>
-        <div className="pt-4 border-t space-y-3">
+        <div className="pt-6 border-t space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-emerald-500" />
+              <div className="h-2 w-2 rounded-full bg-[#5d7052]" />
               <span className="text-sm">Active</span>
             </div>
             <span className="text-sm font-medium">4 donors</span>
@@ -346,13 +391,13 @@ function RecurringHealthCard() {
 
 export default function AnalyticsPage() {
   return (
-    <div className="space-y-6 p-4 md:p-6 lg:p-8">
+    <div className="space-y-6 p-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Analytics</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
           <p className="text-muted-foreground">Track your fundraising trends and donor insights.</p>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" className="bg-white">
           <Download className="mr-2 h-4 w-4" />
           Export Report
         </Button>

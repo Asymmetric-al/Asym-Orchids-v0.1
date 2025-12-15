@@ -50,35 +50,35 @@ function NotificationRow({ setting, onChange }: {
 }) {
   const Icon = setting.icon
   return (
-    <div className="flex items-start gap-4 py-4">
-      <div className="h-9 w-9 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-        <Icon className="h-4 w-4 text-primary" />
+    <div className="flex items-start gap-4 py-4 group">
+      <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center shrink-0">
+        <Icon className="h-4 w-4 text-[#5d7052]" />
       </div>
       <div className="flex-1 min-w-0">
-        <p className="font-medium">{setting.label}</p>
+        <p className="font-medium text-sm">{setting.label}</p>
         <p className="text-sm text-muted-foreground">{setting.description}</p>
       </div>
-      <div className="flex items-center gap-6">
-        <div className="flex flex-col items-center gap-1">
+      <div className="flex items-center gap-8">
+        <div className="flex flex-col items-center gap-1.5">
           <Switch 
             checked={setting.inApp} 
             onCheckedChange={(checked) => onChange(setting.id, 'inApp', checked)}
+            className="data-[state=checked]:bg-[#5d7052]"
           />
-          <span className="text-xs text-muted-foreground">In-App</span>
         </div>
-        <div className="flex flex-col items-center gap-1">
+        <div className="flex flex-col items-center gap-1.5">
           <Switch 
             checked={setting.email} 
             onCheckedChange={(checked) => onChange(setting.id, 'email', checked)}
+            className="data-[state=checked]:bg-[#5d7052]"
           />
-          <span className="text-xs text-muted-foreground">Email</span>
         </div>
-        <div className="flex flex-col items-center gap-1">
+        <div className="flex flex-col items-center gap-1.5">
           <Switch 
             checked={setting.sms} 
             onCheckedChange={(checked) => onChange(setting.id, 'sms', checked)}
+            className="data-[state=checked]:bg-[#5d7052]"
           />
-          <span className="text-xs text-muted-foreground">SMS</span>
         </div>
       </div>
     </div>
@@ -101,103 +101,95 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-6 p-4 md:p-6 lg:p-8">
+    <div className="p-6 max-w-5xl mx-auto space-y-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Settings</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
           <p className="text-muted-foreground">Manage your notification preferences.</p>
         </div>
         {hasChanges && (
-          <Button onClick={handleSave}>
+          <Button onClick={handleSave} className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
             <Save className="mr-2 h-4 w-4" />
             Save Changes
           </Button>
         )}
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Bell className="h-5 w-5" />
-            Notification Preferences
-          </CardTitle>
-          <CardDescription>Choose how you want to be notified about activity</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-end gap-6 pb-4 border-b mb-2">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Bell className="h-4 w-4" />
-              In-App
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Mail className="h-4 w-4" />
-              Email
-            </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <Smartphone className="h-4 w-4" />
-              SMS
-            </div>
-          </div>
-          <div className="divide-y">
-            {settings.map(setting => (
-              <NotificationRow 
-                key={setting.id} 
-                setting={setting} 
-                onChange={handleChange}
-              />
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-8 space-y-8">
+          <Card className="border shadow-none">
+            <CardHeader className="pb-3 border-b">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
+                <Bell className="h-4 w-4" />
+                Notification Preferences
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="pt-4">
+              <div className="flex items-center justify-end gap-8 pb-4 mb-2">
+                <div className="w-[44px] text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">In-App</div>
+                <div className="w-[44px] text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">Email</div>
+                <div className="w-[44px] text-center text-xs font-medium text-muted-foreground uppercase tracking-wider">SMS</div>
+              </div>
+              <div className="divide-y">
+                {settings.map(setting => (
+                  <NotificationRow 
+                    key={setting.id} 
+                    setting={setting} 
+                    onChange={handleChange}
+                  />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg flex items-center gap-2">
-            <Settings className="h-5 w-5" />
-            General Settings
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Daily Digest</Label>
-              <p className="text-sm text-muted-foreground">Receive a daily summary instead of individual emails</p>
-            </div>
-            <Switch />
-          </div>
-          <Separator />
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label>Marketing Emails</Label>
-              <p className="text-sm text-muted-foreground">Receive tips and updates from the platform</p>
-            </div>
-            <Switch defaultChecked />
-          </div>
-        </CardContent>
-      </Card>
+          <Card className="border shadow-none">
+            <CardHeader className="pb-3 border-b">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
+                <Settings className="h-4 w-4" />
+                General Settings
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6 pt-6">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label className="text-base">Daily Digest</Label>
+                  <p className="text-sm text-muted-foreground">Receive a daily summary instead of individual emails</p>
+                </div>
+                <Switch className="data-[state=checked]:bg-[#5d7052]" />
+              </div>
+              <Separator />
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label className="text-base">Marketing Emails</Label>
+                  <p className="text-sm text-muted-foreground">Receive tips and updates from the platform</p>
+                </div>
+                <Switch defaultChecked className="data-[state=checked]:bg-[#5d7052]" />
+              </div>
+            </CardContent>
+          </Card>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Account</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium">Change Password</p>
-              <p className="text-sm text-muted-foreground">Update your account password</p>
-            </div>
-            <Button variant="outline">Change</Button>
-          </div>
-          <Separator />
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-medium">Two-Factor Authentication</p>
-              <p className="text-sm text-muted-foreground">Add an extra layer of security</p>
-            </div>
-            <Button variant="outline">Enable</Button>
-          </div>
-        </CardContent>
-      </Card>
+        <div className="lg:col-span-4 space-y-6">
+          <Card className="border shadow-none">
+            <CardHeader>
+              <CardTitle className="text-base font-semibold">Account</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="space-y-2">
+                <p className="font-medium text-sm">Change Password</p>
+                <p className="text-xs text-muted-foreground mb-3">Update your account password</p>
+                <Button variant="outline" size="sm" className="w-full">Change Password</Button>
+              </div>
+              <Separator />
+              <div className="space-y-2">
+                <p className="font-medium text-sm">Two-Factor Auth</p>
+                <p className="text-xs text-muted-foreground mb-3">Add an extra layer of security</p>
+                <Button variant="outline" size="sm" className="w-full">Enable 2FA</Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </div>
   )
 }

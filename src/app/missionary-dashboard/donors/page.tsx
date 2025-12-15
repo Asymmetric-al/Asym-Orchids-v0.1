@@ -37,6 +37,8 @@ import {
   Upload,
   Filter,
   Plus,
+  Download,
+  Users,
 } from 'lucide-react'
 
 interface Donor {
@@ -102,7 +104,7 @@ function ActivityHeatmap() {
   }
 
   return (
-    <div className="rounded-xl border p-5">
+    <div className="rounded-xl border shadow-none p-5">
       <div className="flex items-center justify-between mb-4">
         <div>
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">ACTIVITY OVERVIEW</p>
@@ -155,34 +157,35 @@ function DonorRow({ donor, onClick }: { donor: Donor; onClick: () => void }) {
       className="flex items-center gap-4 p-4 border-b last:border-0 hover:bg-muted/30 transition-colors cursor-pointer"
       onClick={onClick}
     >
-      <Avatar className="h-10 w-10 border">
-        <AvatarFallback className="bg-muted text-sm font-medium">
+      <Avatar className="h-10 w-10 border bg-white">
+        <AvatarFallback className="bg-[#f4f4f5] text-sm font-medium text-muted-foreground">
           {initials}
         </AvatarFallback>
       </Avatar>
       
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className="font-medium">{donor.firstName} {donor.lastName}</p>
+          <p className="font-medium text-sm text-foreground">{donor.firstName} {donor.lastName}</p>
+          {donor.status === 'new' && <Badge className="bg-[#5d7052] text-white text-[10px] px-1.5 py-0 h-5 font-normal">New</Badge>}
         </div>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-xs text-muted-foreground">
           {donor.email}
         </p>
       </div>
 
       <div className="hidden md:block text-right">
-        <p className="font-medium">${donor.totalGiven.toLocaleString()}</p>
+        <p className="font-medium text-sm">${donor.totalGiven.toLocaleString()}</p>
         <p className="text-xs text-muted-foreground">{donor.giftCount} gifts</p>
       </div>
 
       <div className="hidden lg:block text-right">
-        <p className="text-sm">{new Date(donor.lastGiftDate).toLocaleDateString()}</p>
+        <p className="text-sm font-medium">{new Date(donor.lastGiftDate).toLocaleDateString()}</p>
         <p className="text-xs text-muted-foreground">Last gift</p>
       </div>
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
             <MoreHorizontal className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -210,46 +213,44 @@ function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void
   return (
     <div className="min-h-screen bg-background">
       <div className="max-w-6xl mx-auto p-6">
-        <button onClick={onClose} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6">
+        <button onClick={onClose} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="h-4 w-4" />
-          Back
+          Back to Donors
         </button>
 
         <div className="flex items-start justify-between mb-8">
-          <div className="flex items-center gap-4">
-            <Avatar className="h-16 w-16 border">
+          <div className="flex items-center gap-5">
+            <Avatar className="h-20 w-20 border bg-white shadow-sm">
               <AvatarImage src="/placeholder-avatar.jpg" />
-              <AvatarFallback className="bg-muted text-lg font-medium">
+              <AvatarFallback className="bg-[#f4f4f5] text-xl font-medium text-muted-foreground">
                 {initials}
               </AvatarFallback>
             </Avatar>
             <div>
-              <h1 className="text-2xl font-semibold">{donor.firstName} & Jane {donor.lastName.slice(0, 3)}</h1>
-              <div className="flex items-center gap-2 mt-1 flex-wrap">
-                <Badge className={statusStyle.color}>{statusStyle.label}</Badge>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-sm text-muted-foreground flex items-center gap-1">
+              <h1 className="text-2xl font-bold tracking-tight">{donor.firstName} & Jane {donor.lastName.slice(0, 3)}</h1>
+              <div className="flex items-center gap-2 mt-2 flex-wrap">
+                <Badge className={`${statusStyle.color} border-none font-normal`}>{statusStyle.label}</Badge>
+                <span className="text-muted-foreground/30">•</span>
+                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
                   <Lock className="h-3 w-3" /> Security: Open
                 </span>
-                <span className="text-muted-foreground">•</span>
-                <Badge variant="outline" className="bg-[#e8ebe5] text-[#5d7052] border-[#5d7052]/20">
+                <span className="text-muted-foreground/30">•</span>
+                <Badge variant="outline" className="bg-[#e8ebe5] text-[#5d7052] border-transparent font-normal">
                   {donor.type || 'Church Planter'}
                 </Badge>
-                <span className="text-muted-foreground">•</span>
-                <span className="text-sm text-muted-foreground">Flag</span>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="outline">Open Scheduler</Button>
-            <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+            <Button variant="outline" className="bg-white hover:bg-muted/50">Open Scheduler</Button>
+            <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white shadow-sm">
               <Mail className="mr-2 h-4 w-4" />
               Send Email
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-6 mb-6">
+        <div className="grid grid-cols-3 gap-6 mb-8">
           <div className="col-span-2">
             <ActivityHeatmap />
           </div>
@@ -266,72 +267,90 @@ function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void
         </div>
 
         <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="border-b w-full justify-start rounded-none bg-transparent p-0 h-auto">
-            <TabsTrigger value="overview" className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3">
-              <FileText className="h-4 w-4 mr-2" />
+          <TabsList className="border-b w-full justify-start rounded-none bg-transparent p-0 h-auto gap-6">
+            <TabsTrigger 
+              value="overview" 
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Overview
             </TabsTrigger>
-            <TabsTrigger value="care-thread" className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3">
-              <MessageSquare className="h-4 w-4 mr-2" />
+            <TabsTrigger 
+              value="care-thread" 
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Care Thread
             </TabsTrigger>
-            <TabsTrigger value="activity-log" className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3">
-              <Calendar className="h-4 w-4 mr-2" />
+            <TabsTrigger 
+              value="activity-log" 
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Activity Log
             </TabsTrigger>
-            <TabsTrigger value="care-plan" className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3">
-              <Target className="h-4 w-4 mr-2" />
+            <TabsTrigger 
+              value="care-plan" 
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Care Plan
             </TabsTrigger>
-            <TabsTrigger value="private-notes" className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3">
-              <Lock className="h-4 w-4 mr-2" />
+            <TabsTrigger 
+              value="private-notes" 
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Private Notes
             </TabsTrigger>
-            <TabsTrigger value="files" className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3">
-              <Upload className="h-4 w-4 mr-2" />
+            <TabsTrigger 
+              value="files" 
+              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
+            >
               Files
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="overview" className="mt-6">
             <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">Contact Information</CardTitle>
+              <Card className="border shadow-none">
+                <CardHeader className="pb-3 border-b">
+                  <CardTitle className="text-base font-semibold">Contact Information</CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-3">
+                <CardContent className="space-y-4 pt-4">
                   <div className="flex items-center gap-3">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{donor.email}</span>
+                    <div className="h-8 w-8 rounded-lg bg-[#f4f4f5] flex items-center justify-center">
+                      <Mail className="h-4 w-4 text-muted-foreground" />
+                    </div>
+                    <span className="text-sm font-medium">{donor.email}</span>
                   </div>
                   {donor.phone && (
                     <div className="flex items-center gap-3">
-                      <Phone className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{donor.phone}</span>
+                      <div className="h-8 w-8 rounded-lg bg-[#f4f4f5] flex items-center justify-center">
+                        <Phone className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <span className="text-sm font-medium">{donor.phone}</span>
                     </div>
                   )}
                   {donor.city && (
                     <div className="flex items-center gap-3">
-                      <MapPin className="h-4 w-4 text-muted-foreground" />
-                      <span className="text-sm">{donor.city}, {donor.state}</span>
+                      <div className="h-8 w-8 rounded-lg bg-[#f4f4f5] flex items-center justify-center">
+                        <MapPin className="h-4 w-4 text-muted-foreground" />
+                      </div>
+                      <span className="text-sm font-medium">{donor.city}, {donor.state}</span>
                     </div>
                   )}
                 </CardContent>
               </Card>
 
-              <Card className="border">
-                <CardHeader className="pb-3">
-                  <CardTitle className="text-sm font-medium">Giving Summary</CardTitle>
+              <Card className="border shadow-none">
+                <CardHeader className="pb-3 border-b">
+                  <CardTitle className="text-base font-semibold">Giving Summary</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="pt-4">
                   <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <p className="text-2xl font-semibold">${donor.totalGiven.toLocaleString()}</p>
-                      <p className="text-xs text-muted-foreground">Total Given</p>
+                    <div className="p-4 bg-[#f8f8f8] rounded-lg">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Total Given</p>
+                      <p className="text-2xl font-bold tracking-tight">${donor.totalGiven.toLocaleString()}</p>
                     </div>
-                    <div>
-                      <p className="text-2xl font-semibold">{donor.giftCount}</p>
-                      <p className="text-xs text-muted-foreground">Total Gifts</p>
+                    <div className="p-4 bg-[#f8f8f8] rounded-lg">
+                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Total Gifts</p>
+                      <p className="text-2xl font-bold tracking-tight">{donor.giftCount}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -340,7 +359,7 @@ function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void
           </TabsContent>
 
           <TabsContent value="activity-log" className="mt-6">
-            <Card className="border">
+            <Card className="border shadow-none">
               <CardHeader className="flex-row items-center justify-between pb-4">
                 <CardTitle className="text-lg font-semibold">Interaction Log</CardTitle>
                 <div className="flex gap-2">
@@ -388,7 +407,7 @@ function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void
           </TabsContent>
 
           <TabsContent value="care-thread" className="mt-6">
-            <Card className="border">
+            <Card className="border shadow-none">
               <CardHeader className="flex-row items-center justify-between pb-4">
                 <CardTitle className="text-lg font-semibold">DISCUSSION FEED</CardTitle>
                 <Badge variant="outline">Internal Team</Badge>
@@ -449,7 +468,7 @@ function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void
                   <TabsTrigger value="completed" className="data-[state=active]:bg-muted">Completed</TabsTrigger>
                 </TabsList>
               </Tabs>
-              <Card className="border">
+              <Card className="border shadow-none">
                 <CardContent className="p-4">
                   <div className="flex items-start gap-3">
                     <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30 mt-0.5" />
@@ -482,7 +501,7 @@ function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void
               </div>
               <p className="text-sm mt-1 opacity-90">Notes added here are only visible to Member Care staff with specific clearance. They are not shared with the missionary or regional leadership.</p>
             </div>
-            <Card className="border">
+            <Card className="border shadow-none">
               <CardHeader className="flex-row items-center justify-between pb-3">
                 <CardTitle className="text-sm font-medium">Add Private Note</CardTitle>
                 <div className="flex gap-2">
@@ -509,7 +528,7 @@ function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void
           </TabsContent>
 
           <TabsContent value="files" className="mt-6">
-            <Card className="border">
+            <Card className="border shadow-none">
               <CardHeader className="flex-row items-center justify-between pb-3">
                 <CardTitle className="text-lg font-semibold">Documents & Files</CardTitle>
                 <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
@@ -549,30 +568,34 @@ export default function DonorsPage() {
   }
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-semibold">Donors</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Donors</h1>
           <p className="text-muted-foreground">Manage your supporters and track their giving.</p>
         </div>
-        <Button variant="outline">
+        <Button variant="outline" className="bg-white">
+          <Download className="mr-2 h-4 w-4" />
           Export CSV
         </Button>
       </div>
 
-      <Card className="border">
+      <Card className="border shadow-none">
         <CardHeader className="pb-4">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <Input
-                placeholder="Search..."
+                placeholder="Search donors by name or email..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="pl-9"
+                className="pl-9 bg-white"
               />
             </div>
-            <span className="text-sm text-muted-foreground self-center">{filteredDonors.length} results</span>
+            <div className="flex items-center gap-2 text-sm text-muted-foreground bg-[#f4f4f5] px-3 py-2 rounded-md">
+              <Users className="h-4 w-4" />
+              <span>{filteredDonors.length} results</span>
+            </div>
           </div>
         </CardHeader>
         <CardContent className="p-0">
@@ -587,9 +610,12 @@ export default function DonorsPage() {
               ))}
             </div>
           ) : (
-            <div className="p-8 text-center">
+            <div className="p-12 text-center">
+              <div className="h-12 w-12 bg-[#f4f4f5] rounded-full flex items-center justify-center mx-auto mb-4">
+                <Users className="h-6 w-6 text-muted-foreground/50" />
+              </div>
               <h3 className="font-medium mb-1">No donors found</h3>
-              <p className="text-sm text-muted-foreground">Try adjusting your search.</p>
+              <p className="text-sm text-muted-foreground">Try adjusting your search query.</p>
             </div>
           )}
         </CardContent>

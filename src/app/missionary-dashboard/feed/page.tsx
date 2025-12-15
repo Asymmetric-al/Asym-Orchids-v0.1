@@ -136,10 +136,10 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
   }
 
   return (
-    <Card className={`relative overflow-hidden ${post.isPinned ? 'border-amber-200 dark:border-amber-900/50' : ''}`}>
+    <Card className={`relative overflow-hidden border shadow-none ${post.isPinned ? 'bg-amber-50/30 border-amber-200' : ''}`}>
       {post.isPinned && (
         <div className="absolute top-3 right-3">
-          <Badge variant="secondary" className="bg-amber-100 text-amber-700">
+          <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-200">
             <Pin className="h-3 w-3 mr-1" />
             Pinned
           </Badge>
@@ -153,25 +153,24 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
           </Badge>
         </div>
       )}
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-3 pt-4 px-4">
         <div className="flex items-start gap-3">
-          <Avatar className="h-10 w-10">
-            <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-sm">
-              SM
-            </AvatarFallback>
+          <Avatar className="h-10 w-10 border">
+            <AvatarFallback className="bg-muted text-sm font-medium">SM</AvatarFallback>
           </Avatar>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <p className="font-medium">Sarah Mitchell</p>
+              <p className="font-semibold text-sm">Sarah Mitchell</p>
+              <span className="text-xs text-muted-foreground">•</span>
               <span className="text-xs text-muted-foreground">
                 {post.publishedAt ? new Date(post.publishedAt).toLocaleDateString() : 'Not published'}
               </span>
             </div>
-            {post.title && <p className="font-semibold mt-1">{post.title}</p>}
+            {post.title && <p className="font-medium mt-0.5 text-sm">{post.title}</p>}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="h-8 w-8">
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground">
                 <MoreHorizontal className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>
@@ -201,16 +200,16 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
           </DropdownMenu>
         </div>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <p className="text-sm leading-relaxed whitespace-pre-wrap">{post.content}</p>
+      <CardContent className="px-4 pb-4 space-y-4">
+        <p className="text-sm leading-relaxed whitespace-pre-wrap text-foreground/90">{post.content}</p>
         
         {post.status === 'published' && (
           <>
-            <div className="flex items-center gap-1 pt-2 border-t">
+            <div className="flex items-center gap-1 pt-3 border-t">
               <Button
                 variant="ghost"
                 size="sm"
-                className={`gap-1.5 ${userReactions.like ? 'text-rose-600' : ''}`}
+                className={`gap-1.5 h-8 px-2 text-muted-foreground hover:text-[#5d7052] ${userReactions.like ? 'text-[#5d7052] bg-[#5d7052]/10' : ''}`}
                 onClick={() => toggleReaction('like')}
               >
                 <Heart className={`h-4 w-4 ${userReactions.like ? 'fill-current' : ''}`} />
@@ -219,7 +218,7 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`gap-1.5 ${userReactions.prayer ? 'text-blue-600' : ''}`}
+                className={`gap-1.5 h-8 px-2 text-muted-foreground hover:text-blue-600 ${userReactions.prayer ? 'text-blue-600 bg-blue-50' : ''}`}
                 onClick={() => toggleReaction('prayer')}
               >
                 <span className="text-base">🙏</span>
@@ -228,50 +227,46 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`gap-1.5 ${userReactions.fire ? 'text-orange-600' : ''}`}
-                onClick={() => toggleReaction('fire')}
-              >
-                <Flame className={`h-4 w-4 ${userReactions.fire ? 'fill-current' : ''}`} />
-                <span className="text-xs">{post.fireCount + (userReactions.fire ? 1 : 0)}</span>
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="gap-1.5 ml-auto"
+                className="gap-1.5 h-8 px-2 text-muted-foreground hover:text-foreground ml-auto"
                 onClick={() => setShowComments(!showComments)}
               >
                 <MessageCircle className="h-4 w-4" />
-                <span className="text-xs">{post.commentCount}</span>
+                <span className="text-xs">{post.commentCount} Comments</span>
               </Button>
             </div>
 
             {showComments && (
-              <div className="space-y-3 pt-2 border-t">
+              <div className="space-y-3 pt-3 border-t bg-muted/20 -mx-4 px-4 pb-3">
                 {comments.slice(0, 3).map(comment => (
-                  <div key={comment.id} className="flex gap-2">
-                    <Avatar className="h-7 w-7">
-                      <AvatarFallback className="text-xs bg-muted">
+                  <div key={comment.id} className="flex gap-2.5">
+                    <Avatar className="h-6 w-6 border mt-1">
+                      <AvatarFallback className="text-[10px] bg-muted">
                         {comment.userName.split(' ').map(n => n[0]).join('')}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="flex-1 bg-muted/50 rounded-lg p-2">
-                      <div className="flex items-center gap-2">
-                        <p className="text-xs font-medium">{comment.userName}</p>
-                        <span className="text-xs text-muted-foreground">
-                          {new Date(comment.createdAt).toLocaleDateString()}
-                        </span>
+                    <div className="flex-1">
+                      <div className="bg-white border rounded-lg p-2.5 shadow-sm">
+                        <div className="flex items-center gap-2 mb-1">
+                          <p className="text-xs font-semibold">{comment.userName}</p>
+                          <span className="text-[10px] text-muted-foreground">
+                            {new Date(comment.createdAt).toLocaleDateString()}
+                          </span>
+                        </div>
+                        <p className="text-sm text-foreground/90">{comment.content}</p>
                       </div>
-                      <p className="text-sm mt-0.5">{comment.content}</p>
                     </div>
                   </div>
                 ))}
-                <div className="flex gap-2">
-                  <Avatar className="h-7 w-7">
-                    <AvatarFallback className="text-xs bg-gradient-to-br from-emerald-500 to-teal-600 text-white">
-                      SM
-                    </AvatarFallback>
+                <div className="flex gap-2 mt-2">
+                  <Avatar className="h-6 w-6 border">
+                    <AvatarFallback className="text-[10px] bg-muted">SM</AvatarFallback>
                   </Avatar>
-                  <Input placeholder="Write a comment..." className="h-8 text-sm" />
+                  <div className="flex-1 relative">
+                    <Input placeholder="Write a comment..." className="h-8 text-sm pr-8 bg-white" />
+                    <Button size="icon" variant="ghost" className="absolute right-0 top-0 h-8 w-8 hover:bg-transparent">
+                      <Send className="h-3 w-3 text-muted-foreground" />
+                    </Button>
+                  </div>
                 </div>
               </div>
             )}
@@ -280,11 +275,11 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
 
         {post.status === 'draft' && (
           <div className="flex gap-2 pt-2 border-t">
-            <Button size="sm" className="flex-1">
+            <Button size="sm" className="flex-1 bg-[#5d7052] hover:bg-[#4a5a42] text-white">
               <Eye className="mr-2 h-4 w-4" />
               Publish
             </Button>
-            <Button size="sm" variant="outline">
+            <Button size="sm" variant="outline" className="flex-1">
               <Edit className="mr-2 h-4 w-4" />
               Edit
             </Button>
@@ -303,57 +298,57 @@ function NewPostDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button>
+        <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
           <Plus className="mr-2 h-4 w-4" />
           New Post
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle>Create New Post</DialogTitle>
           <DialogDescription>Share an update with your supporters.</DialogDescription>
         </DialogHeader>
         <div className="space-y-4 py-4">
-          <div className="flex items-center gap-3">
-            <Avatar className="h-10 w-10">
-              <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-sm">
-                SM
-              </AvatarFallback>
+          <div className="flex items-center gap-3 mb-2">
+            <Avatar className="h-10 w-10 border">
+              <AvatarFallback className="bg-muted text-sm font-medium">SM</AvatarFallback>
             </Avatar>
             <div>
-              <p className="font-medium">Sarah Mitchell</p>
-              <p className="text-xs text-muted-foreground">Posting to your feed</p>
+              <p className="font-medium text-sm">Sarah Mitchell</p>
+              <div className="flex items-center gap-1.5 mt-0.5">
+                <Badge variant="outline" className="text-[10px] font-normal py-0 h-5">
+                  <Globe className="mr-1 h-3 w-3" /> Public
+                </Badge>
+              </div>
             </div>
           </div>
           <Input
             placeholder="Post title (optional)"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="font-medium"
           />
           <Textarea
             placeholder="What's on your heart? Share a story, prayer request, or update..."
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="min-h-[200px] resize-none"
+            className="min-h-[150px] resize-none text-base"
           />
-          <div className="flex items-center gap-2 border-t pt-4">
-            <Button variant="outline" size="sm">
+          <div className="flex items-center gap-2 pt-2">
+            <Button variant="outline" size="sm" className="h-8">
               <ImageIcon className="mr-2 h-4 w-4" />
               Photo
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant="outline" size="sm" className="h-8">
               <Video className="mr-2 h-4 w-4" />
               Video
             </Button>
           </div>
         </div>
-        <div className="flex justify-between">
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Save Draft
-          </Button>
-          <Button disabled={!content.trim()}>
-            <Send className="mr-2 h-4 w-4" />
-            Publish
+        <div className="flex justify-end gap-2">
+          <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
+          <Button disabled={!content.trim()} className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+            Publish Post
           </Button>
         </div>
       </DialogContent>
@@ -465,58 +460,69 @@ export default function FeedPage() {
   const draftPosts = posts.filter(p => p.status === 'draft')
 
   return (
-    <div className="p-4 md:p-6 lg:p-8">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div className="p-6 max-w-6xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">My Feed</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">My Feed</h1>
           <p className="text-muted-foreground">Share updates and engage with your supporters.</p>
         </div>
         <NewPostDialog />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-4">
-          <Tabs defaultValue="published">
-            <TabsList>
-              <TabsTrigger value="published">Published ({publishedPosts.length})</TabsTrigger>
-              <TabsTrigger value="drafts">Drafts ({draftPosts.length})</TabsTrigger>
+      <div className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-8 space-y-6">
+          <Tabs defaultValue="published" className="w-full">
+            <TabsList className="bg-transparent border-b w-full justify-start rounded-none h-auto p-0 mb-6">
+              <TabsTrigger 
+                value="published"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3"
+              >
+                Published ({publishedPosts.length})
+              </TabsTrigger>
+              <TabsTrigger 
+                value="drafts"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3"
+              >
+                Drafts ({draftPosts.length})
+              </TabsTrigger>
             </TabsList>
-            <TabsContent value="published" className="space-y-4 mt-4">
+            <TabsContent value="published" className="space-y-6">
               {publishedPosts.map(post => (
                 <PostCard key={post.id} post={post} />
               ))}
             </TabsContent>
-            <TabsContent value="drafts" className="space-y-4 mt-4">
+            <TabsContent value="drafts" className="space-y-6">
               {draftPosts.length > 0 ? (
                 draftPosts.map(post => (
                   <PostCard key={post.id} post={post} />
                 ))
               ) : (
-                <Card className="p-8 text-center">
+                <Card className="py-12 text-center border-dashed shadow-none">
                   <p className="text-muted-foreground">No drafts yet</p>
                 </Card>
               )}
             </TabsContent>
           </Tabs>
         </div>
-        <div className="space-y-4">
-          <Card>
-            <CardContent className="p-4">
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-sm font-medium">Engagement Overview</p>
-              </div>
+        
+        <div className="lg:col-span-4 space-y-6">
+          <Card className="border shadow-none">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Engagement</CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
                   <p className="text-2xl font-bold">57</p>
-                  <p className="text-xs text-muted-foreground">Likes</p>
+                  <p className="text-xs text-muted-foreground mt-1">Likes</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold">62</p>
-                  <p className="text-xs text-muted-foreground">Prayers</p>
+                  <p className="text-xs text-muted-foreground mt-1">Prayers</p>
                 </div>
                 <div>
                   <p className="text-2xl font-bold">12</p>
-                  <p className="text-xs text-muted-foreground">Comments</p>
+                  <p className="text-xs text-muted-foreground mt-1">Comments</p>
                 </div>
               </div>
             </CardContent>

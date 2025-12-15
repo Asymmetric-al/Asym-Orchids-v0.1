@@ -48,7 +48,7 @@ function StatCard({ title, value, subtitle, icon: Icon }: {
   icon: React.ElementType
 }) {
   return (
-    <Card className="border">
+    <Card className="border shadow-none">
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div>
@@ -56,8 +56,8 @@ function StatCard({ title, value, subtitle, icon: Icon }: {
             <p className="text-2xl font-semibold mt-1">{value}</p>
             {subtitle && <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>}
           </div>
-          <div className="h-10 w-10 rounded-lg bg-muted flex items-center justify-center">
-            <Icon className="h-5 w-5 text-muted-foreground" />
+          <div className="h-10 w-10 rounded-lg bg-[#e8ebe5] flex items-center justify-center">
+            <Icon className="h-5 w-5 text-[#5d7052]" />
           </div>
         </div>
       </CardContent>
@@ -67,7 +67,7 @@ function StatCard({ title, value, subtitle, icon: Icon }: {
 
 function FundingProgress() {
   return (
-    <Card className="border">
+    <Card className="border shadow-none">
       <CardHeader className="pb-3">
         <CardTitle className="text-base font-medium">Funding Progress</CardTitle>
       </CardHeader>
@@ -77,7 +77,7 @@ function FundingProgress() {
             <span className="text-3xl font-semibold">${stats.monthlySupport.toLocaleString()}</span>
             <span className="text-sm text-muted-foreground">of ${stats.monthlyGoal.toLocaleString()}</span>
           </div>
-          <div className="h-2 bg-muted rounded-full overflow-hidden">
+          <div className="h-2 bg-[#f4f4f5] rounded-full overflow-hidden">
             <div 
               className="h-full bg-[#5d7052] rounded-full transition-all"
               style={{ width: `${Math.min(stats.percentFunded, 100)}%` }}
@@ -95,7 +95,7 @@ function FundingProgress() {
 
 function BalanceCard() {
   return (
-    <Card className="border">
+    <Card className="border shadow-none">
       <CardHeader className="pb-3">
         <CardTitle className="text-base font-medium">Available Balance</CardTitle>
       </CardHeader>
@@ -115,7 +115,7 @@ function BalanceCard() {
 
 function ActivityFeed() {
   return (
-    <Card className="border">
+    <Card className="border shadow-none">
       <CardHeader className="flex-row items-center justify-between pb-3">
         <CardTitle className="text-base font-medium">Recent Activity</CardTitle>
         <Link href="/missionary-dashboard/donors" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1">
@@ -124,9 +124,9 @@ function ActivityFeed() {
       </CardHeader>
       <CardContent className="space-y-3">
         {recentActivity.map((activity) => (
-          <div key={activity.id} className="flex items-center gap-3 p-3 rounded-lg border">
-            <div className={`flex h-9 w-9 items-center justify-center rounded-full ${
-              activity.type === 'gift' ? 'bg-[#e8ebe5]' : 'bg-muted'
+          <div key={activity.id} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/30 transition-colors">
+            <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${
+              activity.type === 'gift' ? 'bg-[#e8ebe5]' : 'bg-[#f4f4f5]'
             }`}>
               {activity.type === 'gift' ? (
                 <Heart className="h-4 w-4 text-[#5d7052]" />
@@ -138,7 +138,7 @@ function ActivityFeed() {
               <div className="flex items-center gap-2">
                 <p className="text-sm font-medium">{activity.donor}</p>
                 {activity.isNew && (
-                  <Badge className="bg-[#5d7052] text-white text-[10px] px-1.5 py-0">NEW</Badge>
+                  <Badge className="bg-[#5d7052] text-white text-[10px] px-1.5 py-0 rounded-sm font-normal">NEW</Badge>
                 )}
               </div>
               <p className="text-xs text-muted-foreground">
@@ -155,7 +155,7 @@ function ActivityFeed() {
 
 function TasksPreview() {
   return (
-    <Card className="border">
+    <Card className="border shadow-none">
       <CardHeader className="flex-row items-center justify-between pb-3">
         <CardTitle className="text-base font-medium">Tasks Due Soon</CardTitle>
         <Link href="/missionary-dashboard/tasks" className="text-sm text-muted-foreground hover:text-foreground flex items-center gap-1">
@@ -164,15 +164,15 @@ function TasksPreview() {
       </CardHeader>
       <CardContent className="space-y-2">
         {pendingTasks.map((task) => (
-          <div key={task.id} className="flex items-center gap-3 p-3 rounded-lg border">
+          <div key={task.id} className="flex items-center gap-3 p-3 rounded-lg border hover:bg-muted/30 transition-colors">
             <div className={`h-2 w-2 rounded-full ${
-              task.priority === 'high' ? 'bg-red-500' : 'bg-amber-500'
+              task.priority === 'high' ? 'bg-rose-500' : 'bg-amber-500'
             }`} />
             <p className="text-sm font-medium flex-1">{task.title}</p>
-            <Badge variant="outline" className="text-xs">
-              <Clock className="h-3 w-3 mr-1" />
+            <div className="flex items-center gap-1 text-xs text-muted-foreground bg-[#f4f4f5] px-2 py-1 rounded">
+              <Clock className="h-3 w-3" />
               {task.dueDate}
-            </Badge>
+            </div>
           </div>
         ))}
       </CardContent>
@@ -182,30 +182,30 @@ function TasksPreview() {
 
 function QuickActions() {
   return (
-    <Card className="border">
+    <Card className="border shadow-none">
       <CardHeader className="pb-3">
         <CardTitle className="text-base font-medium">Quick Actions</CardTitle>
       </CardHeader>
       <CardContent className="grid grid-cols-2 gap-2">
-        <Button variant="outline" className="h-auto py-3 flex-col gap-1" asChild>
+        <Button variant="outline" className="h-auto py-3 flex-col gap-1 hover:border-[#5d7052] hover:text-[#5d7052] hover:bg-[#5d7052]/5 transition-all" asChild>
           <Link href="/missionary-dashboard/feed/new">
             <Mail className="h-4 w-4" />
             <span className="text-xs">Post Update</span>
           </Link>
         </Button>
-        <Button variant="outline" className="h-auto py-3 flex-col gap-1" asChild>
+        <Button variant="outline" className="h-auto py-3 flex-col gap-1 hover:border-[#5d7052] hover:text-[#5d7052] hover:bg-[#5d7052]/5 transition-all" asChild>
           <Link href="/missionary-dashboard/newsletter">
             <Mail className="h-4 w-4" />
             <span className="text-xs">Newsletter</span>
           </Link>
         </Button>
-        <Button variant="outline" className="h-auto py-3 flex-col gap-1" asChild>
+        <Button variant="outline" className="h-auto py-3 flex-col gap-1 hover:border-[#5d7052] hover:text-[#5d7052] hover:bg-[#5d7052]/5 transition-all" asChild>
           <Link href="/missionary-dashboard/donors">
             <Users className="h-4 w-4" />
             <span className="text-xs">View Donors</span>
           </Link>
         </Button>
-        <Button variant="outline" className="h-auto py-3 flex-col gap-1" asChild>
+        <Button variant="outline" className="h-auto py-3 flex-col gap-1 hover:border-[#5d7052] hover:text-[#5d7052] hover:bg-[#5d7052]/5 transition-all" asChild>
           <Link href="/missionary-dashboard/tasks/new">
             <CheckSquare className="h-4 w-4" />
             <span className="text-xs">Add Task</span>
@@ -218,7 +218,7 @@ function QuickActions() {
 
 export default function MissionaryDashboardPage() {
   return (
-    <div className="p-6">
+    <div className="p-6 max-w-7xl mx-auto">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold">Welcome back, Sarah</h1>
         <p className="text-muted-foreground">Here&apos;s how your ministry support is doing.</p>

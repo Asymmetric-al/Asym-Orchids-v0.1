@@ -77,11 +77,15 @@ function TaskRow({ task, onComplete }: { task: Task; onComplete: () => void }) {
   const isDueToday = task.dueDate && new Date(task.dueDate).toDateString() === new Date().toDateString()
 
   return (
-    <div className={`flex items-start gap-4 p-4 border rounded-lg ${task.status === 'completed' ? 'opacity-50' : ''}`}>
+    <div className={`flex items-start gap-4 p-4 border rounded-lg transition-all ${
+        task.status === 'completed' 
+          ? 'bg-muted/30 border-transparent opacity-60' 
+          : 'bg-white hover:border-[#5d7052]/50 hover:shadow-sm'
+      }`}>
       <Checkbox
         checked={task.status === 'completed'}
         onCheckedChange={() => onComplete()}
-        className="mt-1"
+        className="mt-1 data-[state=checked]:bg-[#5d7052] data-[state=checked]:border-[#5d7052]"
       />
       
       <div className={`flex h-9 w-9 items-center justify-center rounded-lg shrink-0 ${typeConfig.color}`}>
@@ -90,22 +94,28 @@ function TaskRow({ task, onComplete }: { task: Task; onComplete: () => void }) {
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2">
-          <p className={`font-medium ${task.status === 'completed' ? 'line-through' : ''}`}>{task.title}</p>
-          {task.priority === 'high' && <div className="h-2 w-2 rounded-full bg-red-500" />}
-          {task.priority === 'medium' && <div className="h-2 w-2 rounded-full bg-amber-500" />}
+          <p className={`font-medium text-sm ${task.status === 'completed' ? 'line-through text-muted-foreground' : ''}`}>{task.title}</p>
+          {task.priority === 'high' && <div className="h-1.5 w-1.5 rounded-full bg-rose-500" />}
+          {task.priority === 'medium' && <div className="h-1.5 w-1.5 rounded-full bg-amber-500" />}
         </div>
         {task.description && (
-          <p className="text-sm text-muted-foreground mt-0.5">{task.description}</p>
+          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{task.description}</p>
         )}
-        <div className="flex items-center gap-3 mt-2">
+        <div className="flex items-center gap-3 mt-2.5">
           {task.donorName && (
-            <span className="text-xs flex items-center gap-1 text-muted-foreground">
+            <span className="text-[10px] flex items-center gap-1 text-muted-foreground bg-[#f4f4f5] px-1.5 py-0.5 rounded">
               <User className="h-3 w-3" />
               {task.donorName}
             </span>
           )}
           {task.dueDate && (
-            <span className={`text-xs flex items-center gap-1 ${isOverdue ? 'text-red-600 font-medium' : isDueToday ? 'text-amber-600 font-medium' : 'text-muted-foreground'}`}>
+            <span className={`text-[10px] flex items-center gap-1 px-1.5 py-0.5 rounded ${
+              isOverdue 
+                ? 'bg-rose-50 text-rose-700 font-medium' 
+                : isDueToday 
+                  ? 'bg-amber-50 text-amber-700 font-medium' 
+                  : 'bg-[#f4f4f5] text-muted-foreground'
+            }`}>
               <Clock className="h-3 w-3" />
               {isOverdue ? 'Overdue' : isDueToday ? 'Due today' : new Date(task.dueDate).toLocaleDateString()}
             </span>
@@ -142,7 +152,7 @@ function NewTaskDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+        <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white shadow-sm">
           <Plus className="mr-2 h-4 w-4" />
           Add Task
         </Button>
@@ -216,29 +226,29 @@ export default function TasksPage() {
   const completedCount = taskList.filter(t => t.status === 'completed').length
 
   return (
-    <div className="p-6">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+    <div className="p-6 max-w-5xl mx-auto">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-semibold">Tasks</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Tasks</h1>
           <p className="text-muted-foreground">Manage your follow-up tasks and to-dos.</p>
         </div>
         <NewTaskDialog />
       </div>
 
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-6">
         <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)} className="w-auto">
-          <TabsList className="bg-transparent border p-1">
-            <TabsTrigger value="all" className="data-[state=active]:bg-muted">All</TabsTrigger>
-            <TabsTrigger value="pending" className="data-[state=active]:bg-muted">
+          <TabsList className="bg-muted/50 border p-1 h-auto">
+            <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-1.5 text-xs">All</TabsTrigger>
+            <TabsTrigger value="pending" className="data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-1.5 text-xs">
               Pending ({pendingCount})
             </TabsTrigger>
-            <TabsTrigger value="completed" className="data-[state=active]:bg-muted">
+            <TabsTrigger value="completed" className="data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-1.5 text-xs">
               Completed ({completedCount})
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <Button variant="outline" size="sm">
-          <Filter className="h-4 w-4 mr-2" />
+        <Button variant="outline" size="sm" className="bg-white">
+          <Filter className="h-3.5 w-3.5 mr-2 text-muted-foreground" />
           Filter
         </Button>
       </div>
@@ -253,9 +263,11 @@ export default function TasksPage() {
             />
           ))
         ) : (
-          <Card className="border">
-            <CardContent className="p-8 text-center">
-              <CheckCircle2 className="h-12 w-12 mx-auto text-[#5d7052] mb-4" />
+          <Card className="border shadow-none border-dashed">
+            <CardContent className="p-12 text-center">
+              <div className="h-12 w-12 rounded-full bg-[#e8ebe5] flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="h-6 w-6 text-[#5d7052]" />
+              </div>
               <h3 className="font-medium mb-1">All caught up!</h3>
               <p className="text-sm text-muted-foreground">No pending tasks. Great job staying on top of your follow-ups!</p>
             </CardContent>

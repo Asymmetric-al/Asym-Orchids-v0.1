@@ -24,6 +24,9 @@ import {
   Save,
   Eye,
   Sparkles,
+  ImageIcon,
+  CheckCircle2,
+  Smartphone,
 } from 'lucide-react'
 
 export default function ProfilePage() {
@@ -44,18 +47,18 @@ export default function ProfilePage() {
   })
 
   return (
-    <div className="space-y-6 p-4 md:p-6 lg:p-8">
+    <div className="p-6 max-w-7xl mx-auto space-y-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Profile</h1>
-          <p className="text-muted-foreground">Manage your public profile and contact information.</p>
+          <h1 className="text-2xl font-semibold tracking-tight">Content & Profile</h1>
+          <p className="text-muted-foreground">Manage your public presence and giving pages.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline">
+          <Button variant="outline" className="bg-white">
             <Eye className="mr-2 h-4 w-4" />
-            Preview Page
+            Live Site
           </Button>
-          <Button onClick={() => setIsEditing(!isEditing)}>
+          <Button onClick={() => setIsEditing(!isEditing)} className="bg-black text-white hover:bg-black/90">
             {isEditing ? (
               <>
                 <Save className="mr-2 h-4 w-4" />
@@ -63,7 +66,6 @@ export default function ProfilePage() {
               </>
             ) : (
               <>
-                <Sparkles className="mr-2 h-4 w-4" />
                 Edit Profile
               </>
             )}
@@ -71,270 +73,230 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Profile Photo</CardTitle>
-              <CardDescription>This appears on your giving page</CardDescription>
-            </CardHeader>
-            <CardContent className="flex flex-col items-center gap-4">
-              <div className="relative">
-                <Avatar className="h-32 w-32">
-                  <AvatarImage src="/placeholder-avatar.jpg" />
-                  <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-3xl">
-                    SM
-                  </AvatarFallback>
-                </Avatar>
-                {isEditing && (
-                  <Button size="icon" className="absolute bottom-0 right-0 h-8 w-8 rounded-full">
-                    <Camera className="h-4 w-4" />
-                  </Button>
-                )}
-              </div>
-              {isEditing && (
-                <Button variant="outline" size="sm">
-                  <Upload className="mr-2 h-4 w-4" />
-                  Upload Photo
-                </Button>
-              )}
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Cover Image</CardTitle>
-              <CardDescription>Banner for your giving page</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="relative aspect-[3/1] bg-gradient-to-br from-emerald-500 to-teal-600 rounded-lg overflow-hidden">
-                {isEditing && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/30">
-                    <Button variant="secondary" size="sm">
-                      <Upload className="mr-2 h-4 w-4" />
-                      Change Cover
-                    </Button>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Social Links</CardTitle>
-              <CardDescription>Connect your social profiles</CardDescription>
+      <div className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-7 space-y-6">
+          <Card className="border shadow-none">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-base font-semibold">Basic Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2">
-                  <Facebook className="h-4 w-4 text-blue-600" />
-                  Facebook
-                </Label>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-muted-foreground">Display Name</Label>
+                  <Input 
+                    value={`${profile.firstName} & ${profile.lastName}`}
+                    onChange={(e) => {}}
+                    disabled={!isEditing}
+                    className="bg-muted/10"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className="text-xs font-medium text-muted-foreground">Location</Label>
+                  <Input 
+                    value={profile.location}
+                    onChange={(e) => setProfile({...profile, location: e.target.value})}
+                    disabled={!isEditing}
+                    className="bg-muted/10"
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-muted-foreground">Tagline</Label>
                 <Input 
-                  placeholder="https://facebook.com/..." 
-                  value={profile.facebook}
-                  onChange={(e) => setProfile({...profile, facebook: e.target.value})}
+                  value={profile.ministryFocus}
+                  onChange={(e) => setProfile({...profile, ministryFocus: e.target.value})}
                   disabled={!isEditing}
+                  className="bg-muted/10"
                 />
               </div>
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2">
-                  <Instagram className="h-4 w-4 text-pink-600" />
-                  Instagram
-                </Label>
-                <Input 
-                  placeholder="https://instagram.com/..." 
-                  value={profile.instagram}
-                  onChange={(e) => setProfile({...profile, instagram: e.target.value})}
-                  disabled={!isEditing}
-                />
+
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-muted-foreground">Bio</Label>
+                <div className="relative">
+                  <div className="absolute top-2 left-2 flex gap-1 p-1 bg-white rounded border shadow-sm z-10">
+                    <button className="p-1 hover:bg-muted rounded text-xs font-bold">B</button>
+                    <button className="p-1 hover:bg-muted rounded text-xs italic">I</button>
+                    <button className="p-1 hover:bg-muted rounded text-xs underline">U</button>
+                  </div>
+                  <Textarea 
+                    value={profile.bio}
+                    onChange={(e) => setProfile({...profile, bio: e.target.value})}
+                    disabled={!isEditing}
+                    className="min-h-[160px] resize-none bg-muted/10 pt-10"
+                  />
+                </div>
+                <p className="text-[10px] text-muted-foreground text-right">Rich text formatting supported</p>
               </div>
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2">
-                  <Twitter className="h-4 w-4 text-sky-500" />
-                  Twitter / X
-                </Label>
-                <Input 
-                  placeholder="https://twitter.com/..." 
-                  value={profile.twitter}
-                  onChange={(e) => setProfile({...profile, twitter: e.target.value})}
-                  disabled={!isEditing}
-                />
+            </CardContent>
+          </Card>
+
+          <Card className="border shadow-none">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-base font-semibold">Imagery</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-start gap-6">
+                <Avatar className="h-20 w-20 border">
+                  <AvatarImage src="/placeholder-avatar.jpg" />
+                  <AvatarFallback className="bg-muted text-lg font-medium">SM</AvatarFallback>
+                </Avatar>
+                <div className="space-y-2">
+                  <p className="text-sm font-medium">Profile Photo</p>
+                  <p className="text-xs text-muted-foreground">Recommended 400x400px. JPG or PNG.</p>
+                  <Button variant="outline" size="sm" className="h-8">
+                    <Upload className="mr-2 h-3.5 w-3.5" />
+                    Upload New
+                  </Button>
+                </div>
               </div>
+
               <div className="space-y-2">
-                <Label className="flex items-center gap-2">
-                  <Youtube className="h-4 w-4 text-red-600" />
-                  YouTube
-                </Label>
-                <Input 
-                  placeholder="https://youtube.com/..." 
-                  value={profile.youtube}
-                  onChange={(e) => setProfile({...profile, youtube: e.target.value})}
-                  disabled={!isEditing}
-                />
+                <Label className="text-sm font-medium">Cover Image</Label>
+                <div className="aspect-[3/1] rounded-lg border-2 border-dashed flex flex-col items-center justify-center bg-muted/10 hover:bg-muted/20 transition-colors cursor-pointer">
+                  <div className="h-10 w-10 rounded-full bg-muted/50 flex items-center justify-center mb-2">
+                    <ImageIcon className="h-5 w-5 text-muted-foreground" />
+                  </div>
+                  <p className="text-sm text-muted-foreground">Click to upload cover</p>
+                  <p className="text-xs text-muted-foreground/70">1200x400px recommended</p>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2">
-                  <Link2 className="h-4 w-4" />
-                  Website
-                </Label>
-                <Input 
-                  placeholder="https://..." 
-                  value={profile.website}
-                  onChange={(e) => setProfile({...profile, website: e.target.value})}
-                  disabled={!isEditing}
-                />
+            </CardContent>
+          </Card>
+
+          <Card className="border shadow-none">
+            <CardHeader className="flex-row items-center justify-between pb-4">
+              <CardTitle className="text-base font-semibold">Public Contact Details</CardTitle>
+              <Badge variant="outline" className="text-muted-foreground font-normal">Optional Section</Badge>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-xs text-muted-foreground mb-2">Add contact methods for donors to reach you directly.</p>
+              
+              <div className="p-3 bg-muted/20 border rounded-lg flex items-start gap-2 mb-4">
+                <CheckCircle2 className="h-4 w-4 text-muted-foreground mt-0.5" />
+                <p className="text-xs text-muted-foreground">Fields left blank will be automatically hidden from your public profile.</p>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="space-y-1.5">
+                  <div className="flex justify-between">
+                    <Label className="text-xs font-medium text-muted-foreground">Contact Email</Label>
+                    <span className="text-[10px] text-muted-foreground uppercase">Optional</span>
+                  </div>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input className="pl-9" placeholder="contact@example.com" value={profile.email} onChange={(e) => setProfile({...profile, email: e.target.value})} disabled={!isEditing} />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <div className="flex justify-between">
+                    <Label className="text-xs font-medium text-muted-foreground">Personal Website</Label>
+                    <span className="text-[10px] text-muted-foreground uppercase">Optional</span>
+                  </div>
+                  <div className="relative">
+                    <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                    <Input className="pl-9" placeholder="https://yourwebsite.com" value={profile.website} onChange={(e) => setProfile({...profile, website: e.target.value})} disabled={!isEditing} />
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="border shadow-none">
+            <CardHeader className="flex-row items-center justify-between pb-4">
+              <CardTitle className="text-base font-semibold">Social Links</CardTitle>
+              <Badge variant="outline" className="text-muted-foreground font-normal">Optional</Badge>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-xs text-muted-foreground mb-2">Connect your social platforms. Icons will only appear on your page for the networks you add below.</p>
+              
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 flex justify-center">
+                    <Facebook className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <Input className="pl-10" placeholder="facebook.com/your-page" value={profile.facebook} onChange={(e) => setProfile({...profile, facebook: e.target.value})} disabled={!isEditing} />
+                </div>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 flex justify-center">
+                    <Instagram className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <Input className="pl-10" placeholder="instagram.com/your-handle" value={profile.instagram} onChange={(e) => setProfile({...profile, instagram: e.target.value})} disabled={!isEditing} />
+                </div>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 flex justify-center">
+                    <Twitter className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <Input className="pl-10" placeholder="x.com/your-handle" value={profile.twitter} onChange={(e) => setProfile({...profile, twitter: e.target.value})} disabled={!isEditing} />
+                </div>
+                <div className="relative">
+                  <div className="absolute left-3 top-1/2 -translate-y-1/2 w-5 flex justify-center">
+                    <Youtube className="h-4 w-4 text-muted-foreground" />
+                  </div>
+                  <Input className="pl-10" placeholder="youtube.com/@your-channel" value={profile.youtube} onChange={(e) => setProfile({...profile, youtube: e.target.value})} disabled={!isEditing} />
+                </div>
               </div>
             </CardContent>
           </Card>
         </div>
 
-        <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Basic Information</CardTitle>
-              <CardDescription>Your name and contact details</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>First Name</Label>
-                  <Input 
-                    value={profile.firstName}
-                    onChange={(e) => setProfile({...profile, firstName: e.target.value})}
-                    disabled={!isEditing}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Last Name</Label>
-                  <Input 
-                    value={profile.lastName}
-                    onChange={(e) => setProfile({...profile, lastName: e.target.value})}
-                    disabled={!isEditing}
-                  />
+        <div className="lg:col-span-5">
+          <div className="sticky top-6">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">Live Preview</span>
+              <div className="flex gap-1">
+                <Button variant="outline" size="icon" className="h-8 w-8 bg-white"><Smartphone className="h-4 w-4" /></Button>
+                <Button variant="ghost" size="icon" className="h-8 w-8"><Eye className="h-4 w-4" /></Button>
+              </div>
+            </div>
+            
+            <div className="border-[8px] border-gray-900 rounded-[3rem] overflow-hidden shadow-2xl bg-white aspect-[9/19.5] relative">
+              <div className="absolute top-0 left-0 right-0 h-32 bg-gray-100">
+                <div className="absolute inset-0 flex items-center justify-center opacity-10">
+                   <ImageIcon className="h-12 w-12" />
                 </div>
               </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <Mail className="h-4 w-4 text-muted-foreground" />
-                    Email
-                  </Label>
-                  <Input 
-                    type="email"
-                    value={profile.email}
-                    onChange={(e) => setProfile({...profile, email: e.target.value})}
-                    disabled={!isEditing}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <Phone className="h-4 w-4 text-muted-foreground" />
-                    Phone
-                  </Label>
-                  <Input 
-                    type="tel"
-                    value={profile.phone}
-                    onChange={(e) => setProfile({...profile, phone: e.target.value})}
-                    disabled={!isEditing}
-                  />
-                </div>
-              </div>
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <MapPin className="h-4 w-4 text-muted-foreground" />
-                    Location
-                  </Label>
-                  <Input 
-                    value={profile.location}
-                    onChange={(e) => setProfile({...profile, location: e.target.value})}
-                    disabled={!isEditing}
-                    placeholder="City, Country"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="flex items-center gap-2">
-                    <Globe className="h-4 w-4 text-muted-foreground" />
-                    Ministry Focus
-                  </Label>
-                  <Input 
-                    value={profile.ministryFocus}
-                    onChange={(e) => setProfile({...profile, ministryFocus: e.target.value})}
-                    disabled={!isEditing}
-                    placeholder="e.g., Youth Ministry"
-                  />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">About / Bio</CardTitle>
-              <CardDescription>Tell supporters about your ministry</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Textarea 
-                value={profile.bio}
-                onChange={(e) => setProfile({...profile, bio: e.target.value})}
-                disabled={!isEditing}
-                className="min-h-[200px] resize-none"
-                placeholder="Share your story, mission, and vision..."
-              />
-              <p className="text-xs text-muted-foreground mt-2">
-                {profile.bio.length} / 2000 characters
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Giving Page Preview</CardTitle>
-              <CardDescription>How supporters see your profile</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="border rounded-lg overflow-hidden">
-                <div className="aspect-[3/1] bg-gradient-to-br from-emerald-500 to-teal-600" />
-                <div className="p-6 relative">
-                  <Avatar className="h-20 w-20 absolute -top-10 border-4 border-background">
-                    <AvatarFallback className="bg-gradient-to-br from-emerald-500 to-teal-600 text-white text-xl">
-                      SM
-                    </AvatarFallback>
+              <div className="absolute top-20 left-0 right-0 flex justify-center">
+                <div className="h-24 w-24 rounded-full border-4 border-white bg-white overflow-hidden shadow-sm">
+                   <Avatar className="h-full w-full">
+                    <AvatarImage src="/placeholder-avatar.jpg" />
+                    <AvatarFallback className="bg-muted">SM</AvatarFallback>
                   </Avatar>
-                  <div className="mt-12">
-                    <h3 className="text-xl font-bold">{profile.firstName} {profile.lastName}</h3>
-                    <div className="flex items-center gap-4 text-sm text-muted-foreground mt-1">
-                      <span className="flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5" />
-                        {profile.location}
-                      </span>
-                      <Badge variant="secondary">{profile.ministryFocus}</Badge>
-                    </div>
-                    <p className="text-sm mt-4 text-muted-foreground line-clamp-3">{profile.bio}</p>
-                    <div className="flex gap-2 mt-4">
-                      {profile.facebook && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Facebook className="h-4 w-4" />
-                        </Button>
-                      )}
-                      {profile.instagram && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Instagram className="h-4 w-4" />
-                        </Button>
-                      )}
-                      {profile.website && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8">
-                          <Globe className="h-4 w-4" />
-                        </Button>
-                      )}
-                    </div>
-                  </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+              
+              <div className="mt-48 px-6 text-center">
+                <h2 className="text-xl font-bold text-gray-900">{profile.firstName} & {profile.lastName}</h2>
+                <div className="flex items-center justify-center gap-1 text-xs text-gray-500 mt-1">
+                  <MapPin className="h-3 w-3" />
+                  {profile.location}
+                </div>
+                <p className="text-xs font-medium text-[#5d7052] mt-1">{profile.ministryFocus}</p>
+                
+                <p className="text-sm text-gray-600 mt-4 leading-relaxed line-clamp-4">
+                  {profile.bio}
+                </p>
+
+                <Button className="w-full mt-6 bg-gray-900 text-white hover:bg-gray-800 rounded-full h-12 shadow-lg shadow-gray-900/20">
+                  GIVE SUPPORT
+                </Button>
+
+                <div className="mt-8 pt-8 border-t flex justify-center">
+                   <p className="text-[10px] text-gray-400 font-medium tracking-widest uppercase">Active Campaigns</p>
+                </div>
+                <div className="mt-4 bg-gray-100 rounded-xl h-24 w-full"></div>
+              </div>
+
+              {/* Dynamic Island Area */}
+              <div className="absolute top-0 left-0 right-0 h-14 flex justify-center pt-2">
+                 <div className="bg-black h-7 w-28 rounded-full"></div>
+              </div>
+              {/* Home Indicator */}
+              <div className="absolute bottom-1 left-0 right-0 flex justify-center">
+                 <div className="bg-gray-300 h-1 w-32 rounded-full"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

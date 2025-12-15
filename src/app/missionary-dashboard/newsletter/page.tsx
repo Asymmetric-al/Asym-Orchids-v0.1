@@ -54,13 +54,13 @@ const previousNewsletters = [
 function TemplateCard({ template }: { template: typeof templates[0] }) {
   const Icon = template.icon
   return (
-    <Card className="cursor-pointer hover:border-primary/50 transition-colors group">
+    <Card className="cursor-pointer hover:border-[#5d7052] hover:bg-[#5d7052]/5 transition-all group border shadow-none">
       <CardContent className="p-4 flex items-center gap-3">
-        <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-          <Icon className="h-5 w-5 text-primary" />
+        <div className="h-10 w-10 rounded-lg bg-[#e8ebe5] flex items-center justify-center group-hover:bg-[#5d7052] transition-colors">
+          <Icon className="h-5 w-5 text-[#5d7052] group-hover:text-white transition-colors" />
         </div>
         <div>
-          <p className="font-medium">{template.name}</p>
+          <p className="font-medium text-sm">{template.name}</p>
           <p className="text-xs text-muted-foreground">{template.description}</p>
         </div>
       </CardContent>
@@ -76,55 +76,65 @@ function ComposeNewsletterDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="lg" className="gap-2">
+        <Button size="lg" className="gap-2 bg-[#5d7052] hover:bg-[#4a5a42] text-white">
           <Plus className="h-4 w-4" />
           Compose Newsletter
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
+      <DialogContent className="max-w-4xl h-[85vh] p-0 flex flex-col gap-0 overflow-hidden">
+        <DialogHeader className="px-6 py-4 border-b flex-shrink-0">
           <DialogTitle>Compose Newsletter</DialogTitle>
           <DialogDescription>Create and send an update to your supporters.</DialogDescription>
         </DialogHeader>
-        <div className="space-y-6 py-4">
-          <div className="flex items-center justify-between p-3 bg-muted/50 rounded-lg">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-lg border">
             <div className="flex items-center gap-2">
               <Users className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm">Sending to</span>
+              <span className="text-sm font-medium">Recipients</span>
             </div>
-            <Badge variant="secondary">42 recipients</Badge>
+            <div className="flex items-center gap-2">
+               <span className="text-sm text-muted-foreground">All Subscribers</span>
+               <Badge variant="secondary" className="bg-[#e8ebe5] text-[#5d7052]">42 recipients</Badge>
+            </div>
           </div>
 
-          <div className="space-y-2">
-            <Label>Subject Line</Label>
-            <Input
-              placeholder="e.g., December Ministry Update"
-              value={subject}
-              onChange={(e) => setSubject(e.target.value)}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <Label>Template</Label>
-            <Select>
-              <SelectTrigger>
-                <SelectValue placeholder="Choose a template..." />
-              </SelectTrigger>
-              <SelectContent>
-                {templates.map(t => (
-                  <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label>Template</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Choose a template..." />
+                </SelectTrigger>
+                <SelectContent>
+                  {templates.map(t => (
+                    <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Subject Line</Label>
+              <Input
+                placeholder="e.g., December Ministry Update"
+                value={subject}
+                onChange={(e) => setSubject(e.target.value)}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center justify-between">
               <Label>Email Content</Label>
-              <Button variant="ghost" size="sm">
-                <ImageIcon className="mr-2 h-4 w-4" />
-                Add Image
-              </Button>
+              <div className="flex gap-2">
+                 <Button variant="outline" size="sm" className="h-8">
+                  <ImageIcon className="mr-2 h-3.5 w-3.5" />
+                  Image
+                </Button>
+                <Button variant="outline" size="sm" className="h-8">
+                  <LayoutTemplate className="mr-2 h-3.5 w-3.5" />
+                  Layout
+                </Button>
+              </div>
             </div>
             <Textarea
               placeholder="Write your newsletter content here...
@@ -134,22 +144,22 @@ Dear {first_name},
 Thank you for your continued support of our ministry..."
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="min-h-[300px] resize-none font-mono text-sm"
+              className="min-h-[300px] resize-none font-mono text-sm leading-relaxed p-4"
             />
             <p className="text-xs text-muted-foreground">
-              Use {'{first_name}'} to personalize with donor&apos;s name
+              Tip: Use {'{first_name}'} to personalize with donor&apos;s name
             </p>
           </div>
 
-          <div className="flex items-center gap-4 p-3 bg-amber-50 dark:bg-amber-950/30 rounded-lg text-sm">
+          <div className="flex items-center gap-4 p-4 bg-amber-50/50 border border-amber-100 rounded-lg text-sm">
             <Sparkles className="h-4 w-4 text-amber-600 shrink-0" />
-            <p className="text-amber-800 dark:text-amber-200">
-              Your newsletter will be sent from your organization&apos;s email address and include your branding.
+            <p className="text-amber-800">
+              Your newsletter will be sent from your organization&apos;s email address and include your branding automatically.
             </p>
           </div>
         </div>
-        <div className="flex justify-between">
-          <Button variant="outline" onClick={() => setOpen(false)}>
+        <div className="flex justify-between items-center px-6 py-4 border-t bg-muted/10 mt-auto flex-shrink-0">
+          <Button variant="ghost" onClick={() => setOpen(false)}>
             Save Draft
           </Button>
           <div className="flex gap-2">
@@ -157,7 +167,7 @@ Thank you for your continued support of our ministry..."
               <Eye className="mr-2 h-4 w-4" />
               Preview
             </Button>
-            <Button disabled={!subject || !content}>
+            <Button disabled={!subject || !content} className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
               <Send className="mr-2 h-4 w-4" />
               Send Newsletter
             </Button>
@@ -170,24 +180,22 @@ Thank you for your continued support of our ministry..."
 
 export default function NewsletterPage() {
   return (
-    <div className="space-y-6 p-4 md:p-6 lg:p-8">
+    <div className="p-6 max-w-6xl mx-auto space-y-8">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Newsletter</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">Newsletter</h1>
           <p className="text-muted-foreground">Send updates to your supporters via email.</p>
         </div>
         <ComposeNewsletterDialog />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <LayoutTemplate className="h-5 w-5" />
+      <div className="grid gap-8 lg:grid-cols-12">
+        <div className="lg:col-span-8 space-y-6">
+          <Card className="border shadow-none">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-semibold flex items-center gap-2">
                 Templates
               </CardTitle>
-              <CardDescription>Start with a pre-designed template</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="grid md:grid-cols-2 gap-3">
@@ -198,24 +206,23 @@ export default function NewsletterPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="border shadow-none">
             <CardHeader>
-              <CardTitle className="text-lg">Previous Newsletters</CardTitle>
-              <CardDescription>Your sent newsletters</CardDescription>
+              <CardTitle className="text-base font-semibold">Previous Newsletters</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
+              <div className="space-y-2">
                 {previousNewsletters.map(newsletter => (
                   <div 
                     key={newsletter.id}
-                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
+                    className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/30 transition-colors"
                   >
-                    <div className="flex items-center gap-3">
-                      <div className="h-10 w-10 rounded-lg bg-emerald-100 dark:bg-emerald-950 flex items-center justify-center">
-                        <CheckCircle2 className="h-5 w-5 text-emerald-600" />
+                    <div className="flex items-center gap-4">
+                      <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center shrink-0">
+                        <CheckCircle2 className="h-4 w-4 text-[#5d7052]" />
                       </div>
                       <div>
-                        <p className="font-medium">{newsletter.subject}</p>
+                        <p className="font-medium text-sm">{newsletter.subject}</p>
                         <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
                           <span className="flex items-center gap-1">
                             <Clock className="h-3 w-3" />
@@ -223,20 +230,20 @@ export default function NewsletterPage() {
                           </span>
                           <span className="flex items-center gap-1">
                             <Users className="h-3 w-3" />
-                            {newsletter.recipients} recipients
+                            {newsletter.recipients}
                           </span>
-                          <span className="flex items-center gap-1">
+                          <span className="flex items-center gap-1 text-[#5d7052] font-medium">
                             <Eye className="h-3 w-3" />
-                            {Math.round((newsletter.opened / newsletter.recipients) * 100)}% opened
+                            {Math.round((newsletter.opened / newsletter.recipients) * 100)}%
                           </span>
                         </div>
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                         <Copy className="h-4 w-4" />
                       </Button>
-                      <Button variant="ghost" size="sm">
+                      <Button variant="ghost" size="icon" className="h-8 w-8">
                         <ExternalLink className="h-4 w-4" />
                       </Button>
                     </div>
@@ -247,82 +254,49 @@ export default function NewsletterPage() {
           </Card>
         </div>
 
-        <div className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg flex items-center gap-2">
-                <Users className="h-5 w-5" />
-                Recipients
-              </CardTitle>
+        <div className="lg:col-span-4 space-y-6">
+          <Card className="border shadow-none bg-muted/20">
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Stats Overview</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="text-center p-4 bg-muted/50 rounded-lg">
-                <p className="text-3xl font-bold">42</p>
+            <CardContent className="space-y-6">
+              <div className="text-center">
+                <p className="text-4xl font-bold tracking-tight">42</p>
                 <p className="text-sm text-muted-foreground">Active subscribers</p>
               </div>
-              <div className="space-y-2 text-sm">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Recurring donors</span>
-                  <span className="font-medium">4</span>
+              <div className="grid grid-cols-2 gap-4 border-t border-border/50 pt-4">
+                <div className="text-center">
+                  <p className="text-xl font-bold">12</p>
+                  <p className="text-xs text-muted-foreground">Sent YTD</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">One-time donors</span>
-                  <span className="font-medium">4</span>
+                <div className="text-center">
+                  <p className="text-xl font-bold text-[#5d7052]">78%</p>
+                  <p className="text-xs text-muted-foreground">Avg Open Rate</p>
                 </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Other subscribers</span>
-                  <span className="font-medium">34</span>
-                </div>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Donors who opted out of emails are automatically excluded.
-              </p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Newsletter Stats</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <p className="text-2xl font-bold">12</p>
-                  <p className="text-xs text-muted-foreground">Sent this year</p>
-                </div>
-                <div className="text-center p-3 bg-muted/50 rounded-lg">
-                  <p className="text-2xl font-bold">78%</p>
-                  <p className="text-xs text-muted-foreground">Avg open rate</p>
-                </div>
-              </div>
-              <div className="pt-2 border-t">
-                <p className="text-xs text-muted-foreground">
-                  Last newsletter sent on Dec 1, 2024
-                </p>
               </div>
             </CardContent>
           </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-lg">Tips</CardTitle>
+          <Card className="border shadow-none">
+            <CardHeader className="pb-3">
+              <CardTitle className="text-base font-semibold">Tips for Success</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-                <p>Keep subject lines under 50 characters</p>
+            <CardContent className="space-y-3.5 text-sm">
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
+                <p className="text-muted-foreground">Keep subject lines under 50 characters for better open rates</p>
               </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-                <p>Include a personal story or testimony</p>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
+                <p className="text-muted-foreground">Include a personal story or testimony to connect with donors</p>
               </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-                <p>Add photos to increase engagement</p>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
+                <p className="text-muted-foreground">Add photos to increase engagement and readability</p>
               </div>
-              <div className="flex items-start gap-2">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
-                <p>Send consistently (monthly recommended)</p>
+              <div className="flex items-start gap-2.5">
+                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
+                <p className="text-muted-foreground">Send consistently (monthly recommended)</p>
               </div>
             </CardContent>
           </Card>
