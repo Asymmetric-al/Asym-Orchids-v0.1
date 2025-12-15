@@ -136,10 +136,10 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
   }
 
   return (
-    <Card className={`relative overflow-hidden border shadow-none ${post.isPinned ? 'bg-amber-50/30 border-amber-200' : ''}`}>
+    <Card className={`relative overflow-hidden border shadow-none ${post.isPinned ? 'bg-muted/40 border-border' : ''}`}>
       {post.isPinned && (
         <div className="absolute top-3 right-3">
-          <Badge variant="outline" className="bg-amber-100 text-amber-700 border-amber-200">
+          <Badge variant="outline" className="bg-muted text-foreground/80 border-border">
             <Pin className="h-3 w-3 mr-1" />
             Pinned
           </Badge>
@@ -209,7 +209,7 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`gap-1.5 h-8 px-2 text-muted-foreground hover:text-[#5d7052] ${userReactions.like ? 'text-[#5d7052] bg-[#5d7052]/10' : ''}`}
+                className={`gap-1.5 h-8 px-2 text-muted-foreground hover:text-primary ${userReactions.like ? 'text-primary bg-primary/10' : ''}`}
                 onClick={() => toggleReaction('like')}
               >
                 <Heart className={`h-4 w-4 ${userReactions.like ? 'fill-current' : ''}`} />
@@ -218,7 +218,7 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
               <Button
                 variant="ghost"
                 size="sm"
-                className={`gap-1.5 h-8 px-2 text-muted-foreground hover:text-blue-600 ${userReactions.prayer ? 'text-blue-600 bg-blue-50' : ''}`}
+                className={`gap-1.5 h-8 px-2 text-muted-foreground hover:text-primary ${userReactions.prayer ? 'text-primary bg-primary/10' : ''}`}
                 onClick={() => toggleReaction('prayer')}
               >
                 <span className="text-base">🙏</span>
@@ -236,7 +236,7 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
             </div>
 
             {showComments && (
-              <div className="space-y-3 pt-3 border-t bg-muted/20 -mx-4 px-4 pb-3">
+              <div className="space-y-3 pt-3 border-t bg-muted/30 -mx-4 px-4 pb-3">
                 {comments.slice(0, 3).map(comment => (
                   <div key={comment.id} className="flex gap-2.5">
                     <Avatar className="h-6 w-6 border mt-1">
@@ -245,7 +245,7 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                      <div className="bg-white border rounded-lg p-2.5 shadow-sm">
+                      <div className="bg-card border rounded-lg p-2.5 shadow-none">
                         <div className="flex items-center gap-2 mb-1">
                           <p className="text-xs font-semibold">{comment.userName}</p>
                           <span className="text-[10px] text-muted-foreground">
@@ -262,7 +262,7 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
                     <AvatarFallback className="text-[10px] bg-muted">SM</AvatarFallback>
                   </Avatar>
                   <div className="flex-1 relative">
-                    <Input placeholder="Write a comment..." className="h-8 text-sm pr-8 bg-white" />
+                    <Input placeholder="Write a comment..." className="h-8 text-sm pr-8 bg-card" />
                     <Button size="icon" variant="ghost" className="absolute right-0 top-0 h-8 w-8 hover:bg-transparent">
                       <Send className="h-3 w-3 text-muted-foreground" />
                     </Button>
@@ -275,7 +275,7 @@ function PostCard({ post, onEdit }: { post: Post; onEdit?: () => void }) {
 
         {post.status === 'draft' && (
           <div className="flex gap-2 pt-2 border-t">
-            <Button size="sm" className="flex-1 bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+            <Button size="sm" className="flex-1">
               <Eye className="mr-2 h-4 w-4" />
               Publish
             </Button>
@@ -298,7 +298,7 @@ function NewPostDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+        <Button>
           <Plus className="mr-2 h-4 w-4" />
           New Post
         </Button>
@@ -347,7 +347,7 @@ function NewPostDialog() {
         </div>
         <div className="flex justify-end gap-2">
           <Button variant="ghost" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button disabled={!content.trim()} className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+          <Button disabled={!content.trim()}>
             Publish Post
           </Button>
         </div>
@@ -361,7 +361,7 @@ function FeedSettings() {
   const [commentsMode, setCommentsMode] = React.useState<'allow' | 'approve' | 'disable'>('allow')
 
   return (
-    <Card>
+    <Card className="border">
       <CardHeader>
         <CardTitle className="text-lg flex items-center gap-2">
           <Settings className="h-5 w-5" />
@@ -412,7 +412,7 @@ function FeedSettings() {
           <p className="text-sm font-medium">Comment Settings</p>
           <div className="grid gap-2">
             <Button
-              variant={commentsMode === 'allow' ? 'secondary' : 'ghost'}
+              variant={commentsMode === 'allow' ? 'outline' : 'ghost'}
               size="sm"
               className="justify-start"
               onClick={() => setCommentsMode('allow')}
@@ -420,7 +420,7 @@ function FeedSettings() {
               Allow all comments
             </Button>
             <Button
-              variant={commentsMode === 'approve' ? 'secondary' : 'ghost'}
+              variant={commentsMode === 'approve' ? 'outline' : 'ghost'}
               size="sm"
               className="justify-start"
               onClick={() => setCommentsMode('approve')}
@@ -428,7 +428,7 @@ function FeedSettings() {
               Require approval
             </Button>
             <Button
-              variant={commentsMode === 'disable' ? 'secondary' : 'ghost'}
+              variant={commentsMode === 'disable' ? 'outline' : 'ghost'}
               size="sm"
               className="justify-start"
               onClick={() => setCommentsMode('disable')}
@@ -475,13 +475,13 @@ export default function FeedPage() {
             <TabsList className="bg-transparent border-b w-full justify-start rounded-none h-auto p-0 mb-6">
               <TabsTrigger 
                 value="published"
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:bg-transparent px-4 pb-3"
               >
                 Published ({publishedPosts.length})
               </TabsTrigger>
               <TabsTrigger 
                 value="drafts"
-                className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:bg-transparent px-4 pb-3"
+                className="rounded-none border-b-2 border-transparent data-[state=active]:border-foreground data-[state=active]:text-foreground data-[state=active]:bg-transparent px-4 pb-3"
               >
                 Drafts ({draftPosts.length})
               </TabsTrigger>

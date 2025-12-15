@@ -70,7 +70,7 @@ function NavLink({ item, collapsed = false }: { item: typeof navItems[0]; collap
 
 function Sidebar({ className }: { className?: string }) {
   return (
-    <aside className={cn('flex h-full flex-col border-r bg-background', className)}>
+    <aside className={cn('flex h-full flex-col border-r bg-card', className)}>
       <div className="flex h-14 items-center border-b px-4">
         <Link href="/missionary-dashboard" className="flex items-center gap-2">
           <span className="font-semibold text-lg">Missionary Dashboard</span>
@@ -177,7 +177,7 @@ export default function MissionaryDashboardLayout({
       <Sidebar className="hidden w-56 lg:flex" />
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar />
-        <main className="flex-1 overflow-y-auto bg-muted/30">
+        <main className="flex-1 overflow-y-auto bg-muted">
           {children}
         </main>
       </div>
