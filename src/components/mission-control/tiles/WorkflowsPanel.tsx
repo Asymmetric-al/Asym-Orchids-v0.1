@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { WORKFLOWS } from '@/lib/mission-control/tiles'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { ChevronRight, ArrowRight } from '../icons'
+import { ArrowRight } from '../icons'
 
 export function WorkflowsPanel() {
   return (

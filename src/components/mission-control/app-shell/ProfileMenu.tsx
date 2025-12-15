@@ -21,7 +21,7 @@ import { ROLE_LABELS } from '@/lib/mission-control/roles'
 import type { Role } from '@/lib/mission-control/types'
 
 export function ProfileMenu() {
-  const { user, isDevMode } = useMC()
+  const { user, isDevMode, signOut } = useMC()
   const { role, setRole, roleLabel } = useRole()
 
   const initials = user?.name
@@ -78,7 +78,7 @@ export function ProfileMenu() {
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="text-destructive">
+        <DropdownMenuItem className="text-destructive" onClick={() => signOut()}>
           <LogOut className="mr-2 h-4 w-4" />
           Sign out
         </DropdownMenuItem>

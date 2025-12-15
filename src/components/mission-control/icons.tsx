@@ -138,4 +138,6 @@ export {
   ChevronsUpDown,
   Check,
   Search,
+  User,
+  ArrowRight,
 }

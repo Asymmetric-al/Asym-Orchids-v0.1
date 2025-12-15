@@ -13,7 +13,12 @@ import {
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
-import { useMC, STUB_TENANTS } from '@/lib/mission-control/context'
+import { useMC } from '@/lib/mission-control/context'
+import type { Tenant } from '@/lib/mission-control/types'
+
+const STUB_TENANTS: Tenant[] = [
+  { id: '00000000-0000-0000-0000-000000000001', name: 'Orchids Platform', slug: 'orchids-platform' },
+]
 
 export function TenantSwitcher() {
   const [open, setOpen] = useState(false)
@@ -42,7 +47,7 @@ export function TenantSwitcher() {
           <CommandList>
             <CommandEmpty>No tenant found.</CommandEmpty>
             <CommandGroup>
-              {STUB_TENANTS.map((t) => (
+              {STUB_TENANTS.map((t: Tenant) => (
                 <CommandItem
                   key={t.id}
                   onSelect={() => {

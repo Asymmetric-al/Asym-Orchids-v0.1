@@ -1,8 +1,9 @@
 'use client'
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from 'react'
+import { createContext, useContext, useState, useEffect, type ReactNode } from 'react'
 import type { Role, User, Tenant } from './types'
 import { ROLE_LABELS } from './roles'
+import { createClient } from '@/lib/supabase/client'
 
 interface MCContextValue {
   user: User | null
@@ -12,31 +13,123 @@ interface MCContextValue {
   isDevMode: boolean
   sidebarCollapsed: boolean
   setSidebarCollapsed: (collapsed: boolean) => void
+  loading: boolean
+  signOut: () => Promise<void>
 }
 
 const MCContext = createContext<MCContextValue | null>(null)
 
-const STUB_TENANTS: Tenant[] = [
-  { id: '1', name: 'Global Outreach', slug: 'global-outreach' },
-  { id: '2', name: 'Mission Partners', slug: 'mission-partners' },
-  { id: '3', name: 'Faith Forward', slug: 'faith-forward' },
-]
+const DEFAULT_TENANT: Tenant = {
+  id: '00000000-0000-0000-0000-000000000001',
+  name: 'Orchids Platform',
+  slug: 'orchids-platform'
+}
 
-const STUB_USER: User = {
-  id: '1',
-  email: 'admin@example.org',
-  name: 'Admin User',
-  role: 'admin',
-  tenantId: '1',
+function mapProfileRoleToMCRole(profileRole: string): Role {
+  const roleMap: Record<string, Role> = {
+    admin: 'admin',
+    staff: 'staff',
+    missionary: 'fundraising',
+    donor: 'staff',
+    finance: 'finance',
+    fundraising: 'fundraising',
+    mobilizers: 'mobilizers',
+    member_care: 'member_care',
+    events: 'events'
+  }
+  return roleMap[profileRole] || 'staff'
 }
 
 export function MCProvider({ children }: { children: ReactNode }) {
   const [role, setRole] = useState<Role>('admin')
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
+  const [user, setUser] = useState<User | null>(null)
+  const [tenant, setTenant] = useState<Tenant | null>(DEFAULT_TENANT)
+  const [loading, setLoading] = useState(true)
   const isDevMode = process.env.NODE_ENV === 'development'
 
-  const user: User = { ...STUB_USER, role }
-  const tenant = STUB_TENANTS[0]
+  useEffect(() => {
+    const supabase = createClient()
+
+    async function loadUser() {
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+
+      if (authUser) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*, tenants(*)')
+          .eq('user_id', authUser.id)
+          .single()
+
+        if (profile) {
+          const mcRole = mapProfileRoleToMCRole(profile.role)
+          setRole(mcRole)
+          setUser({
+            id: authUser.id,
+            email: profile.email,
+            name: `${profile.first_name} ${profile.last_name}`,
+            role: mcRole,
+            tenantId: profile.tenant_id,
+            avatarUrl: profile.avatar_url
+          })
+
+          if (profile.tenants) {
+            setTenant({
+              id: profile.tenants.id,
+              name: profile.tenants.name,
+              slug: profile.tenants.slug
+            })
+          }
+        }
+      }
+      setLoading(false)
+    }
+
+    loadUser()
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user) {
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('*, tenants(*)')
+          .eq('user_id', session.user.id)
+          .single()
+
+        if (profile) {
+          const mcRole = mapProfileRoleToMCRole(profile.role)
+          setRole(mcRole)
+          setUser({
+            id: session.user.id,
+            email: profile.email,
+            name: `${profile.first_name} ${profile.last_name}`,
+            role: mcRole,
+            tenantId: profile.tenant_id,
+            avatarUrl: profile.avatar_url
+          })
+
+          if (profile.tenants) {
+            setTenant({
+              id: profile.tenants.id,
+              name: profile.tenants.name,
+              slug: profile.tenants.slug
+            })
+          }
+        }
+      } else {
+        setUser(null)
+        setRole('admin')
+      }
+      setLoading(false)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  const signOut = async () => {
+    const supabase = createClient()
+    await supabase.auth.signOut()
+    window.location.href = '/login'
+  }
 
   return (
     <MCContext.Provider
@@ -48,6 +141,8 @@ export function MCProvider({ children }: { children: ReactNode }) {
         isDevMode,
         sidebarCollapsed,
         setSidebarCollapsed,
+        loading,
+        signOut
       }}
     >
       {children}
@@ -65,5 +160,3 @@ export function useRole() {
   const { role, setRole, isDevMode } = useMC()
   return { role, setRole, isDevMode, roleLabel: ROLE_LABELS[role] }
 }
-
-export { STUB_TENANTS }
