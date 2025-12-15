@@ -1,7 +1,13 @@
+import { AppShell } from '@/components/app-shell'
+
 export default function DonorLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <>{children}</>
+  return (
+    <AppShell role="donor" tenantName="Orchids">
+      {children}
+    </AppShell>
+  )
 }
