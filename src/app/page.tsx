@@ -156,8 +156,8 @@ export default function Home() {
                 <p className="mt-2 text-sm text-muted-foreground">
                   Administer networks, generate reports, and gain insights.
                 </p>
-                <Link href="/dashboard" className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
-                  Admin Portal <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
+                <Link href="/mc" className="mt-4 inline-flex items-center text-sm font-semibold text-primary hover:text-primary/80 transition-colors">
+                  Mission Control <ArrowRight className="ml-1 h-3 w-3 transition-transform group-hover:translate-x-1" />
                 </Link>
               </motion.div>
             </div>

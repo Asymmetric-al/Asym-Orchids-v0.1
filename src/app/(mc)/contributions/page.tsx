@@ -1,278 +1,146 @@
 'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import {
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  flexRender,
-  type ColumnDef,
-  type SortingState,
-} from '@tanstack/react-table'
+import { TilePage } from '@/components/mission-control/tiles/TilePage'
 import { getTileById } from '@/lib/mission-control/tiles'
-import { PageHeader } from '@/components/mission-control/patterns/PageHeader'
-import { DetailsDrawer } from '@/components/mission-control/patterns/DetailsDrawer'
-import { Plus, Search } from '@/components/mission-control/icons'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Badge } from '@/components/ui/badge'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
-
-interface Gift {
-  id: string
-  donorName: string
-  donorEmail: string
-  amount: number
-  date: string
-  method: 'stripe' | 'ach' | 'check' | 'cash'
-  fund: string
-  status: 'completed' | 'pending' | 'failed' | 'disputed'
-  missionary?: string
-}
-
-const MOCK_GIFTS: Gift[] = [
-  { id: 'G001', donorName: 'John Smith', donorEmail: 'john@example.com', amount: 500, date: '2024-12-15', method: 'stripe', fund: 'General', status: 'completed' },
-  { id: 'G002', donorName: 'Sarah Johnson', donorEmail: 'sarah@example.com', amount: 1000, date: '2024-12-14', method: 'ach', fund: 'Missions', status: 'completed', missionary: 'Maria Garcia' },
-  { id: 'G003', donorName: 'Michael Chen', donorEmail: 'mchen@church.org', amount: 250, date: '2024-12-14', method: 'stripe', fund: 'Building', status: 'pending' },
-  { id: 'G004', donorName: 'Emily Davis', donorEmail: 'emily.d@email.com', amount: 100, date: '2024-12-13', method: 'check', fund: 'General', status: 'completed' },
-  { id: 'G005', donorName: 'Robert Williams', donorEmail: 'rwilliams@corp.com', amount: 2500, date: '2024-12-12', method: 'ach', fund: 'Missions', status: 'completed', missionary: 'James Brown' },
-  { id: 'G006', donorName: 'Jennifer Lee', donorEmail: 'jlee@church.org', amount: 150, date: '2024-12-11', method: 'stripe', fund: 'Youth', status: 'disputed' },
-  { id: 'G007', donorName: 'David Miller', donorEmail: 'dmiller@email.com', amount: 75, date: '2024-12-10', method: 'stripe', fund: 'General', status: 'failed' },
-  { id: 'G008', donorName: 'Lisa Anderson', donorEmail: 'lisa.a@email.com', amount: 5000, date: '2024-12-10', method: 'check', fund: 'Missions', status: 'completed', missionary: 'Sarah Johnson' },
-]
-
-const columns: ColumnDef<Gift>[] = [
-  {
-    accessorKey: 'id',
-    header: 'ID',
-    cell: ({ row }) => <span className="font-mono text-xs">{row.original.id}</span>,
-  },
-  {
-    accessorKey: 'donorName',
-    header: 'Donor',
-    cell: ({ row }) => (
-      <div>
-        <div className="font-medium">{row.original.donorName}</div>
-        <div className="text-xs text-muted-foreground">{row.original.donorEmail}</div>
-      </div>
-    ),
-  },
-  {
-    accessorKey: 'amount',
-    header: 'Amount',
-    cell: ({ row }) => <span className="font-semibold">${row.original.amount.toLocaleString()}</span>,
-  },
-  {
-    accessorKey: 'date',
-    header: 'Date',
-  },
-  {
-    accessorKey: 'method',
-    header: 'Method',
-    cell: ({ row }) => (
-      <Badge variant="outline" className="capitalize">{row.original.method}</Badge>
-    ),
-  },
-  {
-    accessorKey: 'fund',
-    header: 'Fund',
-  },
-  {
-    accessorKey: 'status',
-    header: 'Status',
-    cell: ({ row }) => {
-      const status = row.original.status
-      return (
-        <Badge variant={status === 'completed' ? 'default' : status === 'pending' ? 'secondary' : status === 'disputed' ? 'destructive' : 'outline'}>
-          {status}
-        </Badge>
-      )
-    },
-  },
-]
+import Link from 'next/link'
+import { DollarSign, CreditCard, Building, FileCheck, AlertTriangle, TrendingUp } from 'lucide-react'
 
 export default function ContributionsPage() {
   const tile = getTileById('contributions')!
-  const [sorting, setSorting] = useState<SortingState>([])
-  const [globalFilter, setGlobalFilter] = useState('')
-  const [selectedGift, setSelectedGift] = useState<Gift | null>(null)
-
-  const table = useReactTable({
-    data: MOCK_GIFTS,
-    columns,
-    state: { sorting, globalFilter },
-    onSortingChange: setSorting,
-    onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-  })
-
-  const totalAmount = MOCK_GIFTS.filter(g => g.status === 'completed').reduce((sum, g) => sum + g.amount, 0)
 
   return (
-    <div className="flex h-full">
-      <div className="flex flex-1 flex-col overflow-hidden">
-        <PageHeader
-          title={tile.title}
-          description={tile.purpose}
-          breadcrumbs={[{ label: tile.title }]}
-          actions={
-            <div className="flex gap-2">
-              <Link href="/mc/contributions/batches/new">
-                <Button size="sm">
-                  <Plus className="mr-2 h-4 w-4" />
-                  New Batch
-                </Button>
-              </Link>
-            </div>
-          }
-        />
-        <div className="flex-1 overflow-auto p-6 lg:p-8">
-          <div className="mb-6 grid gap-4 sm:grid-cols-4">
-            <div className="rounded-lg border bg-card p-4">
-              <p className="text-xs text-muted-foreground">Total This Month</p>
-              <p className="text-2xl font-bold">${totalAmount.toLocaleString()}</p>
-            </div>
-            <div className="rounded-lg border bg-card p-4">
-              <p className="text-xs text-muted-foreground">Gifts Count</p>
-              <p className="text-2xl font-bold">{MOCK_GIFTS.length}</p>
-            </div>
-            <div className="rounded-lg border bg-card p-4">
-              <p className="text-xs text-muted-foreground">Pending</p>
-              <p className="text-2xl font-bold">{MOCK_GIFTS.filter(g => g.status === 'pending').length}</p>
-            </div>
-            <div className="rounded-lg border bg-card p-4">
-              <p className="text-xs text-muted-foreground">Disputed</p>
-              <p className="text-2xl font-bold text-destructive">{MOCK_GIFTS.filter(g => g.status === 'disputed').length}</p>
-            </div>
-          </div>
-
-          <div className="mb-4 flex items-center gap-4">
-            <div className="relative flex-1 max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                placeholder="Search gifts..."
-                value={globalFilter}
-                onChange={(e) => setGlobalFilter(e.target.value)}
-                className="pl-9"
-              />
-            </div>
-          </div>
-          <div className="rounded-lg border">
-            <Table>
-              <TableHeader>
-                {table.getHeaderGroups().map((headerGroup) => (
-                  <TableRow key={headerGroup.id}>
-                    {headerGroup.headers.map((header) => (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
-                      </TableHead>
-                    ))}
-                  </TableRow>
-                ))}
-              </TableHeader>
-              <TableBody>
-                {table.getRowModel().rows?.length ? (
-                  table.getRowModel().rows.map((row) => (
-                    <TableRow
-                      key={row.id}
-                      className="cursor-pointer"
-                      onClick={() => setSelectedGift(row.original)}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))
-                ) : (
-                  <TableRow>
-                    <TableCell colSpan={columns.length} className="h-24 text-center">
-                      No results.
-                    </TableCell>
-                  </TableRow>
-                )}
-              </TableBody>
-            </Table>
-          </div>
-          <div className="mt-4 flex items-center justify-between">
-            <p className="text-sm text-muted-foreground">
-              {table.getFilteredRowModel().rows.length} gifts
+    <TilePage tile={tile}>
+      <div className="mt-6 grid gap-4 md:grid-cols-4">
+        <Card>
+          <CardHeader className="pb-2">
+            <CardDescription>Today</CardDescription>
+            <CardTitle className="text-2xl">$12,450</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-muted-foreground">24 gifts received</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardDescription>This Week</CardDescription>
+            <CardTitle className="text-2xl">$48,230</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-emerald-600 flex items-center gap-1">
+              <TrendingUp className="h-3 w-3" /> +12% vs last week
             </p>
-            <div className="flex gap-2">
-              <Button variant="outline" size="sm" onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
-                Previous
-              </Button>
-              <Button variant="outline" size="sm" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
-                Next
-              </Button>
-            </div>
-          </div>
-        </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardDescription>This Month</CardDescription>
+            <CardTitle className="text-2xl">$186,400</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-muted-foreground">412 total gifts</p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardDescription>Pending Tie Out</CardDescription>
+            <CardTitle className="text-2xl text-amber-600">3</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs text-muted-foreground">batches to reconcile</p>
+          </CardContent>
+        </Card>
       </div>
 
-      <DetailsDrawer
-        open={!!selectedGift}
-        onClose={() => setSelectedGift(null)}
-        title={`Gift ${selectedGift?.id}`}
-        fullPageHref={selectedGift ? `/mc/contributions/${selectedGift.id}` : undefined}
-      >
-        {selectedGift && (
-          <div className="space-y-4">
-            <div className="text-center">
-              <p className="text-3xl font-bold">${selectedGift.amount.toLocaleString()}</p>
-              <p className="text-sm text-muted-foreground">{selectedGift.date}</p>
+      <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
+          <CardHeader className="pb-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600">
+              <DollarSign className="h-5 w-5" />
             </div>
-            <div className="space-y-2">
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Donor</span>
-                <span>{selectedGift.donorName}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Email</span>
-                <span className="text-xs">{selectedGift.donorEmail}</span>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Method</span>
-                <Badge variant="outline" className="capitalize">{selectedGift.method}</Badge>
-              </div>
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Fund</span>
-                <span>{selectedGift.fund}</span>
-              </div>
-              {selectedGift.missionary && (
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Missionary</span>
-                  <span>{selectedGift.missionary}</span>
-                </div>
-              )}
-              <div className="flex justify-between text-sm">
-                <span className="text-muted-foreground">Status</span>
-                <Badge variant={selectedGift.status === 'completed' ? 'default' : 'destructive'}>
-                  {selectedGift.status}
-                </Badge>
-              </div>
+            <CardTitle className="text-base">All Contributions</CardTitle>
+            <CardDescription>View the complete gifts feed</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/mc/contributions/all">
+              <Button variant="outline" size="sm" className="w-full">View Feed</Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
+          <CardHeader className="pb-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600">
+              <Building className="h-5 w-5" />
             </div>
-            <div className="flex gap-2 pt-4">
-              <Button variant="outline" size="sm" className="flex-1">Send Receipt</Button>
-              <Button variant="outline" size="sm" className="flex-1">View in Stripe</Button>
+            <CardTitle className="text-base">Offline Entry</CardTitle>
+            <CardDescription>Enter checks and cash batches</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/mc/contributions/batches/new">
+              <Button variant="outline" size="sm" className="w-full">New Batch</Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
+          <CardHeader className="pb-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10 text-violet-600">
+              <CreditCard className="h-5 w-5" />
             </div>
-          </div>
-        )}
-      </DetailsDrawer>
-    </div>
+            <CardTitle className="text-base">Stripe & ACH</CardTitle>
+            <CardDescription>Online payment sources</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/mc/contributions/sources">
+              <Button variant="outline" size="sm" className="w-full">View Sources</Button>
+            </Link>
+          </CardContent>
+        </Card>
+
+        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
+          <CardHeader className="pb-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600">
+              <FileCheck className="h-5 w-5" />
+            </div>
+            <CardTitle className="text-base">Tie Out</CardTitle>
+            <CardDescription>Reconcile and close periods</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Link href="/mc/contributions/reconcile">
+              <Button variant="outline" size="sm" className="w-full">Reconcile</Button>
+            </Link>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card className="mt-6 border-amber-200 bg-amber-50/50">
+        <CardHeader className="pb-2">
+          <CardTitle className="text-base flex items-center gap-2 text-amber-700">
+            <AlertTriangle className="h-4 w-4" /> Disputes
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-sm text-amber-700">2 active Stripe disputes require attention</p>
+          <Link href="/mc/contributions/disputes">
+            <Button variant="outline" size="sm" className="mt-2">View Disputes</Button>
+          </Link>
+        </CardContent>
+      </Card>
+
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="text-base">Best Practices</CardTitle>
+        </CardHeader>
+        <CardContent className="text-sm text-muted-foreground space-y-2">
+          <ul className="list-disc list-inside space-y-1 ml-2">
+            <li>Treat Stripe, ACH, and Offline batches as sources, not truth. Truth lives here after ingestion and validation.</li>
+            <li>Capture failure reasons on retries. They drive dunning emails in Email Studio and tasks in CRM.</li>
+            <li>Use soft credits for church-through giving so both donor and church see the right totals.</li>
+          </ul>
+        </CardContent>
+      </Card>
+    </TilePage>
   )
 }
