@@ -122,3 +122,16 @@ export interface PostWithAuthor extends Post {
   user_liked?: boolean
   user_prayed?: boolean
 }
+
+export interface AuditLog {
+  id: string
+  tenant_id: string
+  user_id: string
+  action: string
+  resource_type: string
+  resource_id: string | null
+  details: Record<string, unknown>
+  ip_address: string | null
+  user_agent: string | null
+  created_at: string
+}
