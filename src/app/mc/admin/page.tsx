@@ -1,11 +1,11 @@
 'use client'
 
-import { TilePage } from '@/features/mission-control'
-import { getTileById } from '@/config'
+import { TilePage } from '@/components/mission-control/tiles/TilePage'
+import { getTileById } from '@/lib/mission-control/tiles'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
-import { Settings, Globe, Key, Sparkles, Download, Activity, Shield, CheckCircle, AlertCircle } from 'lucide-react'
+import { Settings, Globe, Key, Sparkles, Download, Activity, Shield, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 
 export default function AdminPage() {
@@ -14,174 +14,178 @@ export default function AdminPage() {
   return (
     <TilePage tile={tile}>
       <div className="mt-6 grid gap-4 md:grid-cols-4">
-        <Card>
+        <Card className="overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardDescription>Domains</CardDescription>
-            <CardTitle className="text-2xl">4</CardTitle>
+            <CardDescription className="font-medium text-slate-500">Domains</CardDescription>
+            <CardTitle className="text-3xl font-bold text-slate-900">4</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-emerald-600 flex items-center gap-1">
-              <CheckCircle className="h-3 w-3" /> All verified
-            </p>
+            <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 w-fit">
+              <CheckCircle className="h-3.5 w-3.5 text-emerald-600" />
+              <span className="text-xs font-medium text-emerald-700">All verified</span>
+            </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardDescription>API Keys</CardDescription>
-            <CardTitle className="text-2xl">8</CardTitle>
+            <CardDescription className="font-medium text-slate-500">API Keys</CardDescription>
+            <CardTitle className="text-3xl font-bold text-slate-900">8</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground">active keys</p>
+            <div className="flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-0.5 w-fit">
+              <Key className="h-3.5 w-3.5 text-slate-500" />
+              <span className="text-xs font-medium text-slate-600">Active keys</span>
+            </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardDescription>System Health</CardDescription>
-            <CardTitle className="text-2xl text-emerald-600">Healthy</CardTitle>
+            <CardDescription className="font-medium text-slate-500">System Health</CardDescription>
+            <CardTitle className="text-3xl font-bold text-emerald-600">Healthy</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground">all services operational</p>
+            <div className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-0.5 w-fit">
+              <Activity className="h-3.5 w-3.5 text-emerald-600" />
+              <span className="text-xs font-medium text-emerald-700">All systems go</span>
+            </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
           <CardHeader className="pb-2">
-            <CardDescription>Last Export</CardDescription>
-            <CardTitle className="text-2xl">Dec 1</CardTitle>
+            <CardDescription className="font-medium text-slate-500">Last Export</CardDescription>
+            <CardTitle className="text-3xl font-bold text-slate-900">Dec 1</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground">month-end export</p>
+             <div className="flex items-center gap-1.5 rounded-full bg-blue-50 px-2.5 py-0.5 w-fit">
+              <Download className="h-3.5 w-3.5 text-blue-600" />
+              <span className="text-xs font-medium text-blue-700">Month-end</span>
+            </div>
           </CardContent>
         </Card>
       </div>
 
-      <div className="mt-6 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
-          <CardHeader className="pb-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-500/10 text-blue-600">
-              <Globe className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-base">Domains & Certificates</CardTitle>
-            <CardDescription>Custom domains for Web, Email, Callbacks</CardDescription>
+      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        {[
+          {
+            title: 'Domains & Certificates',
+            desc: 'Custom domains for Web, Email, Callbacks',
+            icon: Globe,
+            color: 'blue',
+            href: '/mc/admin/domains',
+            action: 'Manage Domains'
+          },
+          {
+            title: 'API Keys',
+            desc: 'Manage integration credentials',
+            icon: Key,
+            color: 'violet',
+            href: '/mc/admin/keys',
+            action: 'View Keys'
+          },
+          {
+            title: 'AI Settings',
+            desc: 'API keys and AI model configuration',
+            icon: Sparkles,
+            color: 'emerald',
+            href: '/mc/admin/ai',
+            action: 'Configure AI'
+          },
+          {
+            title: 'Exports',
+            desc: 'Finance and auditor data dumps',
+            icon: Download,
+            color: 'amber',
+            href: '/mc/admin/exports',
+            action: 'View Exports'
+          },
+          {
+            title: 'Status & Health',
+            desc: 'Background jobs and third-party status',
+            icon: Activity,
+            color: 'rose',
+            href: '/mc/admin/status',
+            action: 'View Status'
+          },
+          {
+            title: 'Security',
+            desc: 'Audit logs and access controls',
+            icon: Shield,
+            color: 'slate',
+            href: '/mc/admin/security',
+            action: 'View Security'
+          }
+        ].map((item) => (
+          <Link key={item.title} href={item.href} className="group block h-full">
+            <Card className="h-full overflow-hidden rounded-xl border border-slate-200/60 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-slate-300 hover:shadow-lg hover:shadow-slate-200/50">
+              <CardHeader className="pb-4">
+                <div className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-${item.color}-50 text-${item.color}-600 transition-colors group-hover:bg-${item.color}-600 group-hover:text-white`}>
+                  <item.icon className="h-6 w-6" />
+                </div>
+                <CardTitle className="text-lg font-bold text-slate-900 group-hover:text-slate-700 transition-colors">
+                  {item.title}
+                </CardTitle>
+                <CardDescription className="line-clamp-2 text-sm text-slate-500 mt-1.5">
+                  {item.desc}
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="pt-0">
+                <div className="flex items-center text-sm font-semibold text-slate-600 group-hover:text-emerald-600 transition-colors mt-auto">
+                  {item.action}
+                  <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </div>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </div>
+
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
+        <Card className="border-slate-200/60 bg-white shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-slate-900">Service Status</CardTitle>
+            <CardDescription>Real-time operational status</CardDescription>
           </CardHeader>
-          <CardContent>
-            <Link href="/mc/admin/domains">
-              <Button variant="outline" size="sm" className="w-full">Manage Domains</Button>
-            </Link>
+          <CardContent className="space-y-4">
+            {[
+              { name: 'Stripe Payments', status: 'Operational' },
+              { name: 'Email Delivery', status: 'Operational' },
+              { name: 'Background Jobs', status: 'Operational' },
+              { name: 'Database', status: 'Operational' }
+            ].map((service) => (
+              <div key={service.name} className="flex items-center justify-between rounded-lg border border-slate-100 bg-slate-50/50 p-3">
+                <span className="text-sm font-medium text-slate-700">{service.name}</span>
+                <Badge variant="secondary" className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 border-emerald-200 shadow-none">
+                  <div className="mr-1.5 h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                  {service.status}
+                </Badge>
+              </div>
+            ))}
           </CardContent>
         </Card>
 
-        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
-          <CardHeader className="pb-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-500/10 text-violet-600">
-              <Key className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-base">API Keys</CardTitle>
-            <CardDescription>Manage integration credentials</CardDescription>
+        <Card className="border-slate-200/60 bg-white shadow-sm">
+          <CardHeader>
+            <CardTitle className="text-lg font-semibold text-slate-900">Security Best Practices</CardTitle>
+            <CardDescription>Recommended actions for admins</CardDescription>
           </CardHeader>
           <CardContent>
-            <Link href="/mc/admin/keys">
-              <Button variant="outline" size="sm" className="w-full">View Keys</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
-          <CardHeader className="pb-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-600">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-base">AI Settings</CardTitle>
-            <CardDescription>API keys and AI model configuration</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/mc/admin/ai">
-              <Button variant="outline" size="sm" className="w-full">Configure AI</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
-          <CardHeader className="pb-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-500/10 text-amber-600">
-              <Download className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-base">Exports</CardTitle>
-            <CardDescription>Finance and auditor data dumps</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/mc/admin/exports">
-              <Button variant="outline" size="sm" className="w-full">View Exports</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
-          <CardHeader className="pb-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-rose-500/10 text-rose-600">
-              <Activity className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-base">Status & Health</CardTitle>
-            <CardDescription>Background jobs and third-party status</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/mc/admin/status">
-              <Button variant="outline" size="sm" className="w-full">View Status</Button>
-            </Link>
-          </CardContent>
-        </Card>
-
-        <Card className="group cursor-pointer transition-all hover:shadow-md hover:border-primary/30">
-          <CardHeader className="pb-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-500/10 text-slate-600">
-              <Shield className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-base">Security</CardTitle>
-            <CardDescription>Audit logs and access controls</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Link href="/mc/admin/security">
-              <Button variant="outline" size="sm" className="w-full">View Security</Button>
-            </Link>
+             <div className="rounded-xl bg-blue-50/50 border border-blue-100 p-4 space-y-3">
+                {[
+                  'Rotate API keys quarterly',
+                  'Limit admin access to least privilege',
+                  'Isolate non-prod domains from prod auth'
+                ].map((tip, i) => (
+                  <div key={i} className="flex items-start gap-3">
+                    <div className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+                      <span className="text-[10px] font-bold">{i + 1}</span>
+                    </div>
+                    <span className="text-sm text-slate-600">{tip}</span>
+                  </div>
+                ))}
+             </div>
           </CardContent>
         </Card>
       </div>
-
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle className="text-base">Service Status</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2">
-          <div className="flex items-center justify-between py-2 border-b">
-            <span className="text-sm">Stripe Payments</span>
-            <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">Operational</Badge>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b">
-            <span className="text-sm">Email Delivery (SendGrid)</span>
-            <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">Operational</Badge>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b">
-            <span className="text-sm">Background Jobs</span>
-            <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">Operational</Badge>
-          </div>
-          <div className="flex items-center justify-between py-2">
-            <span className="text-sm">Database</span>
-            <Badge variant="secondary" className="bg-emerald-100 text-emerald-700">Operational</Badge>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="mt-6">
-        <CardHeader>
-          <CardTitle className="text-base">Best Practices</CardTitle>
-        </CardHeader>
-        <CardContent className="text-sm text-muted-foreground space-y-2">
-          <ul className="list-disc list-inside space-y-1 ml-2">
-            <li>Rotate keys quarterly</li>
-            <li>Limit admin to least privilege</li>
-            <li>Keep non-prod domains isolated from prod auth</li>
-          </ul>
-        </CardContent>
-      </Card>
     </TilePage>
   )
 }

@@ -131,7 +131,7 @@ const StatsGrid = memo(function StatsGrid() {
 
 const RevenueSection = memo(function RevenueSection() {
   return (
-    <Card className="lg:col-span-4">
+    <Card className="lg:col-span-4 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">Revenue Overview</CardTitle>
@@ -168,7 +168,7 @@ const WeeklySection = memo(function WeeklySection() {
   )
 
   return (
-    <Card className="lg:col-span-3">
+    <Card className="lg:col-span-3 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">This Week</CardTitle>
@@ -198,7 +198,7 @@ const ActivitySection = memo(function ActivitySection() {
   }, [])
 
   return (
-    <Card className="lg:col-span-4">
+    <Card className="lg:col-span-4 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">Recent Activity</CardTitle>
@@ -235,7 +235,7 @@ const TasksSection = memo(function TasksSection() {
   }, [])
 
   return (
-    <Card className="lg:col-span-3">
+    <Card className="lg:col-span-3 overflow-hidden border-slate-200/60 bg-white shadow-sm transition-all hover:shadow-md">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1">
           <CardTitle className="text-base font-semibold">Upcoming Tasks</CardTitle>
