@@ -1920,11 +1920,6 @@
     unplugin "1.0.1"
     uuid "^9.0.0"
 
-"@standard-schema/spec@^1.0.0":
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@standard-schema/spec/-/spec-1.0.0.tgz#f193b73dc316c4170f2e82a881da0f550d551b9c"
-  integrity sha512-m2bOd0f2RT9k8QJx1JN85cZYyH1RqFBdlwtkSlf4tBDYLCiiZnv1fIIwacK6cqwXavOydf0NPToMQgpKq+dVlA==
-
 "@standard-schema/utils@^0.3.0":
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/@standard-schema/utils/-/utils-0.3.0.tgz#3d5e608f16c2390c10528e98e59aef6bf73cae7b"
@@ -2116,28 +2111,6 @@
     postcss "^8.4.41"
     tailwindcss "4.1.18"
 
-"@tanstack/db-ivm@0.1.14":
-  version "0.1.14"
-  resolved "https://registry.yarnpkg.com/@tanstack/db-ivm/-/db-ivm-0.1.14.tgz#5cdd0a1bccf11e64706357bb7c45e707b9f1d83e"
-  integrity sha512-GluhFsd/Z1E/MZTf60l9dZpKNpmdxtV4izPRnj1RK6TYrhC9LMndN+ywk1VDFBrjtBq/CTShz4CilECLwVlTGg==
-  dependencies:
-    fractional-indexing "^3.2.0"
-    sorted-btree "^1.8.1"
-
-"@tanstack/db@0.5.12", "@tanstack/db@^0.5.11":
-  version "0.5.12"
-  resolved "https://registry.yarnpkg.com/@tanstack/db/-/db-0.5.12.tgz#0dd7d01839f148a009124eada3b3977a31da39d4"
-  integrity sha512-NpQa+Mo9Y4YZ7qL7ugD7/z+ezcZJ67o1BlR63cr3OOxiBbb4Lx9OphWYsJy3g5eBcNI6DhS2hu9mYdlgAwsJlQ==
-  dependencies:
-    "@standard-schema/spec" "^1.0.0"
-    "@tanstack/db-ivm" "0.1.14"
-    "@tanstack/pacer-lite" "^0.1.1"
-
-"@tanstack/pacer-lite@^0.1.1":
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/pacer-lite/-/pacer-lite-0.1.1.tgz#431d3b0ac871280e8326fdbf156bb171d9bb0aa3"
-  integrity sha512-y/xtNPNt/YeyoVxE/JCx+T7yjEzpezmbb+toK8DDD1P4m7Kzs5YR956+7OKexG3f8aXgC3rLZl7b1V+yNUSy5w==
-
 "@tanstack/query-core@5.90.12":
   version "5.90.12"
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.90.12.tgz#e1f5f47e72ef7d0fc794325936921c700352515e"
@@ -2147,14 +2120,6 @@
   version "5.91.1"
   resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.91.1.tgz#0b0e3b94861f3a584560af3047a536bf7fea06f1"
   integrity sha512-l8bxjk6BMsCaVQH6NzQEE/bEgFy1hAs5qbgXl0xhzezlaQbPk6Mgz9BqEg2vTLPOHD8N4k+w/gdgCbEzecGyNg==
-
-"@tanstack/react-db@^0.1.55":
-  version "0.1.56"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-db/-/react-db-0.1.56.tgz#64d7449ce0a8113d842a372d576a07054634bef1"
-  integrity sha512-7vfwx3tD6tgcUBu6tzpYVMFuYUGzYX7GHw8AtsW/P24eBhr7RR/dyF2ucoUGW6TZzdm8/bN/ql+8ftAV3iFsfA==
-  dependencies:
-    "@tanstack/db" "0.5.12"
-    use-sync-external-store "^1.6.0"
 
 "@tanstack/react-query-devtools@^5.62.8":
   version "5.91.1"
@@ -4136,11 +4101,6 @@ forwarded@0.2.0:
   version "0.2.0"
   resolved "https://registry.yarnpkg.com/forwarded/-/forwarded-0.2.0.tgz#2269936428aad4c15c7ebe9779a84bf0b2a81811"
   integrity sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==
-
-fractional-indexing@^3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/fractional-indexing/-/fractional-indexing-3.2.0.tgz#1193e63d54ff4e0cbe0c79a9ed6cfbab25d91628"
-  integrity sha512-PcOxmqwYCW7O2ovKRU8OoQQj2yqTfEB/yeTYk4gPid6dN5ODRfU1hXd9tTVZzax/0NkO7AxpHykvZnT1aYp/BQ==
 
 framer-motion@^12.23.24:
   version "12.23.26"
@@ -6365,11 +6325,6 @@ sonner@^2.0.7:
   resolved "https://registry.yarnpkg.com/sonner/-/sonner-2.0.7.tgz#810c1487a67ec3370126e0f400dfb9edddc3e4f6"
   integrity sha512-W6ZN4p58k8aDKA4XPcx2hpIQXBRAgyiWVkYhT7CvK6D3iAu7xjvVyhQHg2/iaKJZ1XVJ4r7XuwGL+WGEK37i9w==
 
-sorted-btree@^1.8.1:
-  version "1.8.1"
-  resolved "https://registry.yarnpkg.com/sorted-btree/-/sorted-btree-1.8.1.tgz#6e6275f7955e5892bb8737149cbe495be10f426f"
-  integrity sha512-395+XIP+wqNn3USkFSrNz7G3Ss/MXlZEqesxvzCRFwL14h6e8LukDHdLBePn5pwbm5OQ9vGu8mDyz2lLDIqamQ==
-
 source-map-js@^1.0.2, source-map-js@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/source-map-js/-/source-map-js-1.2.1.tgz#1ce5650fddd87abc099eda37dcff024c2667ae46"
@@ -6912,7 +6867,7 @@ use-sidecar@^1.1.3:
     detect-node-es "^1.1.0"
     tslib "^2.0.0"
 
-use-sync-external-store@^1.5.0, use-sync-external-store@^1.6.0:
+use-sync-external-store@^1.5.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz#b174bfa65cb2b526732d9f2ac0a408027876f32d"
   integrity sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==
