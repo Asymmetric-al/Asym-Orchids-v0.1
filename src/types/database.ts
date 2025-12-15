@@ -25,6 +25,8 @@
  */
 
 export type UserRole = 'donor' | 'missionary' | 'admin'
+export type DonationStatus = 'pending' | 'completed' | 'failed' | 'refunded'
+export type GivingFrequency = 'weekly' | 'biweekly' | 'monthly' | 'quarterly' | 'yearly'
 
 export interface Profile {
   id: string
@@ -34,6 +36,7 @@ export interface Profile {
   first_name: string
   last_name: string
   email: string
+  avatar_url: string | null
   created_at: string
   updated_at: string
 }
@@ -58,16 +61,78 @@ export interface Missionary {
   updated_at: string
 }
 
+export interface MissionaryWithProfile extends Missionary {
+  profile: Profile
+}
+
+export interface Donor {
+  id: string
+  tenant_id: string
+  profile_id: string
+  giving_preferences: Record<string, unknown>
+  total_given: number
+  created_at: string
+  updated_at: string
+}
+
+export interface DonorWithProfile extends Donor {
+  profile: Profile
+}
+
+export interface Fund {
+  id: string
+  tenant_id: string
+  name: string
+  description: string | null
+  target_amount: number
+  current_amount: number
+  missionary_id: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface RecurringGiving {
+  id: string
+  tenant_id: string
+  donor_id: string
+  missionary_id: string | null
+  fund_id: string | null
+  amount: number
+  currency: string
+  frequency: GivingFrequency
+  next_charge_date: string
+  stripe_subscription_id: string | null
+  is_active: boolean
+  created_at: string
+  updated_at: string
+}
+
+export interface Follow {
+  id: string
+  tenant_id: string
+  donor_id: string
+  missionary_id: string
+  created_at: string
+}
+
 export interface Donation {
   id: string
   tenant_id: string
   donor_id: string
   missionary_id: string
+  fund_id: string | null
   amount: number
   currency: string
   stripe_payment_intent_id: string | null
-  status: 'pending' | 'completed' | 'failed' | 'refunded'
+  status: DonationStatus
   created_at: string
+}
+
+export interface DonationWithDetails extends Donation {
+  donor: Profile
+  missionary: MissionaryWithProfile
+  fund: Fund | null
 }
 
 export interface MediaItem {
