@@ -1,0 +1,71 @@
+/**
+ * MULTI-TENANCY APPROACH
+ * 
+ * Orchids Platform uses Row Level Security (RLS) with tenant_id for data isolation.
+ * 
+ * Architecture:
+ * - All tenant-scoped tables include a `tenant_id` column (UUID)
+ * - Supabase RLS policies enforce tenant isolation at the database level
+ * - The user's tenant_id is stored in their JWT claims (via auth.users metadata)
+ * - All queries are automatically filtered by tenant_id via RLS policies
+ * 
+ * Example RLS Policy (to be created in Supabase):
+ * ```sql
+ * CREATE POLICY "Users can only view their tenant's data"
+ * ON public.donations
+ * FOR SELECT
+ * USING (tenant_id = (auth.jwt() -> 'app_metadata' ->> 'tenant_id')::uuid);
+ * ```
+ * 
+ * Benefits:
+ * - Data isolation enforced at database layer (not application layer)
+ * - Single database, single schema (simpler operations)
+ * - Automatic filtering on all queries
+ * - No risk of cross-tenant data leaks from application bugs
+ */
+
+export type UserRole = 'donor' | 'missionary' | 'admin'
+
+export interface Profile {
+  id: string
+  tenant_id: string
+  user_id: string
+  role: UserRole
+  first_name: string
+  last_name: string
+  email: string
+  created_at: string
+  updated_at: string
+}
+
+export interface Tenant {
+  id: string
+  name: string
+  slug: string
+  created_at: string
+  updated_at: string
+}
+
+export interface Missionary {
+  id: string
+  tenant_id: string
+  profile_id: string
+  bio: string | null
+  mission_field: string | null
+  funding_goal: number
+  current_funding: number
+  created_at: string
+  updated_at: string
+}
+
+export interface Donation {
+  id: string
+  tenant_id: string
+  donor_id: string
+  missionary_id: string
+  amount: number
+  currency: string
+  stripe_payment_intent_id: string | null
+  status: 'pending' | 'completed' | 'failed' | 'refunded'
+  created_at: string
+}
