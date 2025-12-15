@@ -1,7 +1,7 @@
 'use client'
 
-import { TilePage } from '@/components/mission-control/tiles/TilePage'
-import { getTileById } from '@/lib/mission-control/tiles'
+import { TilePage } from '@/features/mission-control'
+import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
