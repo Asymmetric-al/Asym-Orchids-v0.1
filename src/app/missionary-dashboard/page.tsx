@@ -2,28 +2,28 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Progress } from '@/components/ui/progress'
 import {
-  DollarSign,
-  Users,
-  TrendingUp,
-  Calendar,
-  Mail,
-  CheckSquare,
-  Clock,
-  Plus,
-  Filter,
-  ArrowUpRight,
-  Wallet,
-  Target,
-  Sparkles,
-  AlertCircle,
-  ChevronRight,
-  Rss
+  DollarSignIcon,
+  UsersIcon,
+  TrendingUpIcon,
+  CalendarIcon,
+  MailIcon,
+  CheckSquareIcon,
+  ClockIcon,
+  PlusIcon,
+  FilterIcon,
+  ArrowUpRightIcon,
+  WalletIcon,
+  TargetIcon,
+  SparklesIcon,
+  AlertCircleIcon,
+  ChevronRightIcon,
+  RssIcon
 } from 'lucide-react'
 
 const stats = {
@@ -54,77 +54,75 @@ const alerts = [
   { id: 3, type: 'failed', count: 1, label: 'Failed Payment' },
 ]
 
-function StatCard({ title, value, subtitle, icon: Icon, iconBg, iconColor }: { 
-  title: string
-  value: string | number
-  subtitle?: string
-  icon: React.ElementType
-  iconBg: string
-  iconColor: string
-}) {
-  return (
-    <Card className="overflow-hidden border-slate-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-      <CardContent className="p-3">
-        <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <p className="text-sm font-medium text-slate-700">{title}</p>
-            <p className="text-xl font-bold text-slate-900">{value}</p>
-            {subtitle && (
-              <div className="flex items-center gap-1 text-xs text-emerald-700 font-medium">
-                <TrendingUp className="h-3 w-3" />
-                <span>{subtitle}</span>
-              </div>
-            )}
-          </div>
-          <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconBg}`}>
-            <Icon className={`h-4 w-4 ${iconColor}`} />
-          </div>
-        </div>
-      </CardContent>
-    </Card>
-  )
-}
+const MetricsData = [
+  {
+    icons: <DollarSignIcon className='size-5' />,
+    title: 'Monthly Support',
+    value: `$${stats.monthlySupport.toLocaleString()}`,
+    subtitle: `${stats.percentFunded}% of goal`
+  },
+  {
+    icons: <UsersIcon className='size-5' />,
+    title: 'Active Supporters',
+    value: stats.activeSupporters.toString(),
+    subtitle: `+${stats.newSupportersThisMonth} this month`
+  },
+  {
+    icons: <TrendingUpIcon className='size-5' />,
+    title: 'Year to Date',
+    value: '$48,500',
+    subtitle: 'Total received'
+  },
+  {
+    icons: <CalendarIcon className='size-5' />,
+    title: 'This Month',
+    value: '$825',
+    subtitle: 'Month to date'
+  }
+]
 
 function FundingProgress() {
   return (
-    <Card className="col-span-2 border-slate-200 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-3 pb-0">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
-            <Target className="h-4 w-4 text-emerald-700" />
-          </div>
-          <div>
-            <CardTitle className="text-sm font-semibold text-slate-900">Funding Goal</CardTitle>
-            <p className="text-xs text-slate-600">Monthly progress</p>
+    <Card className='col-span-2 shadow-none'>
+      <CardHeader className='flex flex-row items-center justify-between gap-1 pb-0'>
+        <div className='flex items-center gap-3'>
+          <Avatar className='size-8.5 rounded-sm'>
+            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <TargetIcon className='size-5' />
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col gap-0.5'>
+            <CardTitle className='text-lg font-semibold'>Funding Goal</CardTitle>
+            <p className='text-muted-foreground text-sm'>Monthly progress</p>
           </div>
         </div>
-        <Badge className="bg-emerald-100 text-emerald-800 hover:bg-emerald-100 border-0 text-xs font-semibold">
+        <Badge className='bg-primary/10 text-primary border-0 text-xs font-semibold'>
           {stats.percentFunded}% Funded
         </Badge>
       </CardHeader>
-      <CardContent className="p-3 pt-2">
-        <div className="space-y-3">
-          <div className="flex items-baseline justify-between">
-            <span className="text-2xl font-bold text-slate-900">${stats.monthlySupport.toLocaleString()}</span>
-            <span className="text-xs text-slate-700 font-medium">
+      <CardContent className='pt-4'>
+        <div className='space-y-4'>
+          <div className='flex items-baseline justify-between'>
+            <span className='text-2xl font-medium'>${stats.monthlySupport.toLocaleString()}</span>
+            <span className='text-muted-foreground text-sm font-medium'>
               of ${stats.monthlyGoal.toLocaleString()} goal
             </span>
           </div>
-          <Progress value={stats.percentFunded} className="h-2.5 bg-slate-200 [&>div]:bg-gradient-to-r [&>div]:from-emerald-500 [&>div]:to-teal-500" />
-          <div className="grid grid-cols-3 gap-2 pt-1">
-            <div className="text-center p-2 rounded-lg bg-slate-100">
-              <p className="text-xs font-semibold text-slate-700 mb-0.5">Remaining</p>
-              <p className="text-base font-bold text-slate-900">${(stats.monthlyGoal - stats.monthlySupport).toLocaleString()}</p>
+          <Progress value={stats.percentFunded} className='h-2.5' />
+          <div className='grid grid-cols-3 gap-3'>
+            <div className='rounded-md border px-3 py-2 text-center'>
+              <p className='text-muted-foreground text-sm font-medium'>Remaining</p>
+              <p className='text-lg font-medium'>${(stats.monthlyGoal - stats.monthlySupport).toLocaleString()}</p>
             </div>
-            <div className="text-center p-2 rounded-lg bg-emerald-100">
-              <p className="text-xs font-semibold text-slate-700 mb-0.5">Trend</p>
-              <p className="text-base font-bold text-emerald-800 flex items-center justify-center gap-1">
-                <TrendingUp className="h-3.5 w-3.5" /> +12%
+            <div className='rounded-md border px-3 py-2 text-center'>
+              <p className='text-muted-foreground text-sm font-medium'>Trend</p>
+              <p className='text-primary flex items-center justify-center gap-1 text-lg font-medium'>
+                <TrendingUpIcon className='size-4' /> +12%
               </p>
             </div>
-            <div className="text-center p-2 rounded-lg bg-slate-100">
-              <p className="text-xs font-semibold text-slate-700 mb-0.5">Days Left</p>
-              <p className="text-base font-bold text-slate-900">16</p>
+            <div className='rounded-md border px-3 py-2 text-center'>
+              <p className='text-muted-foreground text-sm font-medium'>Days Left</p>
+              <p className='text-lg font-medium'>16</p>
             </div>
           </div>
         </div>
@@ -135,23 +133,23 @@ function FundingProgress() {
 
 function BalanceCard() {
   return (
-    <Card className="flex flex-col justify-between overflow-hidden border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg">
-      <CardHeader className="p-3 pb-0">
-        <div className="flex items-center gap-2">
-          <Wallet className="h-4 w-4 text-slate-300" />
-          <CardTitle className="text-xs font-medium text-slate-200">Available Balance</CardTitle>
+    <Card className='flex flex-col justify-between overflow-hidden border-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white shadow-lg'>
+      <CardHeader className='pb-0'>
+        <div className='flex items-center gap-2'>
+          <WalletIcon className='size-4 text-slate-300' />
+          <CardTitle className='text-xs font-medium text-slate-200'>Available Balance</CardTitle>
         </div>
       </CardHeader>
-      <CardContent className="p-3 pt-2 space-y-3">
+      <CardContent className='space-y-4 pt-2'>
         <div>
-          <h3 className="text-2xl font-bold tracking-tight text-white">${stats.currentBalance.toLocaleString()}</h3>
-          <p className="mt-0.5 text-xs text-slate-300">Updated today at 9:41 AM</p>
+          <h3 className='text-2xl font-medium tracking-tight text-white'>${stats.currentBalance.toLocaleString()}</h3>
+          <p className='text-muted-foreground mt-0.5 text-sm text-slate-300'>Updated today at 9:41 AM</p>
         </div>
-        <div className="flex gap-2">
-          <Button size="sm" className="flex-1 h-8 bg-white/15 text-white hover:bg-white/25 border-0 rounded-lg text-xs font-medium">
+        <div className='flex gap-2'>
+          <Button size='sm' className='h-8 flex-1 rounded-lg border-0 bg-white/15 text-xs font-medium text-white hover:bg-white/25'>
             Withdraw
           </Button>
-          <Button size="sm" className="flex-1 h-8 bg-white text-slate-900 hover:bg-slate-100 border-0 rounded-lg text-xs font-medium">
+          <Button size='sm' className='h-8 flex-1 rounded-lg border-0 bg-white text-xs font-medium text-slate-900 hover:bg-slate-100'>
             View History
           </Button>
         </div>
@@ -162,37 +160,34 @@ function BalanceCard() {
 
 function AlertsSection() {
   return (
-    <Card className="border-slate-200 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-3 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-amber-100">
-            <AlertCircle className="h-4 w-4 text-amber-700" />
-          </div>
-          <CardTitle className="text-sm font-semibold text-slate-900">Alerts</CardTitle>
-        </div>
+    <Card className='shadow-none'>
+      <CardHeader className='flex flex-row items-center gap-3 pb-2'>
+        <Avatar className='size-8.5 rounded-sm'>
+          <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+            <AlertCircleIcon className='size-5' />
+          </AvatarFallback>
+        </Avatar>
+        <CardTitle className='text-lg font-semibold'>Alerts</CardTitle>
       </CardHeader>
-      <CardContent className="p-3 pt-0 space-y-1.5">
+      <CardContent className='space-y-2'>
         {alerts.map((alert) => (
           <Link 
             key={alert.id} 
             href={`/missionary-dashboard/donors?filter=${alert.type}`}
-            className="flex items-center justify-between p-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors group"
+            className='group flex items-center justify-between rounded-md border px-4 py-2 transition-colors hover:bg-muted/50'
           >
-            <div className="flex items-center gap-2">
-              <div className={`h-2 w-2 rounded-full ${
+            <div className='flex items-center gap-3'>
+              <div className={`size-2 rounded-full ${
                 alert.type === 'at-risk' ? 'bg-amber-500' : 
                 alert.type === 'new' ? 'bg-emerald-500' : 'bg-rose-500'
               }`} />
-              <span className="text-sm font-semibold text-slate-800">{alert.label}</span>
+              <span className='text-sm font-medium'>{alert.label}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Badge variant="secondary" className={`text-xs font-bold ${
-                alert.type === 'at-risk' ? 'bg-amber-200 text-amber-800' : 
-                alert.type === 'new' ? 'bg-emerald-200 text-emerald-800' : 'bg-rose-200 text-rose-800'
-              }`}>
+            <div className='flex items-center gap-2'>
+              <Badge variant='secondary' className='text-xs font-medium'>
                 {alert.count}
               </Badge>
-              <ChevronRight className="h-4 w-4 text-slate-500 group-hover:text-slate-700 transition-colors" />
+              <ChevronRightIcon className='text-muted-foreground size-4 transition-colors group-hover:text-foreground' />
             </div>
           </Link>
         ))}
@@ -203,46 +198,48 @@ function AlertsSection() {
 
 function ActivityFeed() {
   return (
-    <Card className="border-slate-200 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-3 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100">
-            <Sparkles className="h-4 w-4 text-blue-700" />
-          </div>
-          <div>
-            <CardTitle className="text-sm font-semibold text-slate-900">Recent Activity</CardTitle>
-            <p className="text-xs text-slate-600">Latest donations</p>
+    <Card className='shadow-none'>
+      <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
+        <div className='flex items-center gap-3'>
+          <Avatar className='size-8.5 rounded-sm'>
+            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <SparklesIcon className='size-5' />
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col gap-0.5'>
+            <CardTitle className='text-lg font-semibold'>Recent Activity</CardTitle>
+            <p className='text-muted-foreground text-sm'>Latest donations</p>
           </div>
         </div>
-        <Button variant="ghost" size="sm" className="h-7 text-xs text-slate-700 hover:text-slate-900 hover:bg-slate-100" asChild>
-          <Link href="/missionary-dashboard/donors">
-            View All <ArrowUpRight className="ml-1 h-3 w-3" />
+        <Button variant='ghost' size='sm' className='h-7 text-xs' asChild>
+          <Link href='/missionary-dashboard/donors'>
+            View All <ArrowUpRightIcon className='ml-1 size-3' />
           </Link>
         </Button>
       </CardHeader>
-      <CardContent className="p-0">
-        <div className="divide-y divide-slate-200">
+      <CardContent className='p-0'>
+        <div className='divide-y'>
           {recentActivity.map((activity) => (
-            <div key={activity.id} className="flex items-center gap-2 px-3 py-2 hover:bg-slate-50 transition-colors">
-              <Avatar className="h-8 w-8 border border-slate-300">
-                <AvatarFallback className={`text-xs font-semibold ${activity.type === 'gift' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-700'}`}>
+            <div key={activity.id} className='flex items-center gap-3 px-6 py-3 transition-colors hover:bg-muted/50'>
+              <Avatar className='size-8 border'>
+                <AvatarFallback className={`text-xs font-medium ${activity.type === 'gift' ? 'bg-rose-100 text-rose-700' : 'bg-blue-100 text-blue-700'}`}>
                   {activity.donor.split(' ').map(n => n[0]).join('')}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-1.5">
-                  <p className="text-sm font-semibold text-slate-900 truncate">{activity.donor}</p>
+              <div className='min-w-0 flex-1'>
+                <div className='flex items-center gap-2'>
+                  <p className='truncate text-sm font-medium'>{activity.donor}</p>
                   {activity.isNew && (
-                    <Badge className="h-4 px-1 text-[10px] bg-emerald-200 text-emerald-800 hover:bg-emerald-200 border-0 font-semibold">
+                    <Badge className='bg-primary/10 text-primary h-4 border-0 px-1 text-[10px] font-medium'>
                       New
                     </Badge>
                   )}
                 </div>
-                <p className="text-xs text-slate-600">
+                <p className='text-muted-foreground text-xs'>
                   {activity.type === 'gift' ? 'One-time' : 'Monthly'} · {activity.date}
                 </p>
               </div>
-              <p className="text-sm font-bold text-emerald-700">+${activity.amount}</p>
+              <p className='text-primary text-sm font-medium'>+${activity.amount}</p>
             </div>
           ))}
         </div>
@@ -253,41 +250,43 @@ function ActivityFeed() {
 
 function TasksPreview() {
   return (
-    <Card className="border-slate-200 bg-white shadow-sm">
-      <CardHeader className="flex flex-row items-center justify-between p-3 pb-2">
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100">
-            <CheckSquare className="h-4 w-4 text-violet-700" />
-          </div>
-          <div>
-            <CardTitle className="text-sm font-semibold text-slate-900">Tasks</CardTitle>
-            <p className="text-xs text-slate-600">{pendingTasks.length} pending</p>
+    <Card className='shadow-none'>
+      <CardHeader className='flex flex-row items-center justify-between gap-3 pb-2'>
+        <div className='flex items-center gap-3'>
+          <Avatar className='size-8.5 rounded-sm'>
+            <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+              <CheckSquareIcon className='size-5' />
+            </AvatarFallback>
+          </Avatar>
+          <div className='flex flex-col gap-0.5'>
+            <CardTitle className='text-lg font-semibold'>Tasks</CardTitle>
+            <p className='text-muted-foreground text-sm'>{pendingTasks.length} pending</p>
           </div>
         </div>
-        <Button variant="ghost" size="icon" className="h-7 w-7 text-slate-600 hover:text-slate-900 hover:bg-slate-100">
-          <Plus className="h-4 w-4" />
+        <Button variant='ghost' size='icon' className='size-7'>
+          <PlusIcon className='size-4' />
         </Button>
       </CardHeader>
-      <CardContent className="p-3 pt-0 space-y-1.5">
+      <CardContent className='space-y-2'>
         {pendingTasks.map((task) => (
-          <div key={task.id} className="flex items-start gap-2 p-2 rounded-lg border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all group cursor-pointer">
-            <div className={`mt-1 h-2 w-2 rounded-full shrink-0 ${
+          <div key={task.id} className='group flex cursor-pointer items-start gap-3 rounded-md border px-4 py-2 transition-all hover:border-primary/50 hover:shadow-sm'>
+            <div className={`mt-1 size-2 shrink-0 rounded-full ${
               task.priority === 'high' ? 'bg-rose-500' : 'bg-amber-500'
             }`} />
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-slate-900 group-hover:text-emerald-700 transition-colors">{task.title}</p>
-              <div className="flex items-center gap-1 mt-0.5 text-xs text-slate-600">
-                <Clock className="h-3 w-3" />
+            <div className='min-w-0 flex-1'>
+              <p className='text-sm font-medium transition-colors group-hover:text-primary'>{task.title}</p>
+              <div className='text-muted-foreground mt-0.5 flex items-center gap-1 text-xs'>
+                <ClockIcon className='size-3' />
                 <span>{task.dueDate}</span>
               </div>
             </div>
-            <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity text-slate-500 hover:text-emerald-700 hover:bg-emerald-50">
-              <CheckSquare className="h-3 w-3" />
+            <Button variant='ghost' size='icon' className='size-6 opacity-0 transition-opacity group-hover:opacity-100'>
+              <CheckSquareIcon className='size-3' />
             </Button>
           </div>
         ))}
-        <Button variant="outline" size="sm" className="w-full mt-1.5 h-8 text-xs border-dashed border-slate-300 text-slate-700 hover:text-slate-900 hover:border-slate-400 hover:bg-slate-50" asChild>
-          <Link href="/missionary-dashboard/tasks">View all tasks</Link>
+        <Button variant='outline' size='sm' className='mt-2 h-8 w-full border-dashed text-xs' asChild>
+          <Link href='/missionary-dashboard/tasks'>View all tasks</Link>
         </Button>
       </CardContent>
     </Card>
@@ -296,28 +295,30 @@ function TasksPreview() {
 
 function QuickActions() {
   const actions = [
-    { icon: Rss, label: 'Post Update', href: '/missionary-dashboard/feed/new', bg: 'bg-blue-100', color: 'text-blue-700' },
-    { icon: Users, label: 'Add Donor', href: '/missionary-dashboard/donors/new', bg: 'bg-emerald-100', color: 'text-emerald-700' },
-    { icon: Mail, label: 'Newsletter', href: '/missionary-dashboard/newsletter', bg: 'bg-purple-100', color: 'text-purple-700' },
-    { icon: CheckSquare, label: 'New Task', href: '/missionary-dashboard/tasks/new', bg: 'bg-amber-100', color: 'text-amber-700' },
+    { icon: RssIcon, label: 'Post Update', href: '/missionary-dashboard/feed/new' },
+    { icon: UsersIcon, label: 'Add Donor', href: '/missionary-dashboard/donors/new' },
+    { icon: MailIcon, label: 'Newsletter', href: '/missionary-dashboard/newsletter' },
+    { icon: CheckSquareIcon, label: 'New Task', href: '/missionary-dashboard/tasks/new' },
   ]
 
   return (
-    <Card className="border-slate-200 bg-white shadow-sm">
-      <CardHeader className="p-3 pb-2">
-        <CardTitle className="text-sm font-semibold text-slate-900">Quick Actions</CardTitle>
+    <Card className='shadow-none'>
+      <CardHeader className='pb-2'>
+        <CardTitle className='text-lg font-semibold'>Quick Actions</CardTitle>
       </CardHeader>
-      <CardContent className="p-3 pt-0 grid grid-cols-2 gap-1.5">
+      <CardContent className='grid grid-cols-2 gap-2'>
         {actions.map((action) => (
           <Link
             key={action.label}
             href={action.href}
-            className="flex flex-col items-center justify-center gap-1.5 p-3 rounded-lg border border-slate-200 bg-white hover:border-slate-300 hover:shadow-sm transition-all group"
+            className='group flex flex-col items-center justify-center gap-2 rounded-md border px-4 py-3 transition-all hover:border-primary/50 hover:shadow-sm'
           >
-            <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${action.bg} group-hover:scale-105 transition-transform`}>
-              <action.icon className={`h-4 w-4 ${action.color}`} />
-            </div>
-            <span className="text-xs font-semibold text-slate-700 group-hover:text-slate-900">{action.label}</span>
+            <Avatar className='size-8.5 rounded-sm transition-transform group-hover:scale-105'>
+              <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+                <action.icon className='size-5' />
+              </AvatarFallback>
+            </Avatar>
+            <span className='text-xs font-medium'>{action.label}</span>
           </Link>
         ))}
       </CardContent>
@@ -327,68 +328,57 @@ function QuickActions() {
 
 export default function MissionaryDashboardPage() {
   return (
-    <div className="min-h-full p-3 md:p-4 space-y-4">
-      <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
+    <div className='min-h-full space-y-4 p-4 md:p-6'>
+      <div className='flex flex-col gap-2 md:flex-row md:items-center md:justify-between'>
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Dashboard</h1>
-          <p className="text-sm text-slate-700">Welcome back, here's your ministry overview</p>
+          <h1 className='text-xl font-semibold'>Dashboard</h1>
+          <p className='text-muted-foreground text-sm'>Welcome back, here&apos;s your ministry overview</p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" className="h-8 gap-1.5 border-slate-300 text-slate-700 hover:text-slate-900 hover:bg-slate-100">
-            <Filter className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Filter</span>
+        <div className='flex items-center gap-2'>
+          <Button variant='outline' size='sm' className='h-8 gap-1.5'>
+            <FilterIcon className='size-3.5' />
+            <span className='hidden sm:inline'>Filter</span>
           </Button>
-          <Button size="sm" className="h-8 gap-1.5 bg-emerald-600 hover:bg-emerald-700 text-white shadow-sm">
-            <Plus className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">New Gift</span>
+          <Button size='sm' className='h-8 gap-1.5'>
+            <PlusIcon className='size-3.5' />
+            <span className='hidden sm:inline'>New Gift</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Monthly Support"
-          value={`$${stats.monthlySupport.toLocaleString()}`}
-          subtitle={`${stats.percentFunded}% of goal`}
-          icon={DollarSign}
-          iconBg="bg-emerald-100"
-          iconColor="text-emerald-700"
-        />
-        <StatCard
-          title="Active Supporters"
-          value={stats.activeSupporters}
-          subtitle={`+${stats.newSupportersThisMonth} this month`}
-          icon={Users}
-          iconBg="bg-blue-100"
-          iconColor="text-blue-700"
-        />
-        <StatCard
-          title="Year to Date"
-          value="$48,500"
-          subtitle="Total received"
-          icon={TrendingUp}
-          iconBg="bg-violet-100"
-          iconColor="text-violet-700"
-        />
-        <StatCard
-          title="This Month"
-          value="$825"
-          subtitle="Month to date"
-          icon={Calendar}
-          iconBg="bg-amber-100"
-          iconColor="text-amber-700"
-        />
+      <div className='grid gap-4 sm:grid-cols-2 lg:grid-cols-4'>
+        {MetricsData.map((metric, index) => (
+          <Card key={index} className='shadow-none'>
+            <CardContent className='flex items-center gap-3 px-4 py-3'>
+              <Avatar className='size-8.5 rounded-sm'>
+                <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
+                  {metric.icons}
+                </AvatarFallback>
+              </Avatar>
+              <div className='flex flex-col gap-0.5'>
+                <span className='text-muted-foreground text-sm font-medium'>{metric.title}</span>
+                <span className='text-lg font-medium'>{metric.value}</span>
+                {metric.subtitle && (
+                  <div className='text-primary flex items-center gap-1 text-xs font-medium'>
+                    <TrendingUpIcon className='size-3' />
+                    <span>{metric.subtitle}</span>
+                  </div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
 
-      <div className="grid gap-4 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-2">
-          <div className="grid gap-3 md:grid-cols-3">
+      <div className='grid gap-4 lg:grid-cols-3'>
+        <div className='space-y-4 lg:col-span-2'>
+          <div className='grid gap-4 md:grid-cols-3'>
             <FundingProgress />
             <BalanceCard />
           </div>
           <ActivityFeed />
         </div>
-        <div className="space-y-3">
+        <div className='space-y-4'>
           <AlertsSection />
           <TasksPreview />
           <QuickActions />
