@@ -42,6 +42,32 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --radius-2xl: calc(var(--radius) + 8px);
+
+  --animate-flip: flip 6s ease infinite;
+
+  @keyframes flip {
+    0% {
+      transform: rotateX(0deg);
+    }
+    20% {
+      transform: rotateX(0deg);
+    }
+    33.33% {
+      transform: rotateX(120deg);
+    }
+    53.33% {
+      transform: rotateX(120deg);
+    }
+    66.66% {
+      transform: rotateX(240deg);
+    }
+    86.66% {
+      transform: rotateX(240deg);
+    }
+    100% {
+      transform: rotateX(360deg);
+    }
+  }
 }
 
 :root {

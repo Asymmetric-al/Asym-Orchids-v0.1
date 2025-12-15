@@ -1,6 +1,87 @@
-# Mission Control Platform
+# Asymmetric.al - Mission Control Platform
 
 A modern Next.js 15 application for mission-focused organizations. Built with React 19, Tailwind CSS 4, and shadcn/ui.
+
+## Design & UI Specifications
+
+### Design System
+
+**Typography**
+- Primary Font: Inter (`--font-inter`) + SF Pro Display fallbacks
+- Monospace: Geist Mono (`--font-geist-mono`)
+- Headings: Bold (700), Semibold (600)
+- Body: Regular (400), Medium (500)
+
+**Color Palette**
+- Background: `#fafafa` (zinc-50) / Dark: `#0b0b0f` (zinc-950)
+- Foreground: `#09090b` (zinc-950) / Dark: `#f4f4f5` (zinc-100)
+- Primary: `#18181b` (zinc-900) / Dark: `#f4f4f5`
+- Muted: `#f4f4f5` (zinc-100) / Dark: `#18181b`
+- Border: `#e4e4e7` (zinc-200) / Dark: `#27272a`
+- Accent colors: Emerald for success states, Rose for alerts
+
+**Border Radius**
+- Base: `0.75rem` (12px)
+- Small: `calc(var(--radius) - 4px)`
+- Large: `var(--radius)`
+- 2XL: `calc(var(--radius) + 8px)`
+
+**Shadows**
+- Cards: `shadow-sm` on hover
+- Header: `shadow-md` on scroll with backdrop blur
+
+### Component Patterns
+
+**Header**
+- Fixed position with backdrop blur on scroll
+- Navigation menu with dropdown support
+- Social links + CTA button
+- Mobile hamburger menu
+
+**Hero Section**
+- Full viewport height with muted background
+- Animated rotating text (flip animation)
+- Motion-preset animations (fade, slide)
+- Trusted by logos section
+
+**Cards**
+- Border: `border-border/50`
+- Background: `bg-card`
+- Hover: `hover:border-border hover:shadow-sm`
+- Rounded: `rounded-2xl` or `rounded-3xl`
+
+**Buttons**
+- Primary: Dark fill with light text
+- Outline: Border with transparent bg
+- Ghost: No border, hover background
+- Sizes: `sm`, `default`, `lg`
+
+### Animation Specifications
+
+**Flip Animation**
+```css
+@keyframes flip {
+  0%, 20% { transform: rotateX(0deg); }
+  33.33%, 53.33% { transform: rotateX(120deg); }
+  66.66%, 86.66% { transform: rotateX(240deg); }
+  100% { transform: rotateX(360deg); }
+}
+```
+Duration: 6s, Timing: ease, Iteration: infinite
+
+**Motion Presets**
+- Fade: opacity 0 → 1
+- Slide: translateX/Y with configurable offset
+- Zoom: scale 0.5 → 1
+- Blur: filter blur(10px) → blur(0px)
+
+Transition: Spring animation with stiffness: 200, damping: 20
+
+### Spacing System
+- Container max-width: `max-w-7xl` (1280px)
+- Section padding: `py-20 md:py-28`
+- Card padding: `p-6` or `p-8`
+- Gap between elements: `gap-4` to `gap-8`
 
 ## Tech Stack
 
@@ -15,7 +96,7 @@ A modern Next.js 15 application for mission-focused organizations. Built with Re
 
 ## Project Structure
 
-```
+```text
 src/
 ├── app/                    # Next.js App Router
 │   ├── (api)/             # API routes
