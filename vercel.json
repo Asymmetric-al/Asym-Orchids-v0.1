@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/monitoring/audit-scan",
+      "schedule": "0 0 * * *"
+    }
+  ]
+}

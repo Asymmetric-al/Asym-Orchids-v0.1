@@ -4,6 +4,7 @@ import "./globals.css";
 import { VisualEditsMessenger } from "orchids-visual-edits";
 import { QueryProvider } from "@/providers/query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
+import { WebVitalsReporter } from "@/components/web-vitals-reporter";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +41,7 @@ export default function RootLayout({
             {children}
           </QueryProvider>
         </ThemeProvider>
+        <WebVitalsReporter />
         <VisualEditsMessenger />
       </body>
     </html>
