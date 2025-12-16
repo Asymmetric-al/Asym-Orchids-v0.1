@@ -6,620 +6,708 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ScrollArea } from '@/components/ui/scroll-area'
+import { Textarea } from '@/components/ui/textarea'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
+  DialogDescription,
 } from '@/components/ui/dialog'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 import {
   Search,
-  MoreHorizontal,
   Mail,
   Phone,
   MapPin,
-  Calendar,
-  ArrowLeft,
-  ChevronDown,
-  Video,
-  MessageSquare,
-  FileText,
-  Target,
-  Lock,
-  Upload,
   Filter,
   Plus,
   Download,
-  Users,
+  Heart,
+  MessageSquare,
+  Briefcase,
+  Check,
+  Send,
+  Copy,
+  ExternalLink,
+  Pencil,
+  User,
 } from 'lucide-react'
+import { formatDistanceToNow, format } from 'date-fns'
+
+type ActivityType = 'gift' | 'note' | 'call' | 'email' | 'meeting'
+
+interface Activity {
+  id: string
+  type: ActivityType
+  date: string
+  title: string
+  description?: string
+  amount?: number
+  status?: string
+}
 
 interface Donor {
   id: string
-  firstName: string
-  lastName: string
-  email: string
-  phone?: string
-  city?: string
-  state?: string
-  status: 'active' | 'at_risk' | 'lapsed' | 'new'
+  name: string
+  initials: string
+  type: 'Individual' | 'Organization' | 'Church'
+  status: 'Active' | 'Lapsed' | 'New' | 'At Risk'
   totalGiven: number
-  giftCount: number
   lastGiftDate: string
   lastGiftAmount: number
-  isRecurring: boolean
-  recurringAmount?: number
-  recurringFrequency?: string
-  firstGiftDate: string
-  type?: string
-  carePriority?: 'High' | 'Medium' | 'Low'
+  frequency: 'Monthly' | 'One-Time' | 'Annually' | 'Irregular'
+  email: string
+  phone: string
+  avatar?: string
+  location: string
+  address: {
+    street: string
+    city: string
+    state: string
+    zip: string
+    country: string
+  }
+  joinedDate: string
+  tags: string[]
+  activities: Activity[]
 }
 
-const donors: Donor[] = [
-  { id: 'd1', firstName: 'Thomas', lastName: 'Smith', email: 'thomas.smith@email.com', phone: '(512) 555-0123', city: 'Austin', state: 'TX', status: 'active', totalGiven: 1800, giftCount: 12, lastGiftDate: '2024-12-10', lastGiftAmount: 150, isRecurring: true, recurringAmount: 150, recurringFrequency: 'monthly', firstGiftDate: '2024-01-15', type: 'Church Planter', carePriority: 'Medium' },
-  { id: 'd2', firstName: 'Rebecca', lastName: 'Johnson', email: 'rebecca.j@email.com', phone: '(206) 555-0456', city: 'Seattle', state: 'WA', status: 'active', totalGiven: 900, giftCount: 10, lastGiftDate: '2024-12-05', lastGiftAmount: 75, isRecurring: true, recurringAmount: 75, recurringFrequency: 'monthly', firstGiftDate: '2024-03-01', type: 'Individual', carePriority: 'Low' },
-  { id: 'd3', firstName: 'Michael', lastName: 'Williams', email: 'mike.w@email.com', phone: '(303) 555-0789', city: 'Denver', state: 'CO', status: 'active', totalGiven: 2400, giftCount: 6, lastGiftDate: '2024-12-01', lastGiftAmount: 200, isRecurring: true, recurringAmount: 200, recurringFrequency: 'monthly', firstGiftDate: '2024-06-15', type: 'Family', carePriority: 'High' },
-  { id: 'd4', firstName: 'Jennifer', lastName: 'Davis', email: 'jen.davis@email.com', city: 'Portland', state: 'OR', status: 'at_risk', totalGiven: 500, giftCount: 5, lastGiftDate: '2024-06-15', lastGiftAmount: 100, isRecurring: false, firstGiftDate: '2023-05-20', type: 'Individual', carePriority: 'Medium' },
-  { id: 'd5', firstName: 'David', lastName: 'Brown', email: 'david.b@email.com', phone: '(312) 555-0234', city: 'Chicago', state: 'IL', status: 'new', totalGiven: 250, giftCount: 1, lastGiftDate: '2024-12-12', lastGiftAmount: 250, isRecurring: false, firstGiftDate: '2024-12-12', type: 'Individual', carePriority: 'High' },
-  { id: 'd6', firstName: 'Emily', lastName: 'Garcia', email: 'emily.g@email.com', phone: '(305) 555-0567', city: 'Miami', state: 'FL', status: 'active', totalGiven: 600, giftCount: 11, lastGiftDate: '2024-12-08', lastGiftAmount: 50, isRecurring: true, recurringAmount: 50, recurringFrequency: 'monthly', firstGiftDate: '2024-02-14', type: 'Individual', carePriority: 'Low' },
-  { id: 'd7', firstName: 'Robert', lastName: 'Martinez', email: 'rob.m@email.com', city: 'Phoenix', state: 'AZ', status: 'lapsed', totalGiven: 300, giftCount: 3, lastGiftDate: '2024-03-01', lastGiftAmount: 100, isRecurring: false, firstGiftDate: '2023-09-01', type: 'Individual', carePriority: 'Medium' },
-  { id: 'd8', firstName: 'Amanda', lastName: 'Lee', email: 'amanda.lee@email.com', phone: '(619) 555-0890', city: 'San Diego', state: 'CA', status: 'new', totalGiven: 100, giftCount: 1, lastGiftDate: '2024-12-14', lastGiftAmount: 100, isRecurring: false, firstGiftDate: '2024-12-14', type: 'Individual', carePriority: 'High' },
+const generateActivities = (donorId: string): Activity[] => {
+  return [
+    { id: `act-${donorId}-1`, type: 'gift', date: '2023-10-24T10:00:00', title: 'Donation Received', amount: 200, status: 'Succeeded' },
+    { id: `act-${donorId}-2`, type: 'note', date: '2023-10-15T14:30:00', title: 'Coffee Meeting', description: 'Met to discuss the new building project. Very interested in supporting the roof construction.' },
+    { id: `act-${donorId}-3`, type: 'email', date: '2023-10-01T09:15:00', title: 'Sent Quarterly Update', description: 'Q3 Impact Report sent via Mailchimp.' },
+    { id: `act-${donorId}-4`, type: 'gift', date: '2023-09-24T10:00:00', title: 'Donation Received', amount: 200, status: 'Succeeded' },
+  ]
+}
+
+const DONORS_DATA: Donor[] = [
+  { 
+    id: '1', 
+    name: 'Alice Johnson', 
+    initials: 'AJ',
+    type: 'Individual', 
+    status: 'Active', 
+    totalGiven: 12400, 
+    lastGiftDate: '2024-10-24', 
+    lastGiftAmount: 200,
+    frequency: 'Monthly',
+    email: 'alice.j@example.com', 
+    phone: '+1 (555) 123-4567',
+    avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?fit=facearea&facepad=2&w=256&h=256&q=80',
+    location: 'Denver, CO',
+    address: { street: '123 Maple Avenue', city: 'Denver', state: 'CO', zip: '80203', country: 'USA' },
+    joinedDate: '2019-03-15',
+    tags: ['Youth Ministry', 'Monthly Partner'],
+    activities: generateActivities('1')
+  },
+  { 
+    id: '2', 
+    name: 'Grace Community Church', 
+    initials: 'GC',
+    type: 'Church', 
+    status: 'Active', 
+    totalGiven: 45000, 
+    lastGiftDate: '2024-10-15', 
+    lastGiftAmount: 1500,
+    frequency: 'Monthly',
+    email: 'missions@grace-community.org', 
+    phone: '+1 (555) 987-6543',
+    location: 'Colorado Springs, CO',
+    address: { street: '4500 Church Street', city: 'Colorado Springs', state: 'CO', zip: '80903', country: 'USA' },
+    joinedDate: '2015-01-10',
+    tags: ['Church Partner', 'Major Donor'],
+    activities: [
+       { id: 'act-2-1', type: 'gift', date: '2024-10-15T08:00:00', title: 'Monthly Support', amount: 1500, status: 'Succeeded' },
+       { id: 'act-2-2', type: 'meeting', date: '2024-09-20T11:00:00', title: 'Zoom with Missions Committee', description: 'Presented the annual vision. They approved the budget increase for 2025.' },
+    ]
+  },
+  { 
+    id: '3', 
+    name: 'Robert Smith', 
+    initials: 'RS',
+    type: 'Individual', 
+    status: 'Lapsed', 
+    totalGiven: 500, 
+    lastGiftDate: '2024-04-10', 
+    lastGiftAmount: 100,
+    frequency: 'Irregular',
+    email: 'bob.smith@example.com', 
+    phone: '+1 (555) 456-7890',
+    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?fit=facearea&facepad=2&w=256&h=256&q=80',
+    location: 'Boulder, CO',
+    address: { street: '789 Oak Lane', city: 'Boulder', state: 'CO', zip: '80302', country: 'USA' },
+    joinedDate: '2023-11-01',
+    tags: ['Needs Follow-up'],
+    activities: [
+        { id: 'act-3-1', type: 'gift', date: '2024-04-10T10:00:00', title: 'Donation', amount: 100, status: 'Succeeded' },
+    ]
+  },
+  {
+    id: '4',
+    name: 'Tom Clark',
+    initials: 'TC',
+    type: 'Individual', 
+    status: 'At Risk',
+    totalGiven: 1200, 
+    lastGiftDate: '2024-09-10',
+    lastGiftAmount: 100,
+    frequency: 'Monthly',
+    email: 'tom.c@example.com', 
+    phone: '+1 (555) 333-4444',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?fit=facearea&facepad=2&w=256&h=256&q=80',
+    location: 'Lakewood, CO',
+    address: { street: '888 Birch Dr', city: 'Lakewood', state: 'CO', zip: '80226', country: 'USA' },
+    joinedDate: '2022-01-20',
+    tags: ['Card Failed', 'Urgent'],
+    activities: [
+        { id: 'act-4-1', type: 'gift', date: '2024-09-10T10:00:00', title: 'Donation Failed', amount: 100, status: 'Failed' },
+    ]
+  }
 ]
 
-const statusConfig = {
-  active: { label: 'On Field', color: 'bg-[#5d7052] text-white' },
-  at_risk: { label: 'At Risk', color: 'bg-amber-100 text-amber-800' },
-  lapsed: { label: 'Lapsed', color: 'bg-gray-100 text-gray-700' },
-  new: { label: 'New', color: 'bg-blue-100 text-blue-800' },
+const formatCurrency = (value: number) => {
+  return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(value)
 }
 
-function ActivityHeatmap() {
-  const months = ['Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
-  const days = ['Mon', 'Wed', 'Fri']
-  
-  const generateActivityData = () => {
-    const data: number[][] = []
-    for (let week = 0; week < 53; week++) {
-      const weekData: number[] = []
-      for (let day = 0; day < 3; day++) {
-        weekData.push(Math.random() > 0.7 ? Math.floor(Math.random() * 4) : 0)
-      }
-      data.push(weekData)
-    }
-    return data
+const getStatusColor = (status: Donor['status']) => {
+  switch(status) {
+    case 'Active': return 'bg-emerald-500'
+    case 'Lapsed': return 'bg-gray-400'
+    case 'New': return 'bg-blue-500'
+    case 'At Risk': return 'bg-amber-500'
+    default: return 'bg-gray-400'
   }
-  
-  const activityData = React.useMemo(() => generateActivityData(), [])
-  
-  const getColor = (level: number) => {
-    const colors = ['#ebedf0', '#c6e48b', '#7bc96f', '#239a3b', '#196127']
-    return colors[level] || colors[0]
+}
+
+const getStatusBadge = (status: Donor['status']) => {
+  const styles: Record<Donor['status'], string> = {
+    Active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+    Lapsed: 'bg-gray-100 text-gray-600 border-gray-200',
+    New: 'bg-blue-50 text-blue-700 border-blue-200',
+    'At Risk': 'bg-amber-50 text-amber-700 border-amber-200',
   }
-
   return (
-    <div className="rounded-xl border shadow-none p-5">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">ACTIVITY OVERVIEW</p>
-          <p className="text-sm text-muted-foreground">12/12/2024 — 12/12/2025</p>
-        </div>
-        <div className="flex items-center gap-4 text-xs text-muted-foreground">
-          <span>Less</span>
-          <div className="flex gap-0.5">
-            {[0, 1, 2, 3, 4].map(level => (
-              <div key={level} className="w-2.5 h-2.5 rounded-sm" style={{ backgroundColor: getColor(level) }} />
-            ))}
-          </div>
-          <span>More</span>
-        </div>
-      </div>
-      
-      <div className="flex gap-1">
-        <div className="flex flex-col justify-between text-[10px] text-muted-foreground pr-2 py-1">
-          {days.map(day => <span key={day}>{day}</span>)}
-        </div>
-        <div className="flex-1 overflow-x-auto">
-          <div className="flex gap-[2px] min-w-max">
-            {activityData.map((week, weekIndex) => (
-              <div key={weekIndex} className="flex flex-col gap-[2px]">
-                {week.map((day, dayIndex) => (
-                  <div
-                    key={dayIndex}
-                    className="w-2.5 h-2.5 rounded-sm"
-                    style={{ backgroundColor: getColor(day) }}
-                  />
-                ))}
-              </div>
-            ))}
-          </div>
-          <div className="flex justify-between text-[10px] text-muted-foreground mt-1 px-1">
-            {months.map((month, i) => <span key={i}>{month}</span>)}
-          </div>
-        </div>
-      </div>
-    </div>
+    <Badge variant="outline" className={`font-medium border px-2.5 py-0.5 text-[11px] uppercase tracking-wider ${styles[status]}`}>
+      {status}
+    </Badge>
   )
 }
 
-function DonorRow({ donor, onClick }: { donor: Donor; onClick: () => void }) {
-  const initials = `${donor.firstName[0]}${donor.lastName[0]}`
-  const statusStyle = statusConfig[donor.status]
-  
-  return (
-    <div 
-      className="flex items-center gap-4 p-4 border-b last:border-0 hover:bg-muted/30 transition-colors cursor-pointer"
-      onClick={onClick}
-    >
-      <Avatar className="h-10 w-10 border bg-white">
-        <AvatarFallback className="bg-[#f4f4f5] text-sm font-medium text-muted-foreground">
-          {initials}
-        </AvatarFallback>
-      </Avatar>
-      
-      <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-2">
-          <p className="font-medium text-sm text-foreground">{donor.firstName} {donor.lastName}</p>
-          {donor.status === 'new' && <Badge className="bg-[#5d7052] text-white text-[10px] px-1.5 py-0 h-5 font-normal">New</Badge>}
-        </div>
-        <p className="text-xs text-muted-foreground">
-          {donor.email}
-        </p>
-      </div>
-
-      <div className="hidden md:block text-right">
-        <p className="font-medium text-sm">${donor.totalGiven.toLocaleString()}</p>
-        <p className="text-xs text-muted-foreground">{donor.giftCount} gifts</p>
-      </div>
-
-      <div className="hidden lg:block text-right">
-        <p className="text-sm font-medium">{new Date(donor.lastGiftDate).toLocaleDateString()}</p>
-        <p className="text-xs text-muted-foreground">Last gift</p>
-      </div>
-
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
-          <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground">
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>
-            <Mail className="mr-2 h-4 w-4" />
-            Send Email
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Phone className="mr-2 h-4 w-4" />
-            Log Call
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem>View Details</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </div>
-  )
+const getActivityIcon = (type: ActivityType) => {
+  switch(type) {
+    case 'gift': return <Heart className="h-4 w-4 text-white" />
+    case 'call': return <Phone className="h-4 w-4 text-white" />
+    case 'email': return <Mail className="h-4 w-4 text-white" />
+    case 'note': return <MessageSquare className="h-4 w-4 text-white" />
+    case 'meeting': return <Briefcase className="h-4 w-4 text-white" />
+    default: return <Heart className="h-4 w-4 text-white" />
+  }
 }
 
-function DonorDetailView({ donor, onClose }: { donor: Donor; onClose: () => void }) {
-  const initials = `${donor.firstName[0]}${donor.lastName[0]}`
-  const statusStyle = statusConfig[donor.status]
-
-  return (
-    <div className="min-h-screen bg-background">
-      <div className="max-w-6xl mx-auto p-6">
-        <button onClick={onClose} className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-6 transition-colors">
-          <ArrowLeft className="h-4 w-4" />
-          Back to Donors
-        </button>
-
-        <div className="flex items-start justify-between mb-8">
-          <div className="flex items-center gap-5">
-            <Avatar className="h-20 w-20 border bg-white shadow-sm">
-              <AvatarImage src="/placeholder-avatar.jpg" />
-              <AvatarFallback className="bg-[#f4f4f5] text-xl font-medium text-muted-foreground">
-                {initials}
-              </AvatarFallback>
-            </Avatar>
-            <div>
-              <h1 className="text-2xl font-bold tracking-tight">{donor.firstName} & Jane {donor.lastName.slice(0, 3)}</h1>
-              <div className="flex items-center gap-2 mt-2 flex-wrap">
-                <Badge className={`${statusStyle.color} border-none font-normal`}>{statusStyle.label}</Badge>
-                <span className="text-muted-foreground/30">•</span>
-                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Lock className="h-3 w-3" /> Security: Open
-                </span>
-                <span className="text-muted-foreground/30">•</span>
-                <Badge variant="outline" className="bg-[#e8ebe5] text-[#5d7052] border-transparent font-normal">
-                  {donor.type || 'Church Planter'}
-                </Badge>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" className="bg-white hover:bg-muted/50">Open Scheduler</Button>
-            <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white shadow-sm">
-              <Mail className="mr-2 h-4 w-4" />
-              Send Email
-            </Button>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="col-span-2">
-            <ActivityHeatmap />
-          </div>
-          <div className="flex gap-6">
-            <div className="text-center">
-              <p className="text-3xl font-semibold">{donor.carePriority}</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">CARE PRIORITY</p>
-            </div>
-            <div className="text-center">
-              <p className="text-3xl font-semibold">10/28/2025</p>
-              <p className="text-xs text-muted-foreground uppercase tracking-wider">LAST CONTACT</p>
-            </div>
-          </div>
-        </div>
-
-        <Tabs defaultValue="overview" className="w-full">
-          <TabsList className="border-b w-full justify-start rounded-none bg-transparent p-0 h-auto gap-6">
-            <TabsTrigger 
-              value="overview" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Overview
-            </TabsTrigger>
-            <TabsTrigger 
-              value="care-thread" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Care Thread
-            </TabsTrigger>
-            <TabsTrigger 
-              value="activity-log" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Activity Log
-            </TabsTrigger>
-            <TabsTrigger 
-              value="care-plan" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Care Plan
-            </TabsTrigger>
-            <TabsTrigger 
-              value="private-notes" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Private Notes
-            </TabsTrigger>
-            <TabsTrigger 
-              value="files" 
-              className="rounded-none border-b-2 border-transparent data-[state=active]:border-[#5d7052] data-[state=active]:text-[#5d7052] data-[state=active]:bg-transparent px-0 pb-3 font-medium text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Files
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="overview" className="mt-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="border shadow-none">
-                <CardHeader className="pb-3 border-b">
-                  <CardTitle className="text-base font-semibold">Contact Information</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4 pt-4">
-                  <div className="flex items-center gap-3">
-                    <div className="h-8 w-8 rounded-lg bg-[#f4f4f5] flex items-center justify-center">
-                      <Mail className="h-4 w-4 text-muted-foreground" />
-                    </div>
-                    <span className="text-sm font-medium">{donor.email}</span>
-                  </div>
-                  {donor.phone && (
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-lg bg-[#f4f4f5] flex items-center justify-center">
-                        <Phone className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                      <span className="text-sm font-medium">{donor.phone}</span>
-                    </div>
-                  )}
-                  {donor.city && (
-                    <div className="flex items-center gap-3">
-                      <div className="h-8 w-8 rounded-lg bg-[#f4f4f5] flex items-center justify-center">
-                        <MapPin className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                      <span className="text-sm font-medium">{donor.city}, {donor.state}</span>
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
-
-              <Card className="border shadow-none">
-                <CardHeader className="pb-3 border-b">
-                  <CardTitle className="text-base font-semibold">Giving Summary</CardTitle>
-                </CardHeader>
-                <CardContent className="pt-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="p-4 bg-[#f8f8f8] rounded-lg">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Total Given</p>
-                      <p className="text-2xl font-bold tracking-tight">${donor.totalGiven.toLocaleString()}</p>
-                    </div>
-                    <div className="p-4 bg-[#f8f8f8] rounded-lg">
-                      <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-1">Total Gifts</p>
-                      <p className="text-2xl font-bold tracking-tight">{donor.giftCount}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="activity-log" className="mt-6">
-            <Card className="border shadow-none">
-              <CardHeader className="flex-row items-center justify-between pb-4">
-                <CardTitle className="text-lg font-semibold">Interaction Log</CardTitle>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Filter className="h-4 w-4 mr-2" />
-                    Filter
-                  </Button>
-                  <Button size="sm" className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
-                    <Plus className="h-4 w-4 mr-2" />
-                    Log Activity
-                  </Button>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {[
-                  { type: 'Video Call', date: '10/28/2025', note: 'Monthly check-in. Discussed language school progress.', by: 'Jeremy Beaumont' },
-                  { type: 'Video Call', date: '11/22/2025', note: 'Routine check-in', by: 'Elisha Lima' },
-                  { type: 'Text', date: '11/20/2025', note: 'Routine check-in', by: 'Elisha Lima' },
-                  { type: 'Call', date: '11/14/2025', note: 'Routine check-in', by: 'Jeremy Beaumont' },
-                ].map((activity, i) => (
-                  <div key={i} className="flex items-start gap-4 p-4 border rounded-lg">
-                    <div className="flex-shrink-0">
-                      {activity.type === 'Video Call' && <Video className="h-4 w-4 text-muted-foreground" />}
-                      {activity.type === 'Text' && <MessageSquare className="h-4 w-4 text-muted-foreground" />}
-                      {activity.type === 'Call' && <Phone className="h-4 w-4 text-muted-foreground" />}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm">{activity.type}</span>
-                        <span className="text-muted-foreground">•</span>
-                        <span className="text-sm text-muted-foreground">{activity.date}</span>
-                      </div>
-                      <p className="text-sm text-muted-foreground mt-1">{activity.note}</p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Avatar className="h-6 w-6">
-                        <AvatarFallback className="text-xs bg-muted">{activity.by.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
-                      <span className="text-sm text-muted-foreground">{activity.by}</span>
-                    </div>
-                  </div>
-                ))}
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="care-thread" className="mt-6">
-            <Card className="border shadow-none">
-              <CardHeader className="flex-row items-center justify-between pb-4">
-                <CardTitle className="text-lg font-semibold">DISCUSSION FEED</CardTitle>
-                <Badge variant="outline">Internal Team</Badge>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  <div className="flex gap-3">
-                    <Avatar className="h-8 w-8">
-                      <AvatarFallback className="bg-muted text-xs">JB</AvatarFallback>
-                    </Avatar>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium text-sm">Jeremy Beaumont</span>
-                        <span className="text-xs text-muted-foreground">Oct 28, 2025, 02:30 PM</span>
-                      </div>
-                      <div className="mt-2 p-3 bg-muted/50 rounded-lg border-l-2 border-muted-foreground/20">
-                        <p className="text-sm">Spoke with John. He is feeling a bit isolated due to language barriers. Recommended connection with the local expat fellowship.</p>
-                      </div>
-                      <button className="text-xs text-muted-foreground mt-2 hover:text-foreground">← Reply</button>
-                    </div>
-                  </div>
-                </div>
-                <div className="border-t pt-4">
-                  <div className="flex gap-2 border-b pb-2 mb-3">
-                    <button className="p-1 hover:bg-muted rounded"><strong>B</strong></button>
-                    <button className="p-1 hover:bg-muted rounded"><em>I</em></button>
-                    <button className="p-1 hover:bg-muted rounded"><u>U</u></button>
-                  </div>
-                  <textarea 
-                    placeholder="Post an update to the thread..." 
-                    className="w-full min-h-[80px] p-3 text-sm border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-ring/20"
-                  />
-                  <div className="flex justify-end mt-2">
-                    <Button size="sm" className="bg-[#8b9a7d] hover:bg-[#7a8a6c]">
-                      Post
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="care-plan" className="mt-6">
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold">Care Goals</h3>
-                  <p className="text-sm text-muted-foreground">1 Active / 1 Overdue</p>
-                </div>
-                <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Goal
-                </Button>
-              </div>
-              <Tabs defaultValue="active">
-                <TabsList className="bg-transparent border p-1">
-                  <TabsTrigger value="active" className="data-[state=active]:bg-muted">Active</TabsTrigger>
-                  <TabsTrigger value="completed" className="data-[state=active]:bg-muted">Completed</TabsTrigger>
-                </TabsList>
-              </Tabs>
-              <Card className="border shadow-none">
-                <CardContent className="p-4">
-                  <div className="flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30 mt-0.5" />
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <Badge variant="outline" className="text-xs">MINISTRY</Badge>
-                        <Badge variant="destructive" className="text-xs">OVERDUE</Badge>
-                      </div>
-                      <h4 className="font-medium mt-2">Language Evaluation</h4>
-                      <p className="text-sm text-muted-foreground">Schedule language school evaluation debrief to discuss progress and next levels.</p>
-                      <div className="flex items-center gap-4 mt-3 text-sm">
-                        <span className="text-red-600">Due 11/20/2023</span>
-                        <span className="text-muted-foreground flex items-center gap-1">
-                          <Avatar className="h-4 w-4"><AvatarFallback className="text-[8px]">EL</AvatarFallback></Avatar>
-                          Elisha Lima
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          <TabsContent value="private-notes" className="mt-6">
-            <div className="bg-[#3d4a52] text-white p-4 rounded-lg mb-4">
-              <div className="flex items-center gap-2">
-                <Lock className="h-4 w-4" />
-                <span className="font-medium">Confidential Area</span>
-              </div>
-              <p className="text-sm mt-1 opacity-90">Notes added here are only visible to Member Care staff with specific clearance. They are not shared with the missionary or regional leadership.</p>
-            </div>
-            <Card className="border shadow-none">
-              <CardHeader className="flex-row items-center justify-between pb-3">
-                <CardTitle className="text-sm font-medium">Add Private Note</CardTitle>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">Text</Button>
-                  <Button variant="ghost" size="sm">Voice</Button>
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="flex gap-2 border-b pb-2 mb-3">
-                  <button className="p-1 hover:bg-muted rounded"><strong>B</strong></button>
-                  <button className="p-1 hover:bg-muted rounded"><em>I</em></button>
-                  <button className="p-1 hover:bg-muted rounded"><u>U</u></button>
-                </div>
-                <textarea 
-                  placeholder="Enter confidential observations..." 
-                  className="w-full min-h-[120px] p-3 text-sm border rounded-lg resize-none focus:outline-none focus:ring-2 focus:ring-ring/20"
-                />
-                <div className="flex justify-end mt-3">
-                  <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">Save Securely</Button>
-                </div>
-              </CardContent>
-            </Card>
-            <p className="text-center text-muted-foreground text-sm mt-6">No private notes recorded.</p>
-          </TabsContent>
-
-          <TabsContent value="files" className="mt-6">
-            <Card className="border shadow-none">
-              <CardHeader className="flex-row items-center justify-between pb-3">
-                <CardTitle className="text-lg font-semibold">Documents & Files</CardTitle>
-                <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
-                  <Upload className="h-4 w-4 mr-2" />
-                  Upload File
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center mb-4">
-                    <FileText className="h-6 w-6 text-muted-foreground" />
-                  </div>
-                  <p className="text-muted-foreground">No files uploaded.</p>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        </Tabs>
-      </div>
-    </div>
-  )
+const getActivityBg = (type: ActivityType) => {
+  switch(type) {
+    case 'gift': return 'bg-rose-400'
+    case 'call': return 'bg-blue-400'
+    case 'email': return 'bg-violet-400'
+    case 'note': return 'bg-gray-400'
+    case 'meeting': return 'bg-emerald-400'
+    default: return 'bg-gray-400'
+  }
 }
 
 export default function DonorsPage() {
-  const [search, setSearch] = React.useState('')
-  const [selectedDonor, setSelectedDonor] = React.useState<Donor | null>(null)
+  const [selectedDonorId, setSelectedDonorId] = React.useState<string | null>(null)
+  const [searchTerm, setSearchTerm] = React.useState('')
+  const [statusFilter, setStatusFilter] = React.useState<string>('All')
+  const [activeTab, setActiveTab] = React.useState('timeline')
+  const [noteInput, setNoteInput] = React.useState('')
+  const [isNoteDialogOpen, setIsNoteDialogOpen] = React.useState(false)
+  const [activityInput, setActivityInput] = React.useState('')
 
-  const filteredDonors = donors.filter(donor => {
-    const matchesSearch = search === '' || 
-      `${donor.firstName} ${donor.lastName}`.toLowerCase().includes(search.toLowerCase()) ||
-      donor.email.toLowerCase().includes(search.toLowerCase())
-    return matchesSearch
-  })
+  const filteredDonors = React.useMemo(() => {
+    return DONORS_DATA.filter(donor => {
+      const matchesSearch = donor.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                            donor.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            donor.location.toLowerCase().includes(searchTerm.toLowerCase())
+      const matchesStatus = statusFilter === 'All' || donor.status === statusFilter
+      return matchesSearch && matchesStatus
+    })
+  }, [searchTerm, statusFilter])
 
-  if (selectedDonor) {
-    return <DonorDetailView donor={selectedDonor} onClose={() => setSelectedDonor(null)} />
+  const selectedDonor = React.useMemo(() => 
+    DONORS_DATA.find(d => d.id === selectedDonorId), 
+  [selectedDonorId])
+
+  const handleAddNote = () => {
+    console.log(`Adding note to donor ${selectedDonorId}: ${noteInput}`)
+    setNoteInput('')
+    setIsNoteDialogOpen(false)
+  }
+
+  const handleCopy = (text: string) => {
+    navigator.clipboard.writeText(text)
+  }
+
+  const handlePostActivity = () => {
+    console.log(`Posting activity: ${activityInput}`)
+    setActivityInput('')
   }
 
   return (
-    <div className="p-6 max-w-7xl mx-auto">
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Donors</h1>
-          <p className="text-muted-foreground">Manage your supporters and track their giving.</p>
-        </div>
-        <Button variant="outline" className="bg-white">
-          <Download className="mr-2 h-4 w-4" />
-          Export CSV
-        </Button>
-      </div>
-
-      <Card className="border shadow-none">
-        <CardHeader className="pb-4">
-          <div className="flex flex-col md:flex-row gap-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search donors by name or email..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-9 bg-white"
-              />
+    <div className="flex h-[calc(100vh-4rem)] bg-white">
+      <div className={`flex flex-col h-full border-r border-gray-200 bg-white w-full lg:w-[400px] shrink-0 ${selectedDonorId ? 'hidden lg:flex' : 'flex'}`}>
+        <div className="p-4 border-b border-gray-100 space-y-4 shrink-0 bg-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Partners</h2>
+              <p className="text-sm text-gray-500">{filteredDonors.length} contacts</p>
             </div>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground bg-[#f4f4f5] px-3 py-2 rounded-md">
-              <Users className="h-4 w-4" />
-              <span>{filteredDonors.length} results</span>
+            <div className="flex gap-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-500 hover:text-gray-900 hover:bg-gray-100">
+                    <Filter className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 bg-white">
+                  <DropdownMenuLabel>Filter Status</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {['All', 'Active', 'New', 'Lapsed', 'At Risk'].map(s => (
+                    <DropdownMenuCheckboxItem 
+                      key={s} 
+                      checked={statusFilter === s}
+                      onCheckedChange={() => setStatusFilter(s)}
+                    >
+                      {s}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuContent>
+              </DropdownMenu>
+              <Button size="icon" className="h-9 w-9 bg-gray-900 hover:bg-gray-800 text-white">
+                <Plus className="h-4 w-4" />
+              </Button>
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          {filteredDonors.length > 0 ? (
-            <div>
-              {filteredDonors.map(donor => (
-                <DonorRow 
-                  key={donor.id} 
-                  donor={donor} 
-                  onClick={() => setSelectedDonor(donor)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="p-12 text-center">
-              <div className="h-12 w-12 bg-[#f4f4f5] rounded-full flex items-center justify-center mx-auto mb-4">
-                <Users className="h-6 w-6 text-muted-foreground/50" />
+          <div className="relative">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+            <Input 
+              placeholder="Search partners..." 
+              className="pl-9 bg-gray-50 border-gray-200 focus:bg-white h-10" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <ScrollArea className="flex-1">
+          <div className="p-2">
+            {filteredDonors.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+                <Search className="h-8 w-8 mb-2 opacity-20" />
+                <p className="text-sm">No partners found</p>
               </div>
-              <h3 className="font-medium mb-1">No donors found</h3>
-              <p className="text-sm text-muted-foreground">Try adjusting your search query.</p>
+            ) : (
+              filteredDonors.map((donor) => (
+                <div 
+                  key={donor.id}
+                  onClick={() => setSelectedDonorId(donor.id)}
+                  className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all border mb-1 ${
+                    selectedDonorId === donor.id 
+                      ? 'bg-blue-50 border-blue-200' 
+                      : 'bg-white border-transparent hover:bg-gray-50 hover:border-gray-200'
+                  }`}
+                >
+                  {selectedDonorId === donor.id && (
+                    <div className="absolute left-0 w-1 h-12 bg-blue-600 rounded-r" />
+                  )}
+                  
+                  <div className="relative shrink-0">
+                    <Avatar className={`h-11 w-11 border-2 ${selectedDonorId === donor.id ? 'border-blue-200' : 'border-white'}`}>
+                      <AvatarImage src={donor.avatar} />
+                      <AvatarFallback className="bg-gray-100 text-gray-600 font-medium text-sm">
+                        {donor.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${getStatusColor(donor.status)}`} />
+                  </div>
+                  
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-0.5">
+                      <span className={`font-medium text-sm truncate ${selectedDonorId === donor.id ? 'text-blue-900' : 'text-gray-900'}`}>
+                        {donor.name}
+                      </span>
+                      <span className="text-xs text-gray-400 whitespace-nowrap ml-2">
+                        {formatDistanceToNow(new Date(donor.lastGiftDate), { addSuffix: true })}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-500 truncate">
+                        {donor.location}
+                      </span>
+                      <span className="text-xs font-semibold text-gray-700">
+                        {formatCurrency(donor.lastGiftAmount)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </ScrollArea>
+      </div>
+
+      <div className={`flex-1 flex flex-col bg-white h-full overflow-hidden ${selectedDonorId ? 'flex' : 'hidden lg:flex'}`}>
+        {selectedDonor ? (
+          <>
+            <div className="shrink-0 border-b border-gray-100 px-6 py-4 bg-white flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  className="lg:hidden -ml-2 text-gray-500"
+                  onClick={() => setSelectedDonorId(null)}
+                >
+                  Back
+                </Button>
+                <h2 className="text-lg font-semibold text-gray-900">{selectedDonor.name}</h2>
+                {getStatusBadge(selectedDonor.status)}
+              </div>
+              <div className="flex items-center gap-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-9 text-sm font-medium gap-2 border-gray-200 bg-white hover:bg-gray-50"
+                  onClick={() => setIsNoteDialogOpen(true)}
+                >
+                  <Pencil className="h-3.5 w-3.5" /> Note
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  className="h-9 text-sm font-medium gap-2 border-gray-200 bg-white hover:bg-gray-50"
+                >
+                  <Phone className="h-3.5 w-3.5" /> Call
+                </Button>
+                <Button 
+                  size="sm" 
+                  className="h-9 text-sm font-medium gap-2 bg-gray-900 text-white hover:bg-gray-800"
+                >
+                  <Mail className="h-3.5 w-3.5" /> Email
+                </Button>
+              </div>
             </div>
-          )}
-        </CardContent>
-      </Card>
+
+            <ScrollArea className="flex-1">
+              <div className="p-6 space-y-6">
+                <div className="flex flex-col md:flex-row gap-6 items-start">
+                  <div className="flex items-center gap-5">
+                    <Avatar className="h-20 w-20 border-2 border-white shadow-sm">
+                      <AvatarImage src={selectedDonor.avatar} />
+                      <AvatarFallback className="text-xl font-semibold bg-gray-100 text-gray-600">
+                        {selectedDonor.initials}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <h1 className="text-2xl font-semibold text-gray-900">{selectedDonor.name}</h1>
+                      <div className="flex items-center gap-1.5 text-sm text-gray-500 mt-1">
+                        <MapPin className="h-3.5 w-3.5" /> {selectedDonor.location}
+                      </div>
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {selectedDonor.tags.map(tag => (
+                          <span key={tag} className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-md text-xs font-medium text-gray-600 uppercase tracking-wide">
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 w-full grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Lifetime</p>
+                      <p className="text-xl font-semibold text-gray-900">{formatCurrency(selectedDonor.totalGiven)}</p>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Last Gift</p>
+                      <p className="text-xl font-semibold text-gray-900">{formatCurrency(selectedDonor.lastGiftAmount)}</p>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Frequency</p>
+                      <p className="text-sm font-semibold text-gray-900">{selectedDonor.frequency}</p>
+                    </div>
+                    <div className="bg-white border border-gray-200 rounded-lg p-4">
+                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Partner Since</p>
+                      <p className="text-sm font-semibold text-gray-900">{new Date(selectedDonor.joinedDate).getFullYear()}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                  <div className="border-b border-gray-200">
+                    <TabsList className="bg-transparent h-auto p-0 gap-6">
+                      {['Timeline', 'Contact Info', 'Giving History'].map(tab => (
+                        <TabsTrigger 
+                          key={tab} 
+                          value={tab.toLowerCase().replace(' ', '-')}
+                          className="bg-transparent border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-none px-0 py-3 text-sm font-medium text-gray-500 hover:text-gray-700"
+                        >
+                          {tab}
+                        </TabsTrigger>
+                      ))}
+                    </TabsList>
+                  </div>
+
+                  <div className="pt-6">
+                    <TabsContent value="timeline" className="space-y-6 mt-0">
+                      <div className="bg-white p-4 rounded-xl border border-gray-200 flex gap-4">
+                        <Avatar className="h-9 w-9 hidden md:block">
+                          <AvatarFallback className="bg-gray-900 text-white text-xs font-medium">ME</AvatarFallback>
+                        </Avatar>
+                        <div className="flex-1 space-y-3">
+                          <Input 
+                            placeholder="Log a call, meeting notes, or task..." 
+                            className="border-gray-200 bg-gray-50 focus:bg-white h-10"
+                            value={activityInput}
+                            onChange={(e) => setActivityInput(e.target.value)}
+                          />
+                          <div className="flex justify-between items-center">
+                            <div className="flex gap-2">
+                              <Button variant="ghost" size="sm" className="h-8 text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-100 gap-1.5">
+                                <Phone className="h-3.5 w-3.5" /> Log Call
+                              </Button>
+                              <Button variant="ghost" size="sm" className="h-8 text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-100 gap-1.5">
+                                <Check className="h-3.5 w-3.5" /> Create Task
+                              </Button>
+                            </div>
+                            <Button 
+                              size="sm" 
+                              className="h-8 text-xs bg-gray-900 text-white hover:bg-gray-800"
+                              onClick={handlePostActivity}
+                              disabled={!activityInput.trim()}
+                            >
+                              Post Activity <Send className="h-3 w-3 ml-1.5" />
+                            </Button>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-4 pl-6 border-l-2 border-gray-200 ml-4 relative pb-6">
+                        {selectedDonor.activities.map((activity) => (
+                          <div key={activity.id} className="relative pl-8 group">
+                            <div className={`absolute -left-[25px] top-0 h-8 w-8 rounded-full border-4 border-white flex items-center justify-center shadow-sm ${getActivityBg(activity.type)}`}>
+                              {getActivityIcon(activity.type)}
+                            </div>
+                            
+                            <div className="bg-white p-4 rounded-xl border border-gray-200 hover:shadow-sm transition-shadow">
+                              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                                <div className="space-y-1">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-sm font-semibold text-gray-900">{activity.title}</span>
+                                    {activity.amount && (
+                                      <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-semibold px-2 h-5">
+                                        {formatCurrency(activity.amount)}
+                                      </Badge>
+                                    )}
+                                  </div>
+                                  {activity.description && (
+                                    <p className="text-sm text-gray-600 leading-relaxed">{activity.description}</p>
+                                  )}
+                                </div>
+                                <span className="text-xs text-gray-400 whitespace-nowrap">
+                                  {format(new Date(activity.date), 'MMM d, h:mm a')}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="contact-info" className="mt-0">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Card className="shadow-none border border-gray-200 bg-white">
+                          <CardHeader className="pb-3 border-b border-gray-100">
+                            <CardTitle className="text-sm font-semibold text-gray-900">Contact Methods</CardTitle>
+                          </CardHeader>
+                          <CardContent className="pt-4 space-y-4">
+                            <div className="flex items-center justify-between group">
+                              <div className="flex items-center gap-3">
+                                <div className="h-9 w-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                                  <Mail className="h-4 w-4" />
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-500">Email</p>
+                                  <p className="text-sm font-medium text-gray-900">{selectedDonor.email}</p>
+                                </div>
+                              </div>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50" 
+                                onClick={() => handleCopy(selectedDonor.email)}
+                              >
+                                <Copy className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                            <div className="flex items-center justify-between group">
+                              <div className="flex items-center gap-3">
+                                <div className="h-9 w-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                  <Phone className="h-4 w-4" />
+                                </div>
+                                <div>
+                                  <p className="text-xs text-gray-500">Phone</p>
+                                  <p className="text-sm font-medium text-gray-900">{selectedDonor.phone}</p>
+                                </div>
+                              </div>
+                              <Button 
+                                variant="ghost" 
+                                size="icon" 
+                                className="h-8 w-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50" 
+                                onClick={() => handleCopy(selectedDonor.phone)}
+                              >
+                                <Copy className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+
+                        <Card className="shadow-none border border-gray-200 bg-white">
+                          <CardHeader className="pb-3 border-b border-gray-100">
+                            <CardTitle className="text-sm font-semibold text-gray-900">Address</CardTitle>
+                          </CardHeader>
+                          <CardContent className="pt-4">
+                            <div className="flex items-start justify-between">
+                              <div className="flex items-start gap-3">
+                                <div className="h-9 w-9 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center shrink-0">
+                                  <MapPin className="h-4 w-4" />
+                                </div>
+                                <div>
+                                  <p className="text-sm font-medium text-gray-900">{selectedDonor.address.street}</p>
+                                  <p className="text-sm text-gray-600">
+                                    {selectedDonor.address.city}, {selectedDonor.address.state} {selectedDonor.address.zip}
+                                  </p>
+                                  <p className="text-xs text-gray-400 mt-1 uppercase font-medium">{selectedDonor.address.country}</p>
+                                </div>
+                              </div>
+                              <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-gray-900 hover:bg-gray-100">
+                                <ExternalLink className="h-3.5 w-3.5" />
+                              </Button>
+                            </div>
+                          </CardContent>
+                        </Card>
+                      </div>
+                    </TabsContent>
+
+                    <TabsContent value="giving-history" className="mt-0">
+                      <Card className="shadow-none border border-gray-200 bg-white overflow-hidden">
+                        <div className="p-0">
+                          <table className="w-full text-sm text-left">
+                            <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
+                              <tr>
+                                <th className="px-6 py-3 font-medium">Date</th>
+                                <th className="px-6 py-3 font-medium">Type</th>
+                                <th className="px-6 py-3 font-medium">Amount</th>
+                                <th className="px-6 py-3 font-medium">Status</th>
+                                <th className="px-6 py-3 font-medium text-right">Receipt</th>
+                              </tr>
+                            </thead>
+                            <tbody className="divide-y divide-gray-100">
+                              {selectedDonor.activities.filter(a => a.type === 'gift').map((gift) => (
+                                <tr key={gift.id} className="hover:bg-gray-50 transition-colors">
+                                  <td className="px-6 py-4 font-medium text-gray-900">
+                                    {format(new Date(gift.date), 'MMM d, yyyy')}
+                                  </td>
+                                  <td className="px-6 py-4 text-gray-500">
+                                    Online Gift
+                                  </td>
+                                  <td className="px-6 py-4 font-semibold text-gray-900">
+                                    {formatCurrency(gift.amount || 0)}
+                                  </td>
+                                  <td className="px-6 py-4">
+                                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-medium">
+                                      {gift.status}
+                                    </Badge>
+                                  </td>
+                                  <td className="px-6 py-4 text-right">
+                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full">
+                                      <Download className="h-4 w-4 text-gray-400 hover:text-gray-900" />
+                                    </Button>
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                          {selectedDonor.activities.filter(a => a.type === 'gift').length === 0 && (
+                            <div className="p-12 text-center text-gray-400">
+                              <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                <Heart className="h-6 w-6 text-gray-300" />
+                              </div>
+                              <p>No giving history available.</p>
+                            </div>
+                          )}
+                        </div>
+                      </Card>
+                    </TabsContent>
+                  </div>
+                </Tabs>
+              </div>
+            </ScrollArea>
+          </>
+        ) : (
+          <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-white">
+            <div className="w-20 h-20 bg-gray-100 border border-gray-200 rounded-full flex items-center justify-center mb-6">
+              <User className="h-8 w-8 text-gray-400" />
+            </div>
+            <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a Partner</h3>
+            <p className="text-gray-500 max-w-sm mx-auto mb-6 leading-relaxed">
+              Select a donor from the list to view their full profile, interaction timeline, and giving history.
+            </p>
+            <Button className="bg-gray-900 text-white hover:bg-gray-800 px-6 h-11">
+              <Plus className="mr-2 h-4 w-4" /> Add New Partner
+            </Button>
+          </div>
+        )}
+      </div>
+
+      <Dialog open={isNoteDialogOpen} onOpenChange={setIsNoteDialogOpen}>
+        <DialogContent className="sm:max-w-[500px] bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-gray-900">Add Note</DialogTitle>
+            <DialogDescription className="text-gray-500">
+              Add a private note to {selectedDonor?.name}&apos;s timeline.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <Textarea 
+              value={noteInput} 
+              onChange={(e) => setNoteInput(e.target.value)} 
+              placeholder="Type your note here..." 
+              className="min-h-[150px] resize-none border-gray-200 bg-white focus:bg-white"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="border-gray-200 bg-white hover:bg-gray-50 text-gray-700">
+              Cancel
+            </Button>
+            <Button onClick={handleAddNote} className="bg-gray-900 text-white hover:bg-gray-800">
+              Save Note
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
