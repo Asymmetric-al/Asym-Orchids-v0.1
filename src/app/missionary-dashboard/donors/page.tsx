@@ -300,6 +300,7 @@ export default function DonorsPage() {
   const [isNoteDialogOpen, setIsNoteDialogOpen] = React.useState(false)
   const [activityInput, setActivityInput] = React.useState('')
   const [copiedField, setCopiedField] = React.useState<string | null>(null)
+  const [isDesktop, setIsDesktop] = React.useState(false)
   const copyTimeoutRef = React.useRef<number | null>(null)
 
   const filteredDonors = React.useMemo(() => {
@@ -390,6 +391,44 @@ export default function DonorsPage() {
       if (copyTimeoutRef.current) window.clearTimeout(copyTimeoutRef.current)
     }
   }, [])
+
+  React.useEffect(() => {
+    const query = window.matchMedia('(min-width: 1024px)')
+    const handleChange = (event: MediaQueryListEvent) => setIsDesktop(event.matches)
+
+    setIsDesktop(query.matches)
+    if (query.addEventListener) {
+      query.addEventListener('change', handleChange)
+    } else {
+      // Safari < 14 fallback
+      // @ts-ignore
+      query.addListener(handleChange)
+    }
+
+    return () => {
+      if (query.removeEventListener) {
+        query.removeEventListener('change', handleChange)
+      } else {
+        // @ts-ignore
+        query.removeListener(handleChange)
+      }
+    }
+  }, [])
+
+  React.useEffect(() => {
+    if (filteredDonors.length === 0) {
+      setSelectedDonorId(null)
+      return
+    }
+
+    const selectedStillVisible = selectedDonorId ? filteredDonors.some((d) => d.id === selectedDonorId) : false
+
+    if (!selectedDonorId && isDesktop) {
+      setSelectedDonorId(filteredDonors[0].id)
+    } else if (selectedDonorId && !selectedStillVisible) {
+      setSelectedDonorId(isDesktop ? filteredDonors[0].id : null)
+    }
+  }, [filteredDonors, isDesktop, selectedDonorId])
 
   React.useEffect(() => {
     setActiveTab('timeline')
