@@ -328,6 +328,11 @@ export default function DonorsPage() {
     [donors, selectedDonorId]
   )
 
+  const giftActivities = React.useMemo(
+    () => selectedDonor?.activities.filter(a => a.type === 'gift') ?? [],
+    [selectedDonor]
+  )
+
   const updateDonorActivities = React.useCallback((donorId: string, activity: Activity) => {
     setDonors(prev =>
       prev.map(donor =>
@@ -396,14 +401,14 @@ export default function DonorsPage() {
   }, [])
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] bg-zinc-50/50">
+    <div className="grid h-[calc(100vh-4rem)] grid-cols-1 bg-zinc-50/50 lg:grid-cols-[380px_1fr]">
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
-        className={`flex flex-col h-full border-r border-zinc-200 bg-white w-full lg:w-[380px] shrink-0 ${selectedDonorId ? 'hidden lg:flex' : 'flex'}`}
+        className={`flex h-full flex-col border-r border-zinc-200 bg-white ${selectedDonorId ? 'hidden lg:flex' : 'flex'}`}
       >
-        <div className="p-5 border-b border-zinc-100 space-y-4 shrink-0 bg-white">
+        <div className="sticky top-0 z-20 space-y-4 border-b border-zinc-100 bg-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-semibold text-zinc-900">Partners</h2>
@@ -411,12 +416,12 @@ export default function DonorsPage() {
             </div>
             <div className="flex gap-2">
               <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100">
-                      <Filter className="h-3.5 w-3.5" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-white border-zinc-200">
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900">
+                    <Filter className="h-3.5 w-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 border-zinc-200 bg-white">
                   <DropdownMenuLabel className="text-zinc-600">Filter Status</DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-zinc-100" />
                   {STATUS_FILTERS.map(status => (
@@ -431,25 +436,25 @@ export default function DonorsPage() {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-                <RippleButton size="icon" className="h-7 w-7 bg-zinc-900 hover:bg-zinc-800 text-white rounded-md">
-                  <Plus className="h-3.5 w-3.5" />
-                </RippleButton>
+              <RippleButton size="icon" className="h-7 w-7 rounded-md bg-zinc-900 text-white hover:bg-zinc-800">
+                <Plus className="h-3.5 w-3.5" />
+              </RippleButton>
             </div>
           </div>
           <div className="relative group">
-            <Search className="absolute left-3 top-2 h-4 w-4 text-zinc-400 group-focus-within:text-zinc-600 transition-colors" />
-              <Input 
-                placeholder="Search partners..." 
-                className="pl-9 bg-white border-zinc-300 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 h-8 text-sm text-zinc-900 transition-all placeholder:text-zinc-500" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+            <Search className="absolute left-3 top-2 h-4 w-4 text-zinc-400 transition-colors group-focus-within:text-zinc-600" />
+            <Input 
+              placeholder="Search partners..." 
+              className="h-9 rounded-lg border-zinc-300 bg-white pl-9 text-sm text-zinc-900 placeholder:text-zinc-500 transition-all focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300" 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </div>
         </div>
 
         <ScrollArea className="flex-1">
           <motion.div 
-            className="p-2"
+            className="p-3"
             variants={staggerContainer}
             initial="hidden"
             animate="visible"
@@ -458,9 +463,9 @@ export default function DonorsPage() {
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="flex flex-col items-center justify-center h-64 text-zinc-400"
+                className="flex h-64 flex-col items-center justify-center text-zinc-400"
               >
-                <Search className="h-8 w-8 mb-2 opacity-20" />
+                <Search className="mb-2 h-8 w-8 opacity-20" />
                 <p className="text-sm">No partners found</p>
               </motion.div>
             ) : (
@@ -478,16 +483,16 @@ export default function DonorsPage() {
                     onClick={() => setSelectedDonorId(donor.id)}
                     whileHover={{ scale: 1.01, backgroundColor: selectedDonorId === donor.id ? undefined : 'rgb(250 250 250)' }}
                     whileTap={{ scale: 0.99 }}
-                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors border mb-1.5 relative overflow-hidden ${
+                    className={`relative mb-2 flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border p-3 transition-colors ${
                       selectedDonorId === donor.id 
-                        ? 'bg-blue-50/80 border-blue-200' 
-                        : 'bg-white border-transparent hover:border-zinc-200'
+                        ? 'border-blue-200 bg-blue-50/80' 
+                        : 'border-transparent bg-white hover:border-zinc-200'
                     }`}
                   >
                     {selectedDonorId === donor.id && (
                       <motion.div 
                         layoutId="selection-indicator"
-                        className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"
+                        className="absolute left-0 top-0 bottom-0 w-1 rounded-r bg-blue-500"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ duration: 0.2 }}
@@ -497,7 +502,7 @@ export default function DonorsPage() {
                     <div className="relative shrink-0">
                       <Avatar className={`h-11 w-11 border-2 transition-all ${selectedDonorId === donor.id ? 'border-blue-200' : 'border-white shadow-sm'}`}>
                         <AvatarImage src={donor.avatar} />
-                        <AvatarFallback className="bg-zinc-100 text-zinc-600 font-medium text-sm">
+                        <AvatarFallback className="bg-zinc-100 text-sm font-medium text-zinc-600">
                           {donor.initials}
                         </AvatarFallback>
                       </Avatar>
@@ -509,20 +514,20 @@ export default function DonorsPage() {
                       />
                     </div>
                     
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between mb-0.5">
-                        <span className={`font-medium text-sm truncate ${selectedDonorId === donor.id ? 'text-blue-900' : 'text-zinc-900'}`}>
+                    <div className="min-w-0 flex-1">
+                      <div className="mb-0.5 flex items-center justify-between">
+                        <span className={`truncate text-sm font-medium ${selectedDonorId === donor.id ? 'text-blue-900' : 'text-zinc-900'}`}>
                           {donor.name}
                         </span>
-                        <span className="text-[11px] text-zinc-400 whitespace-nowrap ml-2">
+                        <span className="ml-2 whitespace-nowrap text-[11px] text-zinc-400">
                           {formatRelativeDate(donor.lastGiftDate)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
-                        <span className="text-xs text-zinc-500 truncate">
+                        <span className="truncate text-xs text-zinc-500">
                           {donor.location}
                         </span>
-                        <span className="text-xs font-semibold text-zinc-700 bg-zinc-100 px-1.5 py-0.5 rounded">
+                        <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs font-semibold text-zinc-700">
                           {formatCurrency(donor.lastGiftAmount)}
                         </span>
                       </div>
@@ -542,7 +547,7 @@ export default function DonorsPage() {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className={`flex-1 flex flex-col bg-white h-full overflow-hidden ${selectedDonorId ? 'flex' : 'hidden lg:flex'}`}
+          className={`flex h-full flex-col overflow-hidden bg-white ${selectedDonorId ? 'flex' : 'hidden lg:flex'}`}
         >
           {selectedDonor ? (
             <>
@@ -550,75 +555,77 @@ export default function DonorsPage() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3 }}
-                className="shrink-0 h-16 border-b border-zinc-100 px-6 flex items-center justify-between bg-white"
+                className="sticky top-0 z-20 flex h-16 items-center justify-between border-b border-zinc-100 bg-white px-4 md:px-6"
               >
                 <div className="flex items-center gap-3">
                   <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="lg:hidden h-7 w-7 -ml-2 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100"
+                      className="-ml-2 h-8 w-8 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 lg:hidden"
                       onClick={() => setSelectedDonorId(null)}
                     >
                       <ArrowLeft className="h-4 w-4" />
                     </Button>
                   </motion.div>
-                  <h2 className="text-lg font-semibold text-zinc-900">{selectedDonor.name}</h2>
-                  {getStatusBadge(selectedDonor.status)}
-                </div>
-                  <div className="flex items-center gap-1.5">
-                    <RippleButton 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 px-2.5 text-xs font-medium gap-1.5 border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700"
-                      onClick={() => setIsNoteDialogOpen(true)}
-                    >
-                      <Pencil className="h-3 w-3" /> Note
-                    </RippleButton>
-                    <RippleButton 
-                      variant="outline" 
-                      size="sm" 
-                      className="h-7 px-2.5 text-xs font-medium gap-1.5 border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700"
-                    >
-                      <Phone className="h-3 w-3" /> Call
-                    </RippleButton>
-                    <RippleButton 
-                      size="sm" 
-                      className="h-7 px-2.5 text-xs font-medium gap-1.5 bg-zinc-900 text-white hover:bg-zinc-800"
-                    >
-                      <Mail className="h-3 w-3" /> Email
-                    </RippleButton>
+                  <div className="flex items-center gap-2">
+                    <h2 className="text-lg font-semibold text-zinc-900">{selectedDonor.name}</h2>
+                    {getStatusBadge(selectedDonor.status)}
                   </div>
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5 justify-end">
+                  <RippleButton 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-8 px-2.5 text-xs font-medium gap-1.5 border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
+                    onClick={() => setIsNoteDialogOpen(true)}
+                  >
+                    <Pencil className="h-3 w-3" /> Note
+                  </RippleButton>
+                  <RippleButton 
+                    variant="outline" 
+                    size="sm" 
+                    className="h-8 px-2.5 text-xs font-medium gap-1.5 border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50"
+                  >
+                    <Phone className="h-3 w-3" /> Call
+                  </RippleButton>
+                  <RippleButton 
+                    size="sm" 
+                    className="h-8 px-2.5 text-xs font-medium gap-1.5 bg-zinc-900 text-white hover:bg-zinc-800"
+                  >
+                    <Mail className="h-3 w-3" /> Email
+                  </RippleButton>
+                </div>
               </motion.div>
 
               <ScrollArea className="flex-1">
-                <div className="max-w-5xl mx-auto p-6 space-y-8">
+                <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 p-4 pb-10 md:gap-8 md:p-6">
                   <motion.div 
                     variants={fadeInUp}
                     initial="hidden"
                     animate="visible"
-                    className="flex flex-col md:flex-row gap-8 items-start"
+                    className="flex flex-col gap-6 lg:flex-row lg:items-start"
                   >
-                    <div className="flex items-center gap-5">
+                    <div className="flex items-start gap-4">
                       <motion.div
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
                       >
-                        <Avatar className="h-20 w-20 border-4 border-white shadow-lg rounded-2xl">
+                        <Avatar className="h-20 w-20 rounded-2xl border-4 border-white shadow-lg">
                           <AvatarImage src={selectedDonor.avatar} />
-                          <AvatarFallback className="text-xl font-semibold bg-zinc-100 text-zinc-600 rounded-2xl">
+                          <AvatarFallback className="rounded-2xl bg-zinc-100 text-xl font-semibold text-zinc-600">
                             {selectedDonor.initials}
                           </AvatarFallback>
                         </Avatar>
                       </motion.div>
-                      <div>
+                      <div className="space-y-1">
                         <h1 className="text-2xl font-semibold text-zinc-900">{selectedDonor.name}</h1>
-                        <div className="flex items-center gap-1.5 text-sm text-zinc-500 mt-1">
+                        <div className="mt-1 flex items-center gap-1.5 text-sm text-zinc-500">
                           <MapPin className="h-3.5 w-3.5" /> {selectedDonor.location}
                         </div>
                         <motion.div 
-                          className="flex flex-wrap gap-2 mt-3"
+                          className="mt-3 flex flex-wrap gap-2"
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
                           transition={{ delay: 0.2 }}
@@ -629,7 +636,7 @@ export default function DonorsPage() {
                               initial={{ opacity: 0, scale: 0.8 }}
                               animate={{ opacity: 1, scale: 1 }}
                               transition={{ delay: 0.3 + i * 0.1 }}
-                              className="px-2.5 py-1 bg-zinc-100 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-600"
+                              className="rounded-lg border border-zinc-200 bg-zinc-100 px-2.5 py-1 text-xs font-medium text-zinc-600"
                             >
                               {tag}
                             </motion.span>
@@ -639,7 +646,7 @@ export default function DonorsPage() {
                     </div>
 
                     <motion.div 
-                      className="flex-1 w-full grid grid-cols-2 md:grid-cols-4 gap-3"
+                      className="grid w-full grid-cols-2 gap-3 sm:grid-cols-2 md:grid-cols-4 lg:gap-4"
                       variants={staggerContainer}
                       initial="hidden"
                       animate="visible"
@@ -655,9 +662,9 @@ export default function DonorsPage() {
                           custom={i}
                           variants={statCardVariants}
                           whileHover={{ scale: 1.02, y: -2 }}
-                          className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow"
+                          className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md"
                         >
-                          <p className="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mb-1">{stat.label}</p>
+                          <p className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400">{stat.label}</p>
                           <p className={`font-semibold text-zinc-900 ${stat.large ? 'text-xl' : 'text-sm'}`}>{stat.value}</p>
                         </motion.div>
                       ))}
@@ -666,60 +673,62 @@ export default function DonorsPage() {
 
                   <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="border-b border-zinc-200">
-                      <TabsList className="bg-transparent h-auto p-0 gap-8">
-                        {['Timeline', 'Contact Info', 'Giving History'].map(tab => (
+                      <div className="-mx-1 overflow-x-auto px-1">
+                        <TabsList className="flex h-auto gap-6 bg-transparent p-0">
+                          {['Timeline', 'Contact Info', 'Giving History'].map(tab => (
                             <TabsTrigger 
                               key={tab} 
                               value={tab.toLowerCase().replace(' ', '-')}
-                              className="relative bg-transparent border-b-2 border-transparent data-[state=active]:border-zinc-900 data-[state=active]:text-zinc-900 data-[state=active]:shadow-none rounded-none px-0 py-2 text-xs font-medium text-zinc-500 hover:text-zinc-700 transition-colors"
+                              className="relative whitespace-nowrap border-b-2 border-transparent bg-transparent px-0 py-2 text-xs font-medium text-zinc-500 transition-colors data-[state=active]:border-zinc-900 data-[state=active]:text-zinc-900 data-[state=active]:shadow-none hover:text-zinc-700"
                             >
                               {tab}
                             </TabsTrigger>
-                        ))}
-                      </TabsList>
+                          ))}
+                        </TabsList>
+                      </div>
                     </div>
 
                     <div className="pt-6">
-                      <TabsContent value="timeline" className="space-y-6 mt-0">
+                      <TabsContent value="timeline" className="mt-0 space-y-6">
                         <motion.div 
                           initial={{ opacity: 0, y: 10 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3 }}
-                          className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex gap-4"
+                          className="flex flex-col gap-3 rounded-xl border border-zinc-200 bg-white p-4 shadow-sm sm:flex-row sm:gap-4"
                         >
-                          <Avatar className="h-9 w-9 hidden md:block">
-                            <AvatarFallback className="bg-zinc-900 text-white text-xs font-medium">ME</AvatarFallback>
+                          <Avatar className="hidden h-9 w-9 sm:block">
+                            <AvatarFallback className="bg-zinc-900 text-xs font-medium text-white">ME</AvatarFallback>
                           </Avatar>
                           <div className="flex-1 space-y-3">
                             <Textarea 
                               placeholder="Log a call, meeting notes, or task..." 
-                              className="min-h-[70px] border-zinc-300 bg-white focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 resize-none transition-all text-sm text-zinc-900 placeholder:text-zinc-500"
+                              className="min-h-[80px] resize-none border-zinc-300 bg-white text-sm text-zinc-900 placeholder:text-zinc-500 transition-all focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300"
                               value={activityInput}
                               onChange={(e) => setActivityInput(e.target.value)}
                             />
-                            <div className="flex justify-between items-center">
-                              <div className="flex gap-0.5">
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-[11px] text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 gap-1">
+                            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                              <div className="flex gap-1">
+                                <Button variant="ghost" size="sm" className="h-7 gap-1 px-2 text-[11px] text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900">
                                   <Phone className="h-3 w-3" /> Log Call
                                 </Button>
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-[11px] text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 gap-1">
+                                <Button variant="ghost" size="sm" className="h-7 gap-1 px-2 text-[11px] text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900">
                                   <Check className="h-3 w-3" /> Task
                                 </Button>
                               </div>
-                                <RippleButton 
-                                  size="sm" 
-                                  className="h-7 px-2.5 text-xs font-medium gap-1.5 bg-zinc-900 text-white hover:bg-zinc-800"
-                                  onClick={handlePostActivity}
-                                  disabled={!activityInput.trim()}
-                                >
-                                  Post <Send className="h-3 w-3" />
-                                </RippleButton>
+                              <RippleButton 
+                                size="sm" 
+                                className="h-8 gap-1.5 px-2.5 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800"
+                                onClick={handlePostActivity}
+                                disabled={!activityInput.trim()}
+                              >
+                                Post <Send className="h-3 w-3" />
+                              </RippleButton>
                             </div>
                           </div>
                         </motion.div>
 
                         <motion.div 
-                          className="space-y-0 pl-6 border-l-2 border-zinc-200 ml-4 relative"
+                          className="relative ml-2 border-l-2 border-zinc-200 pl-4 sm:ml-4 sm:pl-6"
                           variants={staggerContainer}
                           initial="hidden"
                           animate="visible"
@@ -729,36 +738,36 @@ export default function DonorsPage() {
                               key={activity.id} 
                               custom={index}
                               variants={activityVariants}
-                              className="relative pl-8 pb-6 last:pb-0"
+                              className="relative pb-6 pl-6 last:pb-0 sm:pl-8"
                             >
                               <motion.div 
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 transition={{ delay: 0.2 + index * 0.1, type: 'spring', stiffness: 400 }}
-                                className={`absolute -left-[25px] top-0 h-8 w-8 rounded-full border-4 border-white flex items-center justify-center shadow-md ${getActivityBg(activity.type)}`}
+                                className={`absolute -left-[18px] top-0 flex h-8 w-8 items-center justify-center rounded-full border-4 border-white shadow-md sm:-left-[25px] ${getActivityBg(activity.type)}`}
                               >
                                 {getActivityIcon(activity.type)}
                               </motion.div>
                               
                               <motion.div 
                                 whileHover={{ scale: 1.01, y: -1 }}
-                                className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-all"
+                                className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition-all hover:shadow-md"
                               >
-                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                                <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
                                   <div className="space-y-1">
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex flex-wrap items-center gap-2">
                                       <span className="text-sm font-semibold text-zinc-900">{activity.title}</span>
                                       {activity.amount && (
-                                        <Badge className={`font-semibold px-2 h-5 ${activity.status === 'Failed' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
+                                        <Badge className={`h-5 px-2 font-semibold ${activity.status === 'Failed' ? 'border-red-200 bg-red-50 text-red-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
                                           {formatCurrency(activity.amount)}
                                         </Badge>
                                       )}
                                     </div>
                                     {activity.description && (
-                                      <p className="text-sm text-zinc-600 leading-relaxed">{activity.description}</p>
+                                      <p className="break-words text-sm leading-relaxed text-zinc-600">{activity.description}</p>
                                     )}
                                   </div>
-                                  <span className="text-[11px] text-zinc-400 whitespace-nowrap font-medium">
+                                  <span className="whitespace-nowrap text-[11px] font-medium text-zinc-400">
                                     {format(new Date(activity.date), 'MMM d, h:mm a')}
                                   </span>
                                 </div>
@@ -770,27 +779,27 @@ export default function DonorsPage() {
 
                       <TabsContent value="contact-info" className="mt-0">
                         <motion.div 
-                          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                          className="grid grid-cols-1 gap-4 md:grid-cols-2"
                           variants={staggerContainer}
                           initial="hidden"
                           animate="visible"
                         >
                           <motion.div variants={fadeInUp}>
-                            <Card className="shadow-sm border border-zinc-200 bg-white hover:shadow-md transition-shadow">
-                              <CardHeader className="pb-3 border-b border-zinc-100">
+                            <Card className="border border-zinc-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+                              <CardHeader className="border-b border-zinc-100 pb-3">
                                 <CardTitle className="text-sm font-semibold text-zinc-900">Contact Methods</CardTitle>
                               </CardHeader>
                               <CardContent className="pt-4 space-y-4">
                                 <motion.div 
                                   whileHover={{ x: 2 }}
-                                  className="flex items-center justify-between group"
+                                  className="flex items-center justify-between"
                                 >
                                   <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
                                       <Mail className="h-4 w-4" />
                                     </div>
                                     <div>
-                                      <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Email</p>
+                                      <p className="text-[11px] font-medium uppercase tracking-wider text-zinc-400">Email</p>
                                       <p className="text-sm font-medium text-zinc-900">{selectedDonor.email}</p>
                                     </div>
                                   </div>
@@ -798,7 +807,7 @@ export default function DonorsPage() {
                                     <Button 
                                       variant="ghost" 
                                       size="icon" 
-                                      className="h-8 w-8 text-zinc-500 hover:text-blue-600 hover:bg-blue-50" 
+                                      className="h-8 w-8 text-zinc-500 hover:bg-blue-50 hover:text-blue-600" 
                                       onClick={() => handleCopy(selectedDonor.email, 'email')}
                                     >
                                       {copiedField === 'email' ? (
@@ -811,14 +820,14 @@ export default function DonorsPage() {
                                 </motion.div>
                                 <motion.div 
                                   whileHover={{ x: 2 }}
-                                  className="flex items-center justify-between group"
+                                  className="flex items-center justify-between"
                                 >
                                   <div className="flex items-center gap-3">
-                                    <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600">
                                       <Phone className="h-4 w-4" />
                                     </div>
                                     <div>
-                                      <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Phone</p>
+                                      <p className="text-[11px] font-medium uppercase tracking-wider text-zinc-400">Phone</p>
                                       <p className="text-sm font-medium text-zinc-900">{selectedDonor.phone}</p>
                                     </div>
                                   </div>
@@ -826,7 +835,7 @@ export default function DonorsPage() {
                                     <Button 
                                       variant="ghost" 
                                       size="icon" 
-                                      className="h-8 w-8 text-zinc-500 hover:text-emerald-600 hover:bg-emerald-50" 
+                                      className="h-8 w-8 text-zinc-500 hover:bg-emerald-50 hover:text-emerald-600" 
                                       onClick={() => handleCopy(selectedDonor.phone, 'phone')}
                                     >
                                       {copiedField === 'phone' ? (
@@ -842,8 +851,8 @@ export default function DonorsPage() {
                           </motion.div>
 
                           <motion.div variants={fadeInUp}>
-                            <Card className="shadow-sm border border-zinc-200 bg-white hover:shadow-md transition-shadow">
-                              <CardHeader className="pb-3 border-b border-zinc-100">
+                            <Card className="border border-zinc-200 bg-white shadow-sm transition-shadow hover:shadow-md">
+                              <CardHeader className="border-b border-zinc-100 pb-3">
                                 <CardTitle className="text-sm font-semibold text-zinc-900">Address</CardTitle>
                               </CardHeader>
                               <CardContent className="pt-4">
@@ -852,7 +861,7 @@ export default function DonorsPage() {
                                   className="flex items-start justify-between"
                                 >
                                   <div className="flex items-start gap-3">
-                                    <div className="h-10 w-10 rounded-xl bg-zinc-100 text-zinc-600 flex items-center justify-center shrink-0">
+                                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-zinc-100 text-zinc-600">
                                       <MapPin className="h-4 w-4" />
                                     </div>
                                     <div>
@@ -860,11 +869,11 @@ export default function DonorsPage() {
                                       <p className="text-sm text-zinc-600">
                                         {selectedDonor.address.city}, {selectedDonor.address.state} {selectedDonor.address.zip}
                                       </p>
-                                      <p className="text-[11px] text-zinc-400 mt-1 uppercase font-semibold tracking-wider">{selectedDonor.address.country}</p>
+                                      <p className="mt-1 text-[11px] font-semibold uppercase tracking-wider text-zinc-400">{selectedDonor.address.country}</p>
                                     </div>
                                   </div>
                                   <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100">
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900">
                                       <ExternalLink className="h-3.5 w-3.5" />
                                     </Button>
                                   </motion.div>
@@ -881,26 +890,26 @@ export default function DonorsPage() {
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ duration: 0.3 }}
                         >
-                          <Card className="shadow-sm border border-zinc-200 bg-white overflow-hidden">
-                            <div className="p-0">
-                              <table className="w-full text-sm text-left">
-                                <thead className="text-[11px] text-zinc-500 uppercase bg-zinc-50 border-b border-zinc-200">
+                          <Card className="overflow-hidden border border-zinc-200 bg-white shadow-sm">
+                            <div className="overflow-x-auto">
+                              <table className="min-w-[720px] w-full text-left text-sm">
+                                <thead className="border-b border-zinc-200 bg-zinc-50 text-[11px] uppercase text-zinc-500">
                                   <tr>
                                     <th className="px-6 py-3.5 font-semibold tracking-wider">Date</th>
                                     <th className="px-6 py-3.5 font-semibold tracking-wider">Type</th>
                                     <th className="px-6 py-3.5 font-semibold tracking-wider">Amount</th>
                                     <th className="px-6 py-3.5 font-semibold tracking-wider">Status</th>
-                                    <th className="px-6 py-3.5 font-semibold tracking-wider text-right">Receipt</th>
+                                    <th className="px-6 py-3.5 text-right font-semibold tracking-wider">Receipt</th>
                                   </tr>
                                 </thead>
                                 <tbody className="divide-y divide-zinc-100">
-                                  {selectedDonor.activities.filter(a => a.type === 'gift').map((gift, index) => (
+                                  {giftActivities.map((gift, index) => (
                                     <motion.tr 
                                       key={gift.id} 
                                       initial={{ opacity: 0, y: 10 }}
                                       animate={{ opacity: 1, y: 0 }}
                                       transition={{ delay: index * 0.05 }}
-                                      className="hover:bg-zinc-50/50 transition-colors"
+                                      className="transition-colors hover:bg-zinc-50/50"
                                     >
                                       <td className="px-6 py-4 font-medium text-zinc-900">
                                         {format(new Date(gift.date), 'MMM d, yyyy')}
@@ -912,28 +921,28 @@ export default function DonorsPage() {
                                         {formatCurrency(gift.amount || 0)}
                                       </td>
                                       <td className="px-6 py-4">
-                                        <Badge variant="outline" className={`font-medium ${gift.status === 'Failed' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
+                                        <Badge variant="outline" className={`font-medium ${gift.status === 'Failed' ? 'border-red-200 bg-red-50 text-red-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
                                           {gift.status}
                                         </Badge>
                                       </td>
                                       <td className="px-6 py-4 text-right">
                                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-zinc-100 rounded-full">
-                                          <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
-                                        </Button>
+                                          <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0 hover:bg-zinc-100">
+                                            <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
+                                          </Button>
                                         </motion.div>
                                       </td>
                                     </motion.tr>
                                   ))}
                                 </tbody>
                               </table>
-                              {selectedDonor.activities.filter(a => a.type === 'gift').length === 0 && (
+                              {giftActivities.length === 0 && (
                                 <motion.div 
                                   initial={{ opacity: 0 }}
                                   animate={{ opacity: 1 }}
                                   className="p-12 text-center text-zinc-400"
                                 >
-                                  <div className="h-12 w-12 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100">
                                     <Heart className="h-6 w-6 text-zinc-300" />
                                   </div>
                                   <p>No giving history available.</p>
@@ -953,13 +962,13 @@ export default function DonorsPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4 }}
-              className="flex flex-col items-center justify-center h-full text-center p-8 bg-zinc-50/30"
+              className="flex h-full flex-col items-center justify-center bg-zinc-50/30 p-8 text-center"
             >
               <motion.div 
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
-                className="w-24 h-24 bg-white border-2 border-zinc-100 rounded-2xl flex items-center justify-center mb-6 shadow-sm"
+                className="mb-6 flex h-24 w-24 items-center justify-center rounded-2xl border-2 border-zinc-100 bg-white shadow-sm"
               >
                 <User className="h-10 w-10 text-zinc-300" />
               </motion.div>
@@ -967,7 +976,7 @@ export default function DonorsPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="text-xl font-semibold text-zinc-900 mb-2"
+                className="mb-2 text-xl font-semibold text-zinc-900"
               >
                 Select a Partner
               </motion.h3>
@@ -975,7 +984,7 @@ export default function DonorsPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="text-zinc-500 max-w-sm mx-auto mb-8 leading-relaxed"
+                className="mx-auto mb-8 max-w-sm leading-relaxed text-zinc-500"
               >
                 Select a donor from the list to view their full profile, interaction timeline, and giving history.
               </motion.p>
@@ -994,7 +1003,7 @@ export default function DonorsPage() {
       </AnimatePresence>
 
       <Dialog open={isNoteDialogOpen} onOpenChange={setIsNoteDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] bg-white border-zinc-200">
+        <DialogContent className="sm:max-w-[500px] border-zinc-200 bg-white">
           <DialogHeader>
             <DialogTitle className="text-zinc-900">Add Note</DialogTitle>
             <DialogDescription className="text-zinc-500">
@@ -1006,11 +1015,11 @@ export default function DonorsPage() {
               value={noteInput} 
               onChange={(e) => setNoteInput(e.target.value)} 
               placeholder="Type your note here..." 
-              className="min-h-[120px] resize-none border-zinc-300 bg-white focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 text-sm text-zinc-900 placeholder:text-zinc-500"
+              className="min-h-[120px] resize-none border-zinc-300 bg-white text-sm text-zinc-900 placeholder:text-zinc-500 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300"
             />
           </div>
           <DialogFooter>
-            <RippleButton variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="h-7 px-3 text-xs font-medium border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700">
+            <RippleButton variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="h-7 px-3 text-xs font-medium border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50">
               Cancel
             </RippleButton>
             <RippleButton onClick={handleAddNote} disabled={!noteInput.trim()} className="h-7 px-3 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800 disabled:opacity-70">
