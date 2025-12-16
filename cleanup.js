@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const dirs = ['(admin)', '(donor)', '(missionary)'];
+const dirs = ['(admin)', '(donor)', '(missionary)', '(mc)'];
 const basePath = 'C:/Users/Conrad/orchids-projects/orchids-orchids-platform/src/app';
 
 dirs.forEach(d => {
