@@ -1,9 +1,3 @@
 {
-  "buildCommand": "rm -rf .next && next build",
-  "crons": [
-    {
-      "path": "/api/monitoring/audit-scan",
-      "schedule": "0 0 * * *"
-    }
-  ]
+  "buildCommand": "rm -rf .next && next build"
 }
