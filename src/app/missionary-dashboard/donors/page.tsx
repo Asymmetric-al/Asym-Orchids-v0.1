@@ -290,6 +290,35 @@ const activityVariants = {
   }),
 }
 
+const useMediaQuery = (query: string) => {
+  const [matches, setMatches] = React.useState(false)
+
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia(query)
+    const handleChange = (event: MediaQueryListEvent) => setMatches(event.matches)
+
+    setMatches(mediaQuery.matches)
+    if (mediaQuery.addEventListener) {
+      mediaQuery.addEventListener('change', handleChange)
+    } else {
+      // Safari < 14 fallback
+      // @ts-ignore
+      mediaQuery.addListener(handleChange)
+    }
+
+    return () => {
+      if (mediaQuery.removeEventListener) {
+        mediaQuery.removeEventListener('change', handleChange)
+      } else {
+        // @ts-ignore
+        mediaQuery.removeListener(handleChange)
+      }
+    }
+  }, [query])
+
+  return matches
+}
+
 export default function DonorsPage() {
   const [donors, setDonors] = React.useState<Donor[]>(DONORS_DATA)
   const [selectedDonorId, setSelectedDonorId] = React.useState<string | null>(null)
@@ -300,7 +329,7 @@ export default function DonorsPage() {
   const [isNoteDialogOpen, setIsNoteDialogOpen] = React.useState(false)
   const [activityInput, setActivityInput] = React.useState('')
   const [copiedField, setCopiedField] = React.useState<string | null>(null)
-  const [isDesktop, setIsDesktop] = React.useState(false)
+  const isDesktop = useMediaQuery('(min-width: 1024px)')
   const copyTimeoutRef = React.useRef<number | null>(null)
 
   const filteredDonors = React.useMemo(() => {
@@ -393,29 +422,6 @@ export default function DonorsPage() {
   }, [])
 
   React.useEffect(() => {
-    const query = window.matchMedia('(min-width: 1024px)')
-    const handleChange = (event: MediaQueryListEvent) => setIsDesktop(event.matches)
-
-    setIsDesktop(query.matches)
-    if (query.addEventListener) {
-      query.addEventListener('change', handleChange)
-    } else {
-      // Safari < 14 fallback
-      // @ts-ignore
-      query.addListener(handleChange)
-    }
-
-    return () => {
-      if (query.removeEventListener) {
-        query.removeEventListener('change', handleChange)
-      } else {
-        // @ts-ignore
-        query.removeListener(handleChange)
-      }
-    }
-  }, [])
-
-  React.useEffect(() => {
     if (filteredDonors.length === 0) {
       setSelectedDonorId(null)
       return
@@ -459,12 +465,14 @@ export default function DonorsPage() {
           <div className="space-y-3">
             <div className="relative group">
               <Search className="absolute left-3 top-2 h-4 w-4 text-zinc-400 transition-colors group-focus-within:text-zinc-600" />
-              <Input 
-                placeholder="Search partners..." 
-                className="h-9 rounded-lg border-zinc-300 bg-white pl-9 text-sm text-zinc-900 placeholder:text-zinc-500 transition-all focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
+                <Input 
+                  placeholder="Search partners..." 
+                  aria-label="Search partners"
+                  className="h-9 rounded-lg border-zinc-300 bg-white pl-9 text-sm text-zinc-900 placeholder:text-zinc-500 transition-all focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300" 
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+
             </div>
             <div className="flex gap-2 overflow-x-auto pb-1">
               {STATUS_FILTERS.map((status) => (
@@ -501,75 +509,86 @@ export default function DonorsPage() {
               </motion.div>
             ) : (
               <AnimatePresence mode="popLayout">
-                {filteredDonors.map((donor, index) => (
-                  <motion.div 
-                    key={donor.id}
-                    custom={index}
-                    variants={listItemVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    layout
-                    layoutId={`donor-${donor.id}`}
-                    onClick={() => setSelectedDonorId(donor.id)}
-                    whileHover={{ scale: 1.01, backgroundColor: selectedDonorId === donor.id ? undefined : 'rgb(250 250 250)' }}
-                    whileTap={{ scale: 0.99 }}
-                    className={`relative mb-2 flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border p-3 transition-colors ${
-                      selectedDonorId === donor.id 
-                        ? 'border-blue-200 bg-blue-50/80' 
-                        : 'border-transparent bg-white hover:border-zinc-200'
-                    }`}
-                  >
-                    {selectedDonorId === donor.id && (
-                      <motion.div 
-                        layoutId="selection-indicator"
-                        className="absolute left-0 top-0 bottom-0 w-1 rounded-r bg-blue-500"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.2 }}
-                      />
-                    )}
-                    
-                    <div className="relative shrink-0">
-                      <Avatar className={`h-11 w-11 border-2 transition-all ${selectedDonorId === donor.id ? 'border-blue-200' : 'border-white shadow-sm'}`}>
-                        <AvatarImage src={donor.avatar} />
-                        <AvatarFallback className="bg-zinc-100 text-sm font-medium text-zinc-600">
-                          {donor.initials}
-                        </AvatarFallback>
-                      </Avatar>
-                      <motion.div 
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ delay: 0.2, type: 'spring', stiffness: 500 }}
-                        className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${getStatusColor(donor.status)}`} 
-                      />
-                    </div>
-                    
-                    <div className="min-w-0 flex-1">
-                      <div className="mb-0.5 flex items-center justify-between">
-                        <span className={`truncate text-sm font-medium ${selectedDonorId === donor.id ? 'text-blue-900' : 'text-zinc-900'}`}>
-                          {donor.name}
-                        </span>
-                        <span className="ml-2 whitespace-nowrap text-[11px] text-zinc-400">
-                          {formatRelativeDate(donor.lastGiftDate)}
-                        </span>
+                  {filteredDonors.map((donor, index) => (
+                    <motion.div 
+                      key={donor.id}
+                      custom={index}
+                      variants={listItemVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      layout
+                      layoutId={`donor-${donor.id}`}
+                      role="button"
+                      tabIndex={0}
+                      aria-pressed={selectedDonorId === donor.id}
+                      aria-label={`View ${donor.name}`}
+                      onClick={() => setSelectedDonorId(donor.id)}
+                      onKeyDown={(event) => {
+                        if (event.key === 'Enter' || event.key === ' ') {
+                          event.preventDefault()
+                          setSelectedDonorId(donor.id)
+                        }
+                      }}
+                      whileHover={{ scale: 1.01, backgroundColor: selectedDonorId === donor.id ? undefined : 'rgb(250 250 250)' }}
+                      whileTap={{ scale: 0.99 }}
+                      className={`relative mb-2 flex cursor-pointer items-center gap-3 overflow-hidden rounded-xl border p-3 transition-colors ${
+                        selectedDonorId === donor.id 
+                          ? 'border-blue-200 bg-blue-50/80' 
+                          : 'border-transparent bg-white hover:border-zinc-200'
+                      }`}
+                    >
+                      {selectedDonorId === donor.id && (
+                        <motion.div 
+                          layoutId="selection-indicator"
+                          className="absolute left-0 top-0 bottom-0 w-1 rounded-r bg-blue-500"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ duration: 0.2 }}
+                        />
+                      )}
+                      
+                      <div className="relative shrink-0">
+                        <Avatar className={`h-11 w-11 border-2 transition-all ${selectedDonorId === donor.id ? 'border-blue-200' : 'border-white shadow-sm'}`}>
+                          <AvatarImage src={donor.avatar} />
+                          <AvatarFallback className="bg-zinc-100 text-sm font-medium text-zinc-600">
+                            {donor.initials}
+                          </AvatarFallback>
+                        </Avatar>
+                        <motion.div 
+                          initial={{ scale: 0 }}
+                          animate={{ scale: 1 }}
+                          transition={{ delay: 0.2, type: 'spring', stiffness: 500 }}
+                          className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${getStatusColor(donor.status)}`} 
+                        />
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="truncate text-xs text-zinc-500">
-                          {donor.location}
-                        </span>
-                        <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs font-semibold text-zinc-700">
-                          {formatCurrency(donor.lastGiftAmount)}
-                        </span>
+                      
+                      <div className="min-w-0 flex-1">
+                        <div className="mb-0.5 flex items-center justify-between">
+                          <span className={`truncate text-sm font-medium ${selectedDonorId === donor.id ? 'text-blue-900' : 'text-zinc-900'}`}>
+                            {donor.name}
+                          </span>
+                          <span className="ml-2 whitespace-nowrap text-[11px] text-zinc-400">
+                            {formatRelativeDate(donor.lastGiftDate)}
+                          </span>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="truncate text-xs text-zinc-500">
+                            {donor.location}
+                          </span>
+                          <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-xs font-semibold text-zinc-700">
+                            {formatCurrency(donor.lastGiftAmount)}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            )}
-          </motion.div>
-        </ScrollArea>
-      </motion.div>
+                    </motion.div>
+                  ))}
+                </AnimatePresence>
+              )}
+            </motion.div>
+          </ScrollArea>
+        </motion.div>
+
 
       <AnimatePresence mode="wait">
         <motion.div 
@@ -709,7 +728,7 @@ export default function DonorsPage() {
                           {['Timeline', 'Contact Info', 'Giving History'].map(tab => (
                             <TabsTrigger 
                               key={tab} 
-                              value={tab.toLowerCase().replace(' ', '-')}
+                              value={tab.toLowerCase().replace(/\s+/g, '-')}
                               className="relative whitespace-nowrap border-b-2 border-transparent bg-transparent px-0 py-2 text-xs font-medium text-zinc-500 transition-colors data-[state=active]:border-zinc-900 data-[state=active]:text-zinc-900 data-[state=active]:shadow-none hover:text-zinc-700"
                             >
                               {tab}
