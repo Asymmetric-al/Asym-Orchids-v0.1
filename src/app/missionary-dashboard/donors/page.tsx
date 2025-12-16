@@ -1,6 +1,7 @@
 'use client'
 
 import * as React from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -20,7 +21,6 @@ import {
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuTrigger,
   DropdownMenuCheckboxItem,
   DropdownMenuLabel,
@@ -43,6 +43,8 @@ import {
   ExternalLink,
   Pencil,
   User,
+  ArrowLeft,
+  CheckCircle2,
 } from 'lucide-react'
 import { formatDistanceToNow, format } from 'date-fns'
 
@@ -185,17 +187,17 @@ const formatCurrency = (value: number) => {
 const getStatusColor = (status: Donor['status']) => {
   switch(status) {
     case 'Active': return 'bg-emerald-500'
-    case 'Lapsed': return 'bg-gray-400'
+    case 'Lapsed': return 'bg-zinc-400'
     case 'New': return 'bg-blue-500'
     case 'At Risk': return 'bg-amber-500'
-    default: return 'bg-gray-400'
+    default: return 'bg-zinc-400'
   }
 }
 
 const getStatusBadge = (status: Donor['status']) => {
   const styles: Record<Donor['status'], string> = {
     Active: 'bg-emerald-50 text-emerald-700 border-emerald-200',
-    Lapsed: 'bg-gray-100 text-gray-600 border-gray-200',
+    Lapsed: 'bg-zinc-100 text-zinc-600 border-zinc-200',
     New: 'bg-blue-50 text-blue-700 border-blue-200',
     'At Risk': 'bg-amber-50 text-amber-700 border-amber-200',
   }
@@ -222,10 +224,70 @@ const getActivityBg = (type: ActivityType) => {
     case 'gift': return 'bg-rose-400'
     case 'call': return 'bg-blue-400'
     case 'email': return 'bg-violet-400'
-    case 'note': return 'bg-gray-400'
+    case 'note': return 'bg-zinc-400'
     case 'meeting': return 'bg-emerald-400'
-    default: return 'bg-gray-400'
+    default: return 'bg-zinc-400'
   }
+}
+
+const listItemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.05,
+      duration: 0.3,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  }),
+  exit: { opacity: 0, x: -20 },
+}
+
+const fadeInUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }
+  },
+}
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.1,
+    },
+  },
+}
+
+const statCardVariants = {
+  hidden: { opacity: 0, scale: 0.95 },
+  visible: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.3,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  }),
+}
+
+const activityVariants = {
+  hidden: { opacity: 0, x: -30 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.1,
+      duration: 0.4,
+      ease: [0.25, 0.1, 0.25, 1],
+    },
+  }),
 }
 
 export default function DonorsPage() {
@@ -236,6 +298,7 @@ export default function DonorsPage() {
   const [noteInput, setNoteInput] = React.useState('')
   const [isNoteDialogOpen, setIsNoteDialogOpen] = React.useState(false)
   const [activityInput, setActivityInput] = React.useState('')
+  const [copiedField, setCopiedField] = React.useState<string | null>(null)
 
   const filteredDonors = React.useMemo(() => {
     return DONORS_DATA.filter(donor => {
@@ -257,8 +320,10 @@ export default function DonorsPage() {
     setIsNoteDialogOpen(false)
   }
 
-  const handleCopy = (text: string) => {
+  const handleCopy = (text: string, field: string) => {
     navigator.clipboard.writeText(text)
+    setCopiedField(field)
+    setTimeout(() => setCopiedField(null), 2000)
   }
 
   const handlePostActivity = () => {
@@ -267,45 +332,53 @@ export default function DonorsPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] bg-white">
-      <div className={`flex flex-col h-full border-r border-gray-200 bg-white w-full lg:w-[400px] shrink-0 ${selectedDonorId ? 'hidden lg:flex' : 'flex'}`}>
-        <div className="p-4 border-b border-gray-100 space-y-4 shrink-0 bg-white">
+    <div className="flex h-[calc(100vh-4rem)] bg-zinc-50/50">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+        className={`flex flex-col h-full border-r border-zinc-200 bg-white w-full lg:w-[380px] shrink-0 ${selectedDonorId ? 'hidden lg:flex' : 'flex'}`}
+      >
+        <div className="p-5 border-b border-zinc-100 space-y-4 shrink-0 bg-white">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Partners</h2>
-              <p className="text-sm text-gray-500">{filteredDonors.length} contacts</p>
+              <h2 className="text-lg font-semibold text-zinc-900">Partners</h2>
+              <p className="text-sm text-zinc-500">{filteredDonors.length} contacts</p>
             </div>
             <div className="flex gap-2">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-9 w-9 text-gray-500 hover:text-gray-900 hover:bg-gray-100">
+                  <Button variant="ghost" size="icon" className="h-9 w-9 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100">
                     <Filter className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 bg-white">
-                  <DropdownMenuLabel>Filter Status</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
+                <DropdownMenuContent align="end" className="w-48 bg-white border-zinc-200">
+                  <DropdownMenuLabel className="text-zinc-600">Filter Status</DropdownMenuLabel>
+                  <DropdownMenuSeparator className="bg-zinc-100" />
                   {['All', 'Active', 'New', 'Lapsed', 'At Risk'].map(s => (
                     <DropdownMenuCheckboxItem 
                       key={s} 
                       checked={statusFilter === s}
                       onCheckedChange={() => setStatusFilter(s)}
+                      className="text-zinc-700"
                     >
                       {s}
                     </DropdownMenuCheckboxItem>
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <Button size="icon" className="h-9 w-9 bg-gray-900 hover:bg-gray-800 text-white">
-                <Plus className="h-4 w-4" />
-              </Button>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <Button size="icon" className="h-9 w-9 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm">
+                  <Plus className="h-4 w-4" />
+                </Button>
+              </motion.div>
             </div>
           </div>
-          <div className="relative">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-400" />
+          <div className="relative group">
+            <Search className="absolute left-3 top-2.5 h-4 w-4 text-zinc-400 group-focus-within:text-blue-500 transition-colors" />
             <Input 
               placeholder="Search partners..." 
-              className="pl-9 bg-gray-50 border-gray-200 focus:bg-white h-10" 
+              className="pl-9 bg-zinc-50 border-zinc-200 focus:bg-white focus:border-blue-300 focus:ring-2 focus:ring-blue-100 h-10 transition-all" 
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -313,380 +386,566 @@ export default function DonorsPage() {
         </div>
 
         <ScrollArea className="flex-1">
-          <div className="p-2">
+          <motion.div 
+            className="p-2"
+            variants={staggerContainer}
+            initial="hidden"
+            animate="visible"
+          >
             {filteredDonors.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-64 text-gray-400">
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="flex flex-col items-center justify-center h-64 text-zinc-400"
+              >
                 <Search className="h-8 w-8 mb-2 opacity-20" />
                 <p className="text-sm">No partners found</p>
-              </div>
+              </motion.div>
             ) : (
-              filteredDonors.map((donor) => (
-                <div 
-                  key={donor.id}
-                  onClick={() => setSelectedDonorId(donor.id)}
-                  className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all border mb-1 ${
-                    selectedDonorId === donor.id 
-                      ? 'bg-blue-50 border-blue-200' 
-                      : 'bg-white border-transparent hover:bg-gray-50 hover:border-gray-200'
-                  }`}
-                >
-                  {selectedDonorId === donor.id && (
-                    <div className="absolute left-0 w-1 h-12 bg-blue-600 rounded-r" />
-                  )}
-                  
-                  <div className="relative shrink-0">
-                    <Avatar className={`h-11 w-11 border-2 ${selectedDonorId === donor.id ? 'border-blue-200' : 'border-white'}`}>
-                      <AvatarImage src={donor.avatar} />
-                      <AvatarFallback className="bg-gray-100 text-gray-600 font-medium text-sm">
-                        {donor.initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${getStatusColor(donor.status)}`} />
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-0.5">
-                      <span className={`font-medium text-sm truncate ${selectedDonorId === donor.id ? 'text-blue-900' : 'text-gray-900'}`}>
-                        {donor.name}
-                      </span>
-                      <span className="text-xs text-gray-400 whitespace-nowrap ml-2">
-                        {formatDistanceToNow(new Date(donor.lastGiftDate), { addSuffix: true })}
-                      </span>
+              <AnimatePresence mode="popLayout">
+                {filteredDonors.map((donor, index) => (
+                  <motion.div 
+                    key={donor.id}
+                    custom={index}
+                    variants={listItemVariants}
+                    initial="hidden"
+                    animate="visible"
+                    exit="exit"
+                    layout
+                    layoutId={`donor-${donor.id}`}
+                    onClick={() => setSelectedDonorId(donor.id)}
+                    whileHover={{ scale: 1.01, backgroundColor: selectedDonorId === donor.id ? undefined : 'rgb(250 250 250)' }}
+                    whileTap={{ scale: 0.99 }}
+                    className={`flex items-center gap-3 p-3 rounded-xl cursor-pointer transition-colors border mb-1.5 relative overflow-hidden ${
+                      selectedDonorId === donor.id 
+                        ? 'bg-blue-50/80 border-blue-200' 
+                        : 'bg-white border-transparent hover:border-zinc-200'
+                    }`}
+                  >
+                    {selectedDonorId === donor.id && (
+                      <motion.div 
+                        layoutId="selection-indicator"
+                        className="absolute left-0 top-0 bottom-0 w-1 bg-blue-500 rounded-r"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    )}
+                    
+                    <div className="relative shrink-0">
+                      <Avatar className={`h-11 w-11 border-2 transition-all ${selectedDonorId === donor.id ? 'border-blue-200' : 'border-white shadow-sm'}`}>
+                        <AvatarImage src={donor.avatar} />
+                        <AvatarFallback className="bg-zinc-100 text-zinc-600 font-medium text-sm">
+                          {donor.initials}
+                        </AvatarFallback>
+                      </Avatar>
+                      <motion.div 
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ delay: 0.2, type: 'spring', stiffness: 500 }}
+                        className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-white ${getStatusColor(donor.status)}`} 
+                      />
                     </div>
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs text-gray-500 truncate">
-                        {donor.location}
-                      </span>
-                      <span className="text-xs font-semibold text-gray-700">
-                        {formatCurrency(donor.lastGiftAmount)}
-                      </span>
+                    
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className={`font-medium text-sm truncate ${selectedDonorId === donor.id ? 'text-blue-900' : 'text-zinc-900'}`}>
+                          {donor.name}
+                        </span>
+                        <span className="text-[11px] text-zinc-400 whitespace-nowrap ml-2">
+                          {formatDistanceToNow(new Date(donor.lastGiftDate), { addSuffix: true })}
+                        </span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs text-zinc-500 truncate">
+                          {donor.location}
+                        </span>
+                        <span className="text-xs font-semibold text-zinc-700 bg-zinc-100 px-1.5 py-0.5 rounded">
+                          {formatCurrency(donor.lastGiftAmount)}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))
+                  </motion.div>
+                ))}
+              </AnimatePresence>
             )}
-          </div>
+          </motion.div>
         </ScrollArea>
-      </div>
+      </motion.div>
 
-      <div className={`flex-1 flex flex-col bg-white h-full overflow-hidden ${selectedDonorId ? 'flex' : 'hidden lg:flex'}`}>
-        {selectedDonor ? (
-          <>
-            <div className="shrink-0 border-b border-gray-100 px-6 py-4 bg-white flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  className="lg:hidden -ml-2 text-gray-500"
-                  onClick={() => setSelectedDonorId(null)}
-                >
-                  Back
-                </Button>
-                <h2 className="text-lg font-semibold text-gray-900">{selectedDonor.name}</h2>
-                {getStatusBadge(selectedDonor.status)}
-              </div>
-              <div className="flex items-center gap-2">
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-9 text-sm font-medium gap-2 border-gray-200 bg-white hover:bg-gray-50"
-                  onClick={() => setIsNoteDialogOpen(true)}
-                >
-                  <Pencil className="h-3.5 w-3.5" /> Note
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  className="h-9 text-sm font-medium gap-2 border-gray-200 bg-white hover:bg-gray-50"
-                >
-                  <Phone className="h-3.5 w-3.5" /> Call
-                </Button>
-                <Button 
-                  size="sm" 
-                  className="h-9 text-sm font-medium gap-2 bg-gray-900 text-white hover:bg-gray-800"
-                >
-                  <Mail className="h-3.5 w-3.5" /> Email
-                </Button>
-              </div>
-            </div>
-
-            <ScrollArea className="flex-1">
-              <div className="p-6 space-y-6">
-                <div className="flex flex-col md:flex-row gap-6 items-start">
-                  <div className="flex items-center gap-5">
-                    <Avatar className="h-20 w-20 border-2 border-white shadow-sm">
-                      <AvatarImage src={selectedDonor.avatar} />
-                      <AvatarFallback className="text-xl font-semibold bg-gray-100 text-gray-600">
-                        {selectedDonor.initials}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <h1 className="text-2xl font-semibold text-gray-900">{selectedDonor.name}</h1>
-                      <div className="flex items-center gap-1.5 text-sm text-gray-500 mt-1">
-                        <MapPin className="h-3.5 w-3.5" /> {selectedDonor.location}
-                      </div>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {selectedDonor.tags.map(tag => (
-                          <span key={tag} className="px-2.5 py-1 bg-gray-100 border border-gray-200 rounded-md text-xs font-medium text-gray-600 uppercase tracking-wide">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex-1 w-full grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Lifetime</p>
-                      <p className="text-xl font-semibold text-gray-900">{formatCurrency(selectedDonor.totalGiven)}</p>
-                    </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Last Gift</p>
-                      <p className="text-xl font-semibold text-gray-900">{formatCurrency(selectedDonor.lastGiftAmount)}</p>
-                    </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Frequency</p>
-                      <p className="text-sm font-semibold text-gray-900">{selectedDonor.frequency}</p>
-                    </div>
-                    <div className="bg-white border border-gray-200 rounded-lg p-4">
-                      <p className="text-xs uppercase tracking-wider font-medium text-gray-400 mb-1">Partner Since</p>
-                      <p className="text-sm font-semibold text-gray-900">{new Date(selectedDonor.joinedDate).getFullYear()}</p>
-                    </div>
-                  </div>
+      <AnimatePresence mode="wait">
+        <motion.div 
+          key={selectedDonorId || 'empty'}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className={`flex-1 flex flex-col bg-white h-full overflow-hidden ${selectedDonorId ? 'flex' : 'hidden lg:flex'}`}
+        >
+          {selectedDonor ? (
+            <>
+              <motion.div 
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="shrink-0 h-16 border-b border-zinc-100 px-6 flex items-center justify-between bg-white"
+              >
+                <div className="flex items-center gap-3">
+                  <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="lg:hidden h-9 w-9 -ml-2 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100"
+                      onClick={() => setSelectedDonorId(null)}
+                    >
+                      <ArrowLeft className="h-5 w-5" />
+                    </Button>
+                  </motion.div>
+                  <h2 className="text-lg font-semibold text-zinc-900">{selectedDonor.name}</h2>
+                  {getStatusBadge(selectedDonor.status)}
                 </div>
+                <div className="flex items-center gap-2">
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9 text-sm font-medium gap-2 border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700"
+                      onClick={() => setIsNoteDialogOpen(true)}
+                    >
+                      <Pencil className="h-3.5 w-3.5" /> Note
+                    </Button>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="h-9 text-sm font-medium gap-2 border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700"
+                    >
+                      <Phone className="h-3.5 w-3.5" /> Call
+                    </Button>
+                  </motion.div>
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                    <Button 
+                      size="sm" 
+                      className="h-9 text-sm font-medium gap-2 bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm"
+                    >
+                      <Mail className="h-3.5 w-3.5" /> Email
+                    </Button>
+                  </motion.div>
+                </div>
+              </motion.div>
 
-                <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                  <div className="border-b border-gray-200">
-                    <TabsList className="bg-transparent h-auto p-0 gap-6">
-                      {['Timeline', 'Contact Info', 'Giving History'].map(tab => (
-                        <TabsTrigger 
-                          key={tab} 
-                          value={tab.toLowerCase().replace(' ', '-')}
-                          className="bg-transparent border-b-2 border-transparent data-[state=active]:border-gray-900 data-[state=active]:text-gray-900 data-[state=active]:shadow-none rounded-none px-0 py-3 text-sm font-medium text-gray-500 hover:text-gray-700"
-                        >
-                          {tab}
-                        </TabsTrigger>
-                      ))}
-                    </TabsList>
-                  </div>
-
-                  <div className="pt-6">
-                    <TabsContent value="timeline" className="space-y-6 mt-0">
-                      <div className="bg-white p-4 rounded-xl border border-gray-200 flex gap-4">
-                        <Avatar className="h-9 w-9 hidden md:block">
-                          <AvatarFallback className="bg-gray-900 text-white text-xs font-medium">ME</AvatarFallback>
+              <ScrollArea className="flex-1">
+                <div className="max-w-5xl mx-auto p-6 space-y-8">
+                  <motion.div 
+                    variants={fadeInUp}
+                    initial="hidden"
+                    animate="visible"
+                    className="flex flex-col md:flex-row gap-8 items-start"
+                  >
+                    <div className="flex items-center gap-5">
+                      <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      >
+                        <Avatar className="h-20 w-20 border-4 border-white shadow-lg rounded-2xl">
+                          <AvatarImage src={selectedDonor.avatar} />
+                          <AvatarFallback className="text-xl font-semibold bg-zinc-100 text-zinc-600 rounded-2xl">
+                            {selectedDonor.initials}
+                          </AvatarFallback>
                         </Avatar>
-                        <div className="flex-1 space-y-3">
-                          <Input 
-                            placeholder="Log a call, meeting notes, or task..." 
-                            className="border-gray-200 bg-gray-50 focus:bg-white h-10"
-                            value={activityInput}
-                            onChange={(e) => setActivityInput(e.target.value)}
-                          />
-                          <div className="flex justify-between items-center">
-                            <div className="flex gap-2">
-                              <Button variant="ghost" size="sm" className="h-8 text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-100 gap-1.5">
-                                <Phone className="h-3.5 w-3.5" /> Log Call
-                              </Button>
-                              <Button variant="ghost" size="sm" className="h-8 text-xs text-gray-500 hover:text-gray-900 hover:bg-gray-100 gap-1.5">
-                                <Check className="h-3.5 w-3.5" /> Create Task
-                              </Button>
-                            </div>
-                            <Button 
-                              size="sm" 
-                              className="h-8 text-xs bg-gray-900 text-white hover:bg-gray-800"
-                              onClick={handlePostActivity}
-                              disabled={!activityInput.trim()}
-                            >
-                              Post Activity <Send className="h-3 w-3 ml-1.5" />
-                            </Button>
-                          </div>
+                      </motion.div>
+                      <div>
+                        <h1 className="text-2xl font-semibold text-zinc-900">{selectedDonor.name}</h1>
+                        <div className="flex items-center gap-1.5 text-sm text-zinc-500 mt-1">
+                          <MapPin className="h-3.5 w-3.5" /> {selectedDonor.location}
                         </div>
+                        <motion.div 
+                          className="flex flex-wrap gap-2 mt-3"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ delay: 0.2 }}
+                        >
+                          {selectedDonor.tags.map((tag, i) => (
+                            <motion.span 
+                              key={tag} 
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: 0.3 + i * 0.1 }}
+                              className="px-2.5 py-1 bg-zinc-100 border border-zinc-200 rounded-lg text-xs font-medium text-zinc-600"
+                            >
+                              {tag}
+                            </motion.span>
+                          ))}
+                        </motion.div>
                       </div>
+                    </div>
 
-                      <div className="space-y-4 pl-6 border-l-2 border-gray-200 ml-4 relative pb-6">
-                        {selectedDonor.activities.map((activity) => (
-                          <div key={activity.id} className="relative pl-8 group">
-                            <div className={`absolute -left-[25px] top-0 h-8 w-8 rounded-full border-4 border-white flex items-center justify-center shadow-sm ${getActivityBg(activity.type)}`}>
-                              {getActivityIcon(activity.type)}
+                    <motion.div 
+                      className="flex-1 w-full grid grid-cols-2 md:grid-cols-4 gap-3"
+                      variants={staggerContainer}
+                      initial="hidden"
+                      animate="visible"
+                    >
+                      {[
+                        { label: 'Lifetime', value: formatCurrency(selectedDonor.totalGiven), large: true },
+                        { label: 'Last Gift', value: formatCurrency(selectedDonor.lastGiftAmount), large: true },
+                        { label: 'Frequency', value: selectedDonor.frequency },
+                        { label: 'Partner Since', value: new Date(selectedDonor.joinedDate).getFullYear().toString() },
+                      ].map((stat, i) => (
+                        <motion.div
+                          key={stat.label}
+                          custom={i}
+                          variants={statCardVariants}
+                          whileHover={{ scale: 1.02, y: -2 }}
+                          className="bg-white border border-zinc-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow"
+                        >
+                          <p className="text-[10px] uppercase tracking-wider font-semibold text-zinc-400 mb-1">{stat.label}</p>
+                          <p className={`font-semibold text-zinc-900 ${stat.large ? 'text-xl' : 'text-sm'}`}>{stat.value}</p>
+                        </motion.div>
+                      ))}
+                    </motion.div>
+                  </motion.div>
+
+                  <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+                    <div className="border-b border-zinc-200">
+                      <TabsList className="bg-transparent h-auto p-0 gap-8">
+                        {['Timeline', 'Contact Info', 'Giving History'].map(tab => (
+                          <TabsTrigger 
+                            key={tab} 
+                            value={tab.toLowerCase().replace(' ', '-')}
+                            className="relative bg-transparent border-b-2 border-transparent data-[state=active]:border-zinc-900 data-[state=active]:text-zinc-900 data-[state=active]:shadow-none rounded-none px-0 py-3 text-sm font-medium text-zinc-500 hover:text-zinc-700 transition-colors"
+                          >
+                            {tab}
+                          </TabsTrigger>
+                        ))}
+                      </TabsList>
+                    </div>
+
+                    <div className="pt-6">
+                      <TabsContent value="timeline" className="space-y-6 mt-0">
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm flex gap-4"
+                        >
+                          <Avatar className="h-9 w-9 hidden md:block">
+                            <AvatarFallback className="bg-zinc-900 text-white text-xs font-medium">ME</AvatarFallback>
+                          </Avatar>
+                          <div className="flex-1 space-y-3">
+                            <Textarea 
+                              placeholder="Log a call, meeting notes, or task..." 
+                              className="min-h-[80px] border-zinc-200 bg-zinc-50 focus:bg-white focus:border-blue-300 focus:ring-2 focus:ring-blue-100 resize-none transition-all"
+                              value={activityInput}
+                              onChange={(e) => setActivityInput(e.target.value)}
+                            />
+                            <div className="flex justify-between items-center">
+                              <div className="flex gap-1">
+                                <Button variant="ghost" size="sm" className="h-8 text-xs text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 gap-1.5">
+                                  <Phone className="h-3.5 w-3.5" /> Log Call
+                                </Button>
+                                <Button variant="ghost" size="sm" className="h-8 text-xs text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100 gap-1.5">
+                                  <Check className="h-3.5 w-3.5" /> Create Task
+                                </Button>
+                              </div>
+                              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                                <Button 
+                                  size="sm" 
+                                  className="h-8 text-xs bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm"
+                                  onClick={handlePostActivity}
+                                  disabled={!activityInput.trim()}
+                                >
+                                  Post Activity <Send className="h-3 w-3 ml-1.5" />
+                                </Button>
+                              </motion.div>
                             </div>
-                            
-                            <div className="bg-white p-4 rounded-xl border border-gray-200 hover:shadow-sm transition-shadow">
-                              <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
-                                <div className="space-y-1">
-                                  <div className="flex items-center gap-2">
-                                    <span className="text-sm font-semibold text-gray-900">{activity.title}</span>
-                                    {activity.amount && (
-                                      <Badge className="bg-emerald-50 text-emerald-700 border-emerald-200 font-semibold px-2 h-5">
-                                        {formatCurrency(activity.amount)}
-                                      </Badge>
+                          </div>
+                        </motion.div>
+
+                        <motion.div 
+                          className="space-y-0 pl-6 border-l-2 border-zinc-200 ml-4 relative"
+                          variants={staggerContainer}
+                          initial="hidden"
+                          animate="visible"
+                        >
+                          {selectedDonor.activities.map((activity, index) => (
+                            <motion.div 
+                              key={activity.id} 
+                              custom={index}
+                              variants={activityVariants}
+                              className="relative pl-8 pb-6 last:pb-0"
+                            >
+                              <motion.div 
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                transition={{ delay: 0.2 + index * 0.1, type: 'spring', stiffness: 400 }}
+                                className={`absolute -left-[25px] top-0 h-8 w-8 rounded-full border-4 border-white flex items-center justify-center shadow-md ${getActivityBg(activity.type)}`}
+                              >
+                                {getActivityIcon(activity.type)}
+                              </motion.div>
+                              
+                              <motion.div 
+                                whileHover={{ scale: 1.01, y: -1 }}
+                                className="bg-white p-4 rounded-xl border border-zinc-200 shadow-sm hover:shadow-md transition-all"
+                              >
+                                <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2">
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-2">
+                                      <span className="text-sm font-semibold text-zinc-900">{activity.title}</span>
+                                      {activity.amount && (
+                                        <Badge className={`font-semibold px-2 h-5 ${activity.status === 'Failed' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
+                                          {formatCurrency(activity.amount)}
+                                        </Badge>
+                                      )}
+                                    </div>
+                                    {activity.description && (
+                                      <p className="text-sm text-zinc-600 leading-relaxed">{activity.description}</p>
                                     )}
                                   </div>
-                                  {activity.description && (
-                                    <p className="text-sm text-gray-600 leading-relaxed">{activity.description}</p>
-                                  )}
+                                  <span className="text-[11px] text-zinc-400 whitespace-nowrap font-medium">
+                                    {format(new Date(activity.date), 'MMM d, h:mm a')}
+                                  </span>
                                 </div>
-                                <span className="text-xs text-gray-400 whitespace-nowrap">
-                                  {format(new Date(activity.date), 'MMM d, h:mm a')}
-                                </span>
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </TabsContent>
+                              </motion.div>
+                            </motion.div>
+                          ))}
+                        </motion.div>
+                      </TabsContent>
 
-                    <TabsContent value="contact-info" className="mt-0">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <Card className="shadow-none border border-gray-200 bg-white">
-                          <CardHeader className="pb-3 border-b border-gray-100">
-                            <CardTitle className="text-sm font-semibold text-gray-900">Contact Methods</CardTitle>
-                          </CardHeader>
-                          <CardContent className="pt-4 space-y-4">
-                            <div className="flex items-center justify-between group">
-                              <div className="flex items-center gap-3">
-                                <div className="h-9 w-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
-                                  <Mail className="h-4 w-4" />
-                                </div>
-                                <div>
-                                  <p className="text-xs text-gray-500">Email</p>
-                                  <p className="text-sm font-medium text-gray-900">{selectedDonor.email}</p>
-                                </div>
-                              </div>
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-8 w-8 text-gray-400 hover:text-blue-600 hover:bg-blue-50" 
-                                onClick={() => handleCopy(selectedDonor.email)}
-                              >
-                                <Copy className="h-3.5 w-3.5" />
-                              </Button>
-                            </div>
-                            <div className="flex items-center justify-between group">
-                              <div className="flex items-center gap-3">
-                                <div className="h-9 w-9 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center">
-                                  <Phone className="h-4 w-4" />
-                                </div>
-                                <div>
-                                  <p className="text-xs text-gray-500">Phone</p>
-                                  <p className="text-sm font-medium text-gray-900">{selectedDonor.phone}</p>
-                                </div>
-                              </div>
-                              <Button 
-                                variant="ghost" 
-                                size="icon" 
-                                className="h-8 w-8 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50" 
-                                onClick={() => handleCopy(selectedDonor.phone)}
-                              >
-                                <Copy className="h-3.5 w-3.5" />
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-
-                        <Card className="shadow-none border border-gray-200 bg-white">
-                          <CardHeader className="pb-3 border-b border-gray-100">
-                            <CardTitle className="text-sm font-semibold text-gray-900">Address</CardTitle>
-                          </CardHeader>
-                          <CardContent className="pt-4">
-                            <div className="flex items-start justify-between">
-                              <div className="flex items-start gap-3">
-                                <div className="h-9 w-9 rounded-lg bg-gray-100 text-gray-600 flex items-center justify-center shrink-0">
-                                  <MapPin className="h-4 w-4" />
-                                </div>
-                                <div>
-                                  <p className="text-sm font-medium text-gray-900">{selectedDonor.address.street}</p>
-                                  <p className="text-sm text-gray-600">
-                                    {selectedDonor.address.city}, {selectedDonor.address.state} {selectedDonor.address.zip}
-                                  </p>
-                                  <p className="text-xs text-gray-400 mt-1 uppercase font-medium">{selectedDonor.address.country}</p>
-                                </div>
-                              </div>
-                              <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-400 hover:text-gray-900 hover:bg-gray-100">
-                                <ExternalLink className="h-3.5 w-3.5" />
-                              </Button>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      </div>
-                    </TabsContent>
-
-                    <TabsContent value="giving-history" className="mt-0">
-                      <Card className="shadow-none border border-gray-200 bg-white overflow-hidden">
-                        <div className="p-0">
-                          <table className="w-full text-sm text-left">
-                            <thead className="text-xs text-gray-500 uppercase bg-gray-50 border-b border-gray-200">
-                              <tr>
-                                <th className="px-6 py-3 font-medium">Date</th>
-                                <th className="px-6 py-3 font-medium">Type</th>
-                                <th className="px-6 py-3 font-medium">Amount</th>
-                                <th className="px-6 py-3 font-medium">Status</th>
-                                <th className="px-6 py-3 font-medium text-right">Receipt</th>
-                              </tr>
-                            </thead>
-                            <tbody className="divide-y divide-gray-100">
-                              {selectedDonor.activities.filter(a => a.type === 'gift').map((gift) => (
-                                <tr key={gift.id} className="hover:bg-gray-50 transition-colors">
-                                  <td className="px-6 py-4 font-medium text-gray-900">
-                                    {format(new Date(gift.date), 'MMM d, yyyy')}
-                                  </td>
-                                  <td className="px-6 py-4 text-gray-500">
-                                    Online Gift
-                                  </td>
-                                  <td className="px-6 py-4 font-semibold text-gray-900">
-                                    {formatCurrency(gift.amount || 0)}
-                                  </td>
-                                  <td className="px-6 py-4">
-                                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200 font-medium">
-                                      {gift.status}
-                                    </Badge>
-                                  </td>
-                                  <td className="px-6 py-4 text-right">
-                                    <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-gray-100 rounded-full">
-                                      <Download className="h-4 w-4 text-gray-400 hover:text-gray-900" />
+                      <TabsContent value="contact-info" className="mt-0">
+                        <motion.div 
+                          className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                          variants={staggerContainer}
+                          initial="hidden"
+                          animate="visible"
+                        >
+                          <motion.div variants={fadeInUp}>
+                            <Card className="shadow-sm border border-zinc-200 bg-white hover:shadow-md transition-shadow">
+                              <CardHeader className="pb-3 border-b border-zinc-100">
+                                <CardTitle className="text-sm font-semibold text-zinc-900">Contact Methods</CardTitle>
+                              </CardHeader>
+                              <CardContent className="pt-4 space-y-4">
+                                <motion.div 
+                                  whileHover={{ x: 2 }}
+                                  className="flex items-center justify-between group"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                      <Mail className="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                      <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Email</p>
+                                      <p className="text-sm font-medium text-zinc-900">{selectedDonor.email}</p>
+                                    </div>
+                                  </div>
+                                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="h-8 w-8 text-zinc-400 hover:text-blue-600 hover:bg-blue-50" 
+                                      onClick={() => handleCopy(selectedDonor.email, 'email')}
+                                    >
+                                      {copiedField === 'email' ? (
+                                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                                      ) : (
+                                        <Copy className="h-3.5 w-3.5" />
+                                      )}
                                     </Button>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                          {selectedDonor.activities.filter(a => a.type === 'gift').length === 0 && (
-                            <div className="p-12 text-center text-gray-400">
-                              <div className="h-12 w-12 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                                <Heart className="h-6 w-6 text-gray-300" />
-                              </div>
-                              <p>No giving history available.</p>
+                                  </motion.div>
+                                </motion.div>
+                                <motion.div 
+                                  whileHover={{ x: 2 }}
+                                  className="flex items-center justify-between group"
+                                >
+                                  <div className="flex items-center gap-3">
+                                    <div className="h-10 w-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                                      <Phone className="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                      <p className="text-[11px] uppercase tracking-wider text-zinc-400 font-medium">Phone</p>
+                                      <p className="text-sm font-medium text-zinc-900">{selectedDonor.phone}</p>
+                                    </div>
+                                  </div>
+                                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                    <Button 
+                                      variant="ghost" 
+                                      size="icon" 
+                                      className="h-8 w-8 text-zinc-400 hover:text-emerald-600 hover:bg-emerald-50" 
+                                      onClick={() => handleCopy(selectedDonor.phone, 'phone')}
+                                    >
+                                      {copiedField === 'phone' ? (
+                                        <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
+                                      ) : (
+                                        <Copy className="h-3.5 w-3.5" />
+                                      )}
+                                    </Button>
+                                  </motion.div>
+                                </motion.div>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+
+                          <motion.div variants={fadeInUp}>
+                            <Card className="shadow-sm border border-zinc-200 bg-white hover:shadow-md transition-shadow">
+                              <CardHeader className="pb-3 border-b border-zinc-100">
+                                <CardTitle className="text-sm font-semibold text-zinc-900">Address</CardTitle>
+                              </CardHeader>
+                              <CardContent className="pt-4">
+                                <motion.div 
+                                  whileHover={{ x: 2 }}
+                                  className="flex items-start justify-between"
+                                >
+                                  <div className="flex items-start gap-3">
+                                    <div className="h-10 w-10 rounded-xl bg-zinc-100 text-zinc-600 flex items-center justify-center shrink-0">
+                                      <MapPin className="h-4 w-4" />
+                                    </div>
+                                    <div>
+                                      <p className="text-sm font-medium text-zinc-900">{selectedDonor.address.street}</p>
+                                      <p className="text-sm text-zinc-600">
+                                        {selectedDonor.address.city}, {selectedDonor.address.state} {selectedDonor.address.zip}
+                                      </p>
+                                      <p className="text-[11px] text-zinc-400 mt-1 uppercase font-semibold tracking-wider">{selectedDonor.address.country}</p>
+                                    </div>
+                                  </div>
+                                  <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100">
+                                      <ExternalLink className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </motion.div>
+                                </motion.div>
+                              </CardContent>
+                            </Card>
+                          </motion.div>
+                        </motion.div>
+                      </TabsContent>
+
+                      <TabsContent value="giving-history" className="mt-0">
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Card className="shadow-sm border border-zinc-200 bg-white overflow-hidden">
+                            <div className="p-0">
+                              <table className="w-full text-sm text-left">
+                                <thead className="text-[11px] text-zinc-500 uppercase bg-zinc-50 border-b border-zinc-200">
+                                  <tr>
+                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Date</th>
+                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Type</th>
+                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Amount</th>
+                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Status</th>
+                                    <th className="px-6 py-3.5 font-semibold tracking-wider text-right">Receipt</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-zinc-100">
+                                  {selectedDonor.activities.filter(a => a.type === 'gift').map((gift, index) => (
+                                    <motion.tr 
+                                      key={gift.id} 
+                                      initial={{ opacity: 0, y: 10 }}
+                                      animate={{ opacity: 1, y: 0 }}
+                                      transition={{ delay: index * 0.05 }}
+                                      className="hover:bg-zinc-50/50 transition-colors"
+                                    >
+                                      <td className="px-6 py-4 font-medium text-zinc-900">
+                                        {format(new Date(gift.date), 'MMM d, yyyy')}
+                                      </td>
+                                      <td className="px-6 py-4 text-zinc-500">
+                                        Online Gift
+                                      </td>
+                                      <td className="px-6 py-4 font-semibold text-zinc-900">
+                                        {formatCurrency(gift.amount || 0)}
+                                      </td>
+                                      <td className="px-6 py-4">
+                                        <Badge variant="outline" className={`font-medium ${gift.status === 'Failed' ? 'bg-red-50 text-red-700 border-red-200' : 'bg-emerald-50 text-emerald-700 border-emerald-200'}`}>
+                                          {gift.status}
+                                        </Badge>
+                                      </td>
+                                      <td className="px-6 py-4 text-right">
+                                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-zinc-100 rounded-full">
+                                            <Download className="h-4 w-4 text-zinc-400 hover:text-zinc-900" />
+                                          </Button>
+                                        </motion.div>
+                                      </td>
+                                    </motion.tr>
+                                  ))}
+                                </tbody>
+                              </table>
+                              {selectedDonor.activities.filter(a => a.type === 'gift').length === 0 && (
+                                <motion.div 
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  className="p-12 text-center text-zinc-400"
+                                >
+                                  <div className="h-12 w-12 bg-zinc-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                                    <Heart className="h-6 w-6 text-zinc-300" />
+                                  </div>
+                                  <p>No giving history available.</p>
+                                </motion.div>
+                              )}
                             </div>
-                          )}
-                        </div>
-                      </Card>
-                    </TabsContent>
-                  </div>
-                </Tabs>
-              </div>
-            </ScrollArea>
-          </>
-        ) : (
-          <div className="flex flex-col items-center justify-center h-full text-center p-8 bg-white">
-            <div className="w-20 h-20 bg-gray-100 border border-gray-200 rounded-full flex items-center justify-center mb-6">
-              <User className="h-8 w-8 text-gray-400" />
-            </div>
-            <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a Partner</h3>
-            <p className="text-gray-500 max-w-sm mx-auto mb-6 leading-relaxed">
-              Select a donor from the list to view their full profile, interaction timeline, and giving history.
-            </p>
-            <Button className="bg-gray-900 text-white hover:bg-gray-800 px-6 h-11">
-              <Plus className="mr-2 h-4 w-4" /> Add New Partner
-            </Button>
-          </div>
-        )}
-      </div>
+                          </Card>
+                        </motion.div>
+                      </TabsContent>
+                    </div>
+                  </Tabs>
+                </div>
+              </ScrollArea>
+            </>
+          ) : (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.4 }}
+              className="flex flex-col items-center justify-center h-full text-center p-8 bg-zinc-50/30"
+            >
+              <motion.div 
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.1, type: 'spring', stiffness: 200 }}
+                className="w-24 h-24 bg-white border-2 border-zinc-100 rounded-2xl flex items-center justify-center mb-6 shadow-sm"
+              >
+                <User className="h-10 w-10 text-zinc-300" />
+              </motion.div>
+              <motion.h3 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="text-xl font-semibold text-zinc-900 mb-2"
+              >
+                Select a Partner
+              </motion.h3>
+              <motion.p 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-zinc-500 max-w-sm mx-auto mb-8 leading-relaxed"
+              >
+                Select a donor from the list to view their full profile, interaction timeline, and giving history.
+              </motion.p>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button className="bg-zinc-900 text-white hover:bg-zinc-800 px-6 h-11 shadow-md">
+                  <Plus className="mr-2 h-4 w-4" /> Add New Partner
+                </Button>
+              </motion.div>
+            </motion.div>
+          )}
+        </motion.div>
+      </AnimatePresence>
 
       <Dialog open={isNoteDialogOpen} onOpenChange={setIsNoteDialogOpen}>
-        <DialogContent className="sm:max-w-[500px] bg-white">
+        <DialogContent className="sm:max-w-[500px] bg-white border-zinc-200">
           <DialogHeader>
-            <DialogTitle className="text-gray-900">Add Note</DialogTitle>
-            <DialogDescription className="text-gray-500">
+            <DialogTitle className="text-zinc-900">Add Note</DialogTitle>
+            <DialogDescription className="text-zinc-500">
               Add a private note to {selectedDonor?.name}&apos;s timeline.
             </DialogDescription>
           </DialogHeader>
@@ -695,14 +954,14 @@ export default function DonorsPage() {
               value={noteInput} 
               onChange={(e) => setNoteInput(e.target.value)} 
               placeholder="Type your note here..." 
-              className="min-h-[150px] resize-none border-gray-200 bg-white focus:bg-white"
+              className="min-h-[150px] resize-none border-zinc-200 bg-zinc-50 focus:bg-white focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="border-gray-200 bg-white hover:bg-gray-50 text-gray-700">
+            <Button variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700">
               Cancel
             </Button>
-            <Button onClick={handleAddNote} className="bg-gray-900 text-white hover:bg-gray-800">
+            <Button onClick={handleAddNote} className="bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm">
               Save Note
             </Button>
           </DialogFooter>
