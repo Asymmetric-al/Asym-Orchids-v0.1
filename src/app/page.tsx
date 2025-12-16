@@ -87,7 +87,7 @@ export default function Home() {
 
           <div className="flex items-center max-lg:gap-4">
             <MenuNavigation navigationData={navigationData} className="max-lg:hidden" />
-            <Separator orientation="vertical" className="bg-muted-foreground mx-3 h-6! max-lg:hidden" />
+            <Separator orientation="vertical" className="bg-muted-foreground mx-3 h-6 max-lg:hidden" />
 
             <div className="flex items-center max-sm:hidden">
               <Button variant="ghost" size="icon" asChild>
@@ -123,7 +123,7 @@ export default function Home() {
         <section className="bg-muted flex min-h-[calc(100vh-4rem)] w-full">
           <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="relative flex h-full items-start">
-              <div className="z-1 flex w-full flex-col items-center gap-7 py-32 max-lg:text-center lg:items-start lg:py-24">
+              <div className="z-10 flex w-full flex-col items-center gap-7 py-32 max-lg:text-center lg:items-start lg:py-24">
                 <MotionPreset
                   fade
                   slide
@@ -149,7 +149,7 @@ export default function Home() {
                   className="max-w-xl text-3xl leading-[1.2] font-bold text-pretty sm:text-4xl lg:text-5xl"
                 >
                   The{" "}
-                  <div className="animate-flip text-muted-foreground relative -mb-px inline-block h-7.5 w-36.5 origin-center [transform-style:preserve-3d] sm:h-9 sm:w-43.5 lg:h-12 lg:w-58">
+                  <div className="animate-flip text-muted-foreground relative -mb-px inline-block h-[1.875rem] w-[9.125rem] origin-center [transform-style:preserve-3d] sm:h-9 sm:w-[10.875rem] lg:h-12 lg:w-[14.5rem]">
                     <div className="absolute flex h-full [transform-origin:center] [transform:rotateX(0deg)_translateZ(20px)] [backface-visibility:hidden]">
                       Easiest
                     </div>
