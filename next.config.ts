@@ -1,5 +1,4 @@
 import type { NextConfig } from "next";
-import path from "node:path";
 import { withSentryConfig } from "@sentry/nextjs";
 
 const loaderPath = require.resolve('orchids-visual-edits/loader.js');
@@ -17,7 +16,7 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  outputFileTracingRoot: path.resolve(__dirname, '../../'),
+
   typescript: {
     ignoreBuildErrors: true,
   },
