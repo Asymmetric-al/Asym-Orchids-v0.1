@@ -62,12 +62,12 @@ const tasks: Task[] = [
 ]
 
 const taskTypeConfig = {
-  thank_you: { label: 'Thank You', icon: Heart, color: 'text-[#5d7052] bg-[#e8ebe5]' },
+  thank_you: { label: 'Thank You', icon: Heart, color: 'text-rose-600 bg-rose-50' },
   follow_up: { label: 'Follow Up', icon: User, color: 'text-blue-600 bg-blue-50' },
   failed_payment: { label: 'Failed Payment', icon: AlertTriangle, color: 'text-red-600 bg-red-50' },
   card_expiring: { label: 'Card Expiring', icon: CreditCard, color: 'text-amber-600 bg-amber-50' },
   at_risk: { label: 'At Risk', icon: AlertTriangle, color: 'text-orange-600 bg-orange-50' },
-  custom: { label: 'Custom', icon: CheckCircle2, color: 'text-gray-600 bg-gray-100' },
+  custom: { label: 'Custom', icon: CheckCircle2, color: 'text-zinc-600 bg-zinc-100' },
 }
 
 function TaskRow({ task, onComplete }: { task: Task; onComplete: () => void }) {
@@ -79,13 +79,13 @@ function TaskRow({ task, onComplete }: { task: Task; onComplete: () => void }) {
   return (
     <div className={`flex items-start gap-4 p-4 border rounded-lg transition-all ${
         task.status === 'completed' 
-          ? 'bg-muted/30 border-transparent opacity-60' 
-          : 'bg-white hover:border-[#5d7052]/50 hover:shadow-sm'
+          ? 'bg-zinc-50 border-transparent opacity-60' 
+          : 'bg-white border-zinc-200 hover:border-zinc-300 hover:shadow-sm'
       }`}>
       <Checkbox
         checked={task.status === 'completed'}
         onCheckedChange={() => onComplete()}
-        className="mt-1 data-[state=checked]:bg-[#5d7052] data-[state=checked]:border-[#5d7052]"
+        className="mt-1 data-[state=checked]:bg-zinc-900 data-[state=checked]:border-zinc-900"
       />
       
       <div className={`flex h-9 w-9 items-center justify-center rounded-lg shrink-0 ${typeConfig.color}`}>
@@ -103,7 +103,7 @@ function TaskRow({ task, onComplete }: { task: Task; onComplete: () => void }) {
         )}
         <div className="flex items-center gap-3 mt-2.5">
           {task.donorName && (
-            <span className="text-[10px] flex items-center gap-1 text-muted-foreground bg-[#f4f4f5] px-1.5 py-0.5 rounded">
+            <span className="text-[10px] flex items-center gap-1 text-zinc-500 bg-zinc-100 px-1.5 py-0.5 rounded">
               <User className="h-3 w-3" />
               {task.donorName}
             </span>
@@ -114,7 +114,7 @@ function TaskRow({ task, onComplete }: { task: Task; onComplete: () => void }) {
                 ? 'bg-rose-50 text-rose-700 font-medium' 
                 : isDueToday 
                   ? 'bg-amber-50 text-amber-700 font-medium' 
-                  : 'bg-[#f4f4f5] text-muted-foreground'
+                  : 'bg-zinc-100 text-zinc-500'
             }`}>
               <Clock className="h-3 w-3" />
               {isOverdue ? 'Overdue' : isDueToday ? 'Due today' : new Date(task.dueDate).toLocaleDateString()}
@@ -152,7 +152,7 @@ function NewTaskDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white shadow-sm">
+        <Button className="bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm">
           <Plus className="mr-2 h-4 w-4" />
           Add Task
         </Button>
@@ -192,7 +192,7 @@ function NewTaskDialog() {
         </div>
         <div className="flex justify-end gap-2">
           <Button variant="outline" onClick={() => setOpen(false)}>Cancel</Button>
-          <Button className="bg-[#5d7052] hover:bg-[#4a5a42] text-white" onClick={() => setOpen(false)}>Create Task</Button>
+          <Button className="bg-zinc-900 hover:bg-zinc-800 text-white" onClick={() => setOpen(false)}>Create Task</Button>
         </div>
       </DialogContent>
     </Dialog>
@@ -226,18 +226,18 @@ export default function TasksPage() {
   const completedCount = taskList.filter(t => t.status === 'completed').length
 
   return (
-    <div className="p-6 max-w-5xl mx-auto">
+    <div className="p-6 max-w-5xl mx-auto bg-zinc-50 min-h-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Tasks</h1>
-          <p className="text-muted-foreground">Manage your follow-up tasks and to-dos.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Tasks</h1>
+          <p className="text-zinc-500">Manage your follow-up tasks and to-dos.</p>
         </div>
         <NewTaskDialog />
       </div>
 
       <div className="flex items-center justify-between mb-6">
         <Tabs value={filter} onValueChange={(v) => setFilter(v as typeof filter)} className="w-auto">
-          <TabsList className="bg-muted/50 border p-1 h-auto">
+          <TabsList className="bg-zinc-100 border border-zinc-200 p-1 h-auto">
             <TabsTrigger value="all" className="data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-1.5 text-xs">All</TabsTrigger>
             <TabsTrigger value="pending" className="data-[state=active]:bg-white data-[state=active]:shadow-sm px-4 py-1.5 text-xs">
               Pending ({pendingCount})
@@ -247,8 +247,8 @@ export default function TasksPage() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <Button variant="outline" size="sm" className="bg-white">
-          <Filter className="h-3.5 w-3.5 mr-2 text-muted-foreground" />
+        <Button variant="outline" size="sm" className="bg-white border-zinc-200">
+          <Filter className="h-3.5 w-3.5 mr-2 text-zinc-500" />
           Filter
         </Button>
       </div>
@@ -263,13 +263,13 @@ export default function TasksPage() {
             />
           ))
         ) : (
-          <Card className="border shadow-none border-dashed">
+          <Card className="border-zinc-200 border-dashed bg-white">
             <CardContent className="p-12 text-center">
-              <div className="h-12 w-12 rounded-full bg-[#e8ebe5] flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 className="h-6 w-6 text-[#5d7052]" />
+              <div className="h-12 w-12 rounded-full bg-zinc-100 flex items-center justify-center mx-auto mb-4">
+                <CheckCircle2 className="h-6 w-6 text-zinc-600" />
               </div>
-              <h3 className="font-medium mb-1">All caught up!</h3>
-              <p className="text-sm text-muted-foreground">No pending tasks. Great job staying on top of your follow-ups!</p>
+              <h3 className="font-medium mb-1 text-zinc-900">All caught up!</h3>
+              <p className="text-sm text-zinc-500">No pending tasks. Great job staying on top of your follow-ups!</p>
             </CardContent>
           </Card>
         )}

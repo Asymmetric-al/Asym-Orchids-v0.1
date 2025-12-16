@@ -361,16 +361,16 @@ function FeedSettings() {
   const [commentsMode, setCommentsMode] = React.useState<'allow' | 'approve' | 'disable'>('allow')
 
   return (
-    <Card className="border">
+    <Card className="border-zinc-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-lg flex items-center gap-2">
+        <CardTitle className="text-lg text-zinc-900 flex items-center gap-2">
           <Settings className="h-5 w-5" />
           Feed Settings
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="space-y-3">
-          <p className="text-sm font-medium">Feed Visibility</p>
+          <p className="text-sm font-medium text-zinc-900">Feed Visibility</p>
           <div className="grid gap-2">
             <Button
               variant={visibility === 'public' ? 'default' : 'outline'}
@@ -408,8 +408,8 @@ function FeedSettings() {
           </div>
         </div>
 
-        <div className="space-y-3 pt-4 border-t">
-          <p className="text-sm font-medium">Comment Settings</p>
+        <div className="space-y-3 pt-4 border-t border-zinc-100">
+          <p className="text-sm font-medium text-zinc-900">Comment Settings</p>
           <div className="grid gap-2">
             <Button
               variant={commentsMode === 'allow' ? 'outline' : 'ghost'}
@@ -438,11 +438,11 @@ function FeedSettings() {
           </div>
         </div>
 
-        <div className="pt-4 border-t">
+        <div className="pt-4 border-t border-zinc-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium">Followers</p>
-              <p className="text-xs text-muted-foreground">Manage who can see your feed</p>
+              <p className="text-sm font-medium text-zinc-900">Followers</p>
+              <p className="text-xs text-zinc-500">Manage who can see your feed</p>
             </div>
             <Button variant="outline" size="sm">
               <Users className="mr-2 h-4 w-4" />
@@ -460,11 +460,11 @@ export default function FeedPage() {
   const draftPosts = posts.filter(p => p.status === 'draft')
 
   return (
-    <div className="p-6 max-w-6xl mx-auto">
+    <div className="p-6 max-w-6xl mx-auto bg-zinc-50 min-h-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">My Feed</h1>
-          <p className="text-muted-foreground">Share updates and engage with your supporters.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">My Feed</h1>
+          <p className="text-zinc-500">Share updates and engage with your supporters.</p>
         </div>
         <NewPostDialog />
       </div>
@@ -497,8 +497,8 @@ export default function FeedPage() {
                   <PostCard key={post.id} post={post} />
                 ))
               ) : (
-                <Card className="py-12 text-center border-dashed shadow-none">
-                  <p className="text-muted-foreground">No drafts yet</p>
+                <Card className="py-12 text-center border-dashed border-zinc-200 bg-white">
+                  <p className="text-zinc-500">No drafts yet</p>
                 </Card>
               )}
             </TabsContent>
@@ -506,23 +506,23 @@ export default function FeedPage() {
         </div>
         
         <div className="lg:col-span-4 space-y-6">
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader className="pb-3">
-              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Engagement</CardTitle>
+              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-zinc-500">Engagement</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-3 gap-4 text-center">
                 <div>
-                  <p className="text-2xl font-bold">57</p>
-                  <p className="text-xs text-muted-foreground mt-1">Likes</p>
+                  <p className="text-2xl font-bold text-zinc-900">57</p>
+                  <p className="text-xs text-zinc-500 mt-1">Likes</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">62</p>
-                  <p className="text-xs text-muted-foreground mt-1">Prayers</p>
+                  <p className="text-2xl font-bold text-zinc-900">62</p>
+                  <p className="text-xs text-zinc-500 mt-1">Prayers</p>
                 </div>
                 <div>
-                  <p className="text-2xl font-bold">12</p>
-                  <p className="text-xs text-muted-foreground mt-1">Comments</p>
+                  <p className="text-2xl font-bold text-zinc-900">12</p>
+                  <p className="text-xs text-zinc-500 mt-1">Comments</p>
                 </div>
               </div>
             </CardContent>

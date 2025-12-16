@@ -81,15 +81,15 @@ function ExportCard({ option }: { option: ExportOption }) {
   }
 
   return (
-    <Card className="border shadow-none">
+    <Card className="border-zinc-200 bg-white">
       <CardHeader className="pb-3">
         <div className="flex items-start gap-4">
-          <div className="h-10 w-10 rounded-lg bg-[#e8ebe5] flex items-center justify-center shrink-0">
-            <Icon className="h-5 w-5 text-[#5d7052]" />
+          <div className="h-10 w-10 rounded-lg bg-zinc-100 flex items-center justify-center shrink-0">
+            <Icon className="h-5 w-5 text-zinc-600" />
           </div>
           <div className="flex-1">
-            <CardTitle className="text-base font-semibold">{option.title}</CardTitle>
-            <CardDescription className="mt-1">{option.description}</CardDescription>
+            <CardTitle className="text-base font-semibold text-zinc-900">{option.title}</CardTitle>
+            <CardDescription className="mt-1 text-zinc-500">{option.description}</CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -126,7 +126,7 @@ function ExportCard({ option }: { option: ExportOption }) {
           </div>
         </div>
         <Button 
-          className="w-full bg-black text-white hover:bg-black/90" 
+          className="w-full bg-zinc-900 text-white hover:bg-zinc-800" 
           onClick={handleExport}
           disabled={isExporting}
         >
@@ -149,10 +149,10 @@ function ExportCard({ option }: { option: ExportOption }) {
 
 export default function ExportPage() {
   return (
-    <div className="space-y-8 p-6 max-w-5xl mx-auto">
+    <div className="space-y-8 p-6 max-w-5xl mx-auto bg-zinc-50 min-h-full">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Export Data</h1>
-        <p className="text-muted-foreground">Download reports and data for offline use or analysis.</p>
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Export Data</h1>
+        <p className="text-zinc-500">Download reports and data for offline use or analysis.</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2">
@@ -162,9 +162,9 @@ export default function ExportPage() {
       </div>
 
       <div className="grid gap-6 md:grid-cols-3">
-        <Card className="md:col-span-2 border shadow-none">
+        <Card className="md:col-span-2 border-zinc-200 bg-white">
           <CardHeader>
-            <CardTitle className="text-base font-semibold flex items-center gap-2">
+            <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
               <FileSpreadsheet className="h-4 w-4" />
               Recent Exports
             </CardTitle>
@@ -178,11 +178,11 @@ export default function ExportPage() {
                     className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/30 transition-colors"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center">
+                      <div className="h-9 w-9 rounded-lg bg-zinc-100 flex items-center justify-center">
                         {exp.name.endsWith('.csv') ? (
-                          <FileSpreadsheet className="h-4 w-4 text-[#5d7052]" />
+                          <FileSpreadsheet className="h-4 w-4 text-zinc-600" />
                         ) : (
-                          <FileText className="h-4 w-4 text-[#5d7052]" />
+                          <FileText className="h-4 w-4 text-zinc-600" />
                         )}
                       </div>
                       <div>
@@ -211,22 +211,22 @@ export default function ExportPage() {
           </CardContent>
         </Card>
 
-        <Card className="border shadow-none bg-[#f8f8f8]">
+        <Card className="border-zinc-200 bg-zinc-50">
           <CardHeader>
-            <CardTitle className="text-sm font-semibold">Export Tips</CardTitle>
+            <CardTitle className="text-sm font-semibold text-zinc-900">Export Tips</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4 text-sm">
             <div className="flex items-start gap-2.5">
-              <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
-              <p className="text-muted-foreground"><strong>CSV files</strong> can be opened in Excel, Google Sheets, or any spreadsheet software</p>
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+              <p className="text-zinc-500"><strong className="text-zinc-700">CSV files</strong> can be opened in Excel, Google Sheets, or any spreadsheet software</p>
             </div>
             <div className="flex items-start gap-2.5">
-              <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
-              <p className="text-muted-foreground"><strong>PDF reports</strong> include your organization&apos;s branding and are ready to print</p>
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+              <p className="text-zinc-500"><strong className="text-zinc-700">PDF reports</strong> include your organization&apos;s branding and are ready to print</p>
             </div>
             <div className="flex items-start gap-2.5">
-              <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
-              <p className="text-muted-foreground"><strong>Fund statements</strong> are useful for tax purposes and financial planning</p>
+              <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+              <p className="text-zinc-500"><strong className="text-zinc-700">Fund statements</strong> are useful for tax purposes and financial planning</p>
             </div>
           </CardContent>
         </Card>

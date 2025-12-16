@@ -47,18 +47,18 @@ export default function ProfilePage() {
   })
 
   return (
-    <div className="p-6 max-w-7xl mx-auto space-y-8">
+    <div className="p-6 max-w-7xl mx-auto space-y-8 bg-zinc-50 min-h-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Content & Profile</h1>
-          <p className="text-muted-foreground">Manage your public presence and giving pages.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Content & Profile</h1>
+          <p className="text-zinc-500">Manage your public presence and giving pages.</p>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" className="bg-white">
+          <Button variant="outline" className="bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50">
             <Eye className="mr-2 h-4 w-4" />
             Live Site
           </Button>
-          <Button onClick={() => setIsEditing(!isEditing)} className="bg-black text-white hover:bg-black/90">
+          <Button onClick={() => setIsEditing(!isEditing)} className="bg-zinc-900 text-white hover:bg-zinc-800">
             {isEditing ? (
               <>
                 <Save className="mr-2 h-4 w-4" />
@@ -75,9 +75,9 @@ export default function ProfilePage() {
 
       <div className="grid gap-8 lg:grid-cols-12">
         <div className="lg:col-span-7 space-y-6">
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader className="pb-4">
-              <CardTitle className="text-base font-semibold">Basic Information</CardTitle>
+              <CardTitle className="text-base font-semibold text-zinc-900">Basic Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid md:grid-cols-2 gap-4">
@@ -131,9 +131,9 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader className="pb-4">
-              <CardTitle className="text-base font-semibold">Imagery</CardTitle>
+              <CardTitle className="text-base font-semibold text-zinc-900">Imagery</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="flex items-start gap-6">
@@ -164,10 +164,10 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader className="flex-row items-center justify-between pb-4">
-              <CardTitle className="text-base font-semibold">Public Contact Details</CardTitle>
-              <Badge variant="outline" className="text-muted-foreground font-normal">Optional Section</Badge>
+              <CardTitle className="text-base font-semibold text-zinc-900">Public Contact Details</CardTitle>
+              <Badge variant="outline" className="text-zinc-500 border-zinc-200 font-normal">Optional Section</Badge>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-xs text-muted-foreground mb-2">Add contact methods for donors to reach you directly.</p>
@@ -202,10 +202,10 @@ export default function ProfilePage() {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader className="flex-row items-center justify-between pb-4">
-              <CardTitle className="text-base font-semibold">Social Links</CardTitle>
-              <Badge variant="outline" className="text-muted-foreground font-normal">Optional</Badge>
+              <CardTitle className="text-base font-semibold text-zinc-900">Social Links</CardTitle>
+              <Badge variant="outline" className="text-zinc-500 border-zinc-200 font-normal">Optional</Badge>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-xs text-muted-foreground mb-2">Connect your social platforms. Icons will only appear on your page for the networks you add below.</p>
@@ -271,7 +271,7 @@ export default function ProfilePage() {
                   <MapPin className="h-3 w-3" />
                   {profile.location}
                 </div>
-                <p className="text-xs font-medium text-[#5d7052] mt-1">{profile.ministryFocus}</p>
+                <p className="text-xs font-medium text-zinc-600 mt-1">{profile.ministryFocus}</p>
                 
                 <p className="text-sm text-gray-600 mt-4 leading-relaxed line-clamp-4">
                   {profile.bio}

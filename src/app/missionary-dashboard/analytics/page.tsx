@@ -38,15 +38,15 @@ const monthlyData = [
 ]
 
 const donorSegments = [
-  { name: 'Active', value: 4, color: '#5d7052' }, // Sage
-  { name: 'New', value: 2, color: '#8b9a7d' }, // Light Sage
-  { name: 'At Risk', value: 1, color: '#eab308' }, // Amber
-  { name: 'Lapsed', value: 1, color: '#737373' }, // Gray
+  { name: 'Active', value: 4, color: '#18181b' },
+  { name: 'New', value: 2, color: '#71717a' },
+  { name: 'At Risk', value: 1, color: '#eab308' },
+  { name: 'Lapsed', value: 1, color: '#a1a1aa' },
 ]
 
 const givingTypeData = [
-  { name: 'Recurring', value: 76, color: '#5d7052' },
-  { name: 'One-time', value: 24, color: '#8b9a7d' },
+  { name: 'Recurring', value: 76, color: '#18181b' },
+  { name: 'One-time', value: 24, color: '#71717a' },
 ]
 
 const yearOverYear = [
@@ -81,26 +81,26 @@ function StatCard({ title, value, subtitle, trend, trendValue, icon: Icon }: {
   icon: React.ElementType
 }) {
   return (
-    <Card className="border shadow-none">
+    <Card className="border-zinc-200 bg-white">
       <CardContent className="p-6">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <p className="text-sm font-medium text-muted-foreground">{title}</p>
-            <p className="text-2xl font-semibold tracking-tight">{value}</p>
+            <p className="text-sm font-medium text-zinc-500">{title}</p>
+            <p className="text-2xl font-semibold tracking-tight text-zinc-900">{value}</p>
             {(subtitle || trendValue) && (
               <div className="flex items-center gap-2 mt-1">
                 {trend && trendValue && (
-                  <span className={`flex items-center text-xs font-medium ${trend === 'up' ? 'text-[#5d7052]' : 'text-rose-600'}`}>
+                  <span className={`flex items-center text-xs font-medium ${trend === 'up' ? 'text-emerald-600' : 'text-rose-600'}`}>
                     {trend === 'up' ? <TrendingUp className="h-3 w-3 mr-1" /> : <TrendingDown className="h-3 w-3 mr-1" />}
                     {trendValue}
                   </span>
                 )}
-                {subtitle && <span className="text-xs text-muted-foreground">{subtitle}</span>}
+                {subtitle && <span className="text-xs text-zinc-500">{subtitle}</span>}
               </div>
             )}
           </div>
-          <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center">
-            <Icon className="h-4 w-4 text-[#5d7052]" />
+          <div className="h-9 w-9 rounded-lg bg-zinc-100 flex items-center justify-center">
+            <Icon className="h-4 w-4 text-zinc-600" />
           </div>
         </div>
       </CardContent>
@@ -110,10 +110,10 @@ function StatCard({ title, value, subtitle, trend, trendValue, icon: Icon }: {
 
 function DonorSegmentChart() {
   return (
-    <Card className="border shadow-none">
+    <Card className="border-zinc-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-base font-semibold">Donor Segmentation</CardTitle>
-        <CardDescription>Current supporter breakdown</CardDescription>
+        <CardTitle className="text-base font-semibold text-zinc-900">Donor Segmentation</CardTitle>
+        <CardDescription className="text-zinc-500">Current supporter breakdown</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-center">
@@ -156,12 +156,12 @@ function DonorSegmentChart() {
 
 function MonthlyGivingChart() {
   return (
-    <Card className="lg:col-span-2 border shadow-none">
+    <Card className="lg:col-span-2 border-zinc-200 bg-white">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold">Monthly Giving</CardTitle>
-            <CardDescription>Last 6 months of donations</CardDescription>
+            <CardTitle className="text-base font-semibold text-zinc-900">Monthly Giving</CardTitle>
+            <CardDescription className="text-zinc-500">Last 6 months of donations</CardDescription>
           </div>
           <Select defaultValue="6m">
             <SelectTrigger className="w-[110px] h-8 text-xs">
@@ -198,20 +198,20 @@ function MonthlyGivingChart() {
               contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: 'none' }}
               labelStyle={{ fontWeight: 600, marginBottom: '4px' }}
             />
-            <Bar dataKey="recurring" stackId="a" fill="#5d7052" radius={[0, 0, 0, 0]} name="Recurring" />
-            <Bar dataKey="oneTime" stackId="a" fill="#d4dccb" radius={[4, 4, 0, 0]} name="One-time" />
+              <Bar dataKey="recurring" stackId="a" fill="#18181b" radius={[0, 0, 0, 0]} name="Recurring" />
+              <Bar dataKey="oneTime" stackId="a" fill="#d4d4d8" radius={[4, 4, 0, 0]} name="One-time" />
           </BarChart>
         </ResponsiveContainer>
-        <div className="flex items-center justify-center gap-6 mt-6">
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-[#5d7052]" />
-            <span className="text-xs text-muted-foreground">Recurring</span>
+          <div className="flex items-center justify-center gap-6 mt-6">
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-zinc-900" />
+              <span className="text-xs text-zinc-500">Recurring</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-2 w-2 rounded-full bg-zinc-300" />
+              <span className="text-xs text-zinc-500">One-time</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-2 w-2 rounded-full bg-[#d4dccb]" />
-            <span className="text-xs text-muted-foreground">One-time</span>
-          </div>
-        </div>
       </CardContent>
     </Card>
   )
@@ -219,10 +219,10 @@ function MonthlyGivingChart() {
 
 function GivingTypeChart() {
   return (
-    <Card className="border shadow-none">
+    <Card className="border-zinc-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-base font-semibold">Giving Breakdown</CardTitle>
-        <CardDescription>Recurring vs one-time gifts</CardDescription>
+        <CardTitle className="text-base font-semibold text-zinc-900">Giving Breakdown</CardTitle>
+        <CardDescription className="text-zinc-500">Recurring vs one-time gifts</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="flex items-center justify-center">
@@ -267,14 +267,14 @@ function GivingTypeChart() {
 
 function YearComparisonChart() {
   return (
-    <Card className="lg:col-span-2 border shadow-none">
+    <Card className="lg:col-span-2 border-zinc-200 bg-white">
       <CardHeader>
         <div className="flex items-center justify-between">
           <div>
-            <CardTitle className="text-base font-semibold">Year-over-Year Comparison</CardTitle>
-            <CardDescription>2024 vs 2023 monthly giving</CardDescription>
+            <CardTitle className="text-base font-semibold text-zinc-900">Year-over-Year Comparison</CardTitle>
+            <CardDescription className="text-zinc-500">2024 vs 2023 monthly giving</CardDescription>
           </div>
-          <Badge variant="outline" className="bg-[#e8ebe5] text-[#5d7052] border-0">
+          <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-0">
             <TrendingUp className="h-3 w-3 mr-1" />
             +12% YTD
           </Badge>
@@ -283,12 +283,12 @@ function YearComparisonChart() {
       <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <AreaChart data={yearOverYear}>
-            <defs>
-              <linearGradient id="colorCurrent" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#5d7052" stopOpacity={0.1}/>
-                <stop offset="95%" stopColor="#5d7052" stopOpacity={0}/>
-              </linearGradient>
-            </defs>
+              <defs>
+                <linearGradient id="colorCurrent" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#18181b" stopOpacity={0.1}/>
+                  <stop offset="95%" stopColor="#18181b" stopOpacity={0}/>
+                </linearGradient>
+              </defs>
             <XAxis 
               dataKey="month" 
               tick={{ fontSize: 12, fill: '#737373' }} 
@@ -307,15 +307,15 @@ function YearComparisonChart() {
               formatter={(value: number) => [`$${value.toLocaleString()}`, '']}
               contentStyle={{ borderRadius: '8px', border: '1px solid #e5e5e5', boxShadow: 'none' }}
             />
-            <Area 
-              type="monotone" 
-              dataKey="current" 
-              stroke="#5d7052" 
-              strokeWidth={2}
-              fillOpacity={1} 
-              fill="url(#colorCurrent)" 
-              name="2024" 
-            />
+              <Area 
+                type="monotone" 
+                dataKey="current" 
+                stroke="#18181b" 
+                strokeWidth={2}
+                fillOpacity={1} 
+                fill="url(#colorCurrent)" 
+                name="2024" 
+              />
             <Area 
               type="monotone" 
               dataKey="previous" 
@@ -327,16 +327,16 @@ function YearComparisonChart() {
             />
           </AreaChart>
         </ResponsiveContainer>
-        <div className="flex items-center justify-center gap-6 mt-6">
-          <div className="flex items-center gap-2">
-            <div className="h-0.5 w-4 bg-[#5d7052]" />
-            <span className="text-xs text-muted-foreground">2024</span>
+          <div className="flex items-center justify-center gap-6 mt-6">
+            <div className="flex items-center gap-2">
+              <div className="h-0.5 w-4 bg-zinc-900" />
+              <span className="text-xs text-zinc-500">2024</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="h-0.5 w-4 bg-zinc-300" />
+              <span className="text-xs text-zinc-500">2023</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <div className="h-0.5 w-4 bg-[#e5e5e5]" />
-            <span className="text-xs text-muted-foreground">2023</span>
-          </div>
-        </div>
       </CardContent>
     </Card>
   )
@@ -344,44 +344,44 @@ function YearComparisonChart() {
 
 function RecurringHealthCard() {
   return (
-    <Card className="border shadow-none">
+    <Card className="border-zinc-200 bg-white">
       <CardHeader>
-        <CardTitle className="text-base font-semibold flex items-center gap-2">
+        <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
           Recurring Health
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-1">
-            <span className="text-xs text-muted-foreground uppercase tracking-wider">Monthly</span>
-            <p className="text-2xl font-bold">$475</p>
+            <span className="text-xs text-zinc-500 uppercase tracking-wider">Monthly</span>
+            <p className="text-2xl font-bold text-zinc-900">$475</p>
           </div>
           <div className="space-y-1">
-            <span className="text-xs text-muted-foreground uppercase tracking-wider">Projected</span>
-            <p className="text-2xl font-bold">$5.7k</p>
+            <span className="text-xs text-zinc-500 uppercase tracking-wider">Projected</span>
+            <p className="text-2xl font-bold text-zinc-900">$5.7k</p>
           </div>
         </div>
-        <div className="pt-6 border-t space-y-4">
+        <div className="pt-6 border-t border-zinc-100 space-y-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="h-2 w-2 rounded-full bg-[#5d7052]" />
-              <span className="text-sm">Active</span>
+              <div className="h-2 w-2 rounded-full bg-emerald-500" />
+              <span className="text-sm text-zinc-700">Active</span>
             </div>
-            <span className="text-sm font-medium">4 donors</span>
+            <span className="text-sm font-medium text-zinc-900">4 donors</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-amber-500" />
-              <span className="text-sm">At Risk</span>
+              <span className="text-sm text-zinc-700">At Risk</span>
             </div>
-            <span className="text-sm font-medium">0 donors</span>
+            <span className="text-sm font-medium text-zinc-900">0 donors</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="h-2 w-2 rounded-full bg-rose-500" />
-              <span className="text-sm">Cancelled</span>
+              <span className="text-sm text-zinc-700">Cancelled</span>
             </div>
-            <span className="text-sm font-medium">0 this month</span>
+            <span className="text-sm font-medium text-zinc-900">0 this month</span>
           </div>
         </div>
       </CardContent>
@@ -391,13 +391,13 @@ function RecurringHealthCard() {
 
 export default function AnalyticsPage() {
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-6 bg-zinc-50 min-h-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Analytics</h1>
-          <p className="text-muted-foreground">Track your fundraising trends and donor insights.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Analytics</h1>
+          <p className="text-zinc-500">Track your fundraising trends and donor insights.</p>
         </div>
-        <Button variant="outline" className="bg-white">
+        <Button variant="outline" className="bg-white border-zinc-200 text-zinc-700 hover:bg-zinc-50">
           <Download className="mr-2 h-4 w-4" />
           Export Report
         </Button>

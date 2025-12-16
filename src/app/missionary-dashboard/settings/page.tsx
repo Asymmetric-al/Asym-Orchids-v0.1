@@ -51,36 +51,36 @@ function NotificationRow({ setting, onChange }: {
   const Icon = setting.icon
   return (
     <div className="flex items-start gap-4 py-4 group">
-      <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center shrink-0">
-        <Icon className="h-4 w-4 text-[#5d7052]" />
+      <div className="h-9 w-9 rounded-lg bg-zinc-100 flex items-center justify-center shrink-0">
+        <Icon className="h-4 w-4 text-zinc-600" />
       </div>
       <div className="flex-1 min-w-0">
         <p className="font-medium text-sm">{setting.label}</p>
         <p className="text-sm text-muted-foreground">{setting.description}</p>
       </div>
-      <div className="flex items-center gap-8">
-        <div className="flex flex-col items-center gap-1.5">
-          <Switch 
-            checked={setting.inApp} 
-            onCheckedChange={(checked) => onChange(setting.id, 'inApp', checked)}
-            className="data-[state=checked]:bg-[#5d7052]"
-          />
+        <div className="flex items-center gap-8">
+          <div className="flex flex-col items-center gap-1.5">
+            <Switch 
+              checked={setting.inApp} 
+              onCheckedChange={(checked) => onChange(setting.id, 'inApp', checked)}
+              className="data-[state=checked]:bg-zinc-900"
+            />
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <Switch 
+              checked={setting.email} 
+              onCheckedChange={(checked) => onChange(setting.id, 'email', checked)}
+              className="data-[state=checked]:bg-zinc-900"
+            />
+          </div>
+          <div className="flex flex-col items-center gap-1.5">
+            <Switch 
+              checked={setting.sms} 
+              onCheckedChange={(checked) => onChange(setting.id, 'sms', checked)}
+              className="data-[state=checked]:bg-zinc-900"
+            />
+          </div>
         </div>
-        <div className="flex flex-col items-center gap-1.5">
-          <Switch 
-            checked={setting.email} 
-            onCheckedChange={(checked) => onChange(setting.id, 'email', checked)}
-            className="data-[state=checked]:bg-[#5d7052]"
-          />
-        </div>
-        <div className="flex flex-col items-center gap-1.5">
-          <Switch 
-            checked={setting.sms} 
-            onCheckedChange={(checked) => onChange(setting.id, 'sms', checked)}
-            className="data-[state=checked]:bg-[#5d7052]"
-          />
-        </div>
-      </div>
     </div>
   )
 }
@@ -101,14 +101,14 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="p-6 max-w-5xl mx-auto space-y-8">
+    <div className="p-6 max-w-5xl mx-auto space-y-8 bg-zinc-50 min-h-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-          <p className="text-muted-foreground">Manage your notification preferences.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Settings</h1>
+          <p className="text-zinc-500">Manage your notification preferences.</p>
         </div>
         {hasChanges && (
-          <Button onClick={handleSave} className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+          <Button onClick={handleSave} className="bg-zinc-900 hover:bg-zinc-800 text-white">
             <Save className="mr-2 h-4 w-4" />
             Save Changes
           </Button>
@@ -117,9 +117,9 @@ export default function SettingsPage() {
 
       <div className="grid gap-8 lg:grid-cols-12">
         <div className="lg:col-span-8 space-y-8">
-          <Card className="border shadow-none">
-            <CardHeader className="pb-3 border-b">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
+          <Card className="border-zinc-200 bg-white">
+            <CardHeader className="pb-3 border-b border-zinc-100">
+              <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
                 <Bell className="h-4 w-4" />
                 Notification Preferences
               </CardTitle>
@@ -142,9 +142,9 @@ export default function SettingsPage() {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none">
-            <CardHeader className="pb-3 border-b">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
+          <Card className="border-zinc-200 bg-white">
+            <CardHeader className="pb-3 border-b border-zinc-100">
+              <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
                 <Settings className="h-4 w-4" />
                 General Settings
               </CardTitle>
@@ -152,27 +152,27 @@ export default function SettingsPage() {
             <CardContent className="space-y-6 pt-6">
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Daily Digest</Label>
-                  <p className="text-sm text-muted-foreground">Receive a daily summary instead of individual emails</p>
+                  <Label className="text-base text-zinc-900">Daily Digest</Label>
+                  <p className="text-sm text-zinc-500">Receive a daily summary instead of individual emails</p>
                 </div>
-                <Switch className="data-[state=checked]:bg-[#5d7052]" />
+                <Switch className="data-[state=checked]:bg-zinc-900" />
               </div>
-              <Separator />
+              <Separator className="bg-zinc-100" />
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <Label className="text-base">Marketing Emails</Label>
-                  <p className="text-sm text-muted-foreground">Receive tips and updates from the platform</p>
+                  <Label className="text-base text-zinc-900">Marketing Emails</Label>
+                  <p className="text-sm text-zinc-500">Receive tips and updates from the platform</p>
                 </div>
-                <Switch defaultChecked className="data-[state=checked]:bg-[#5d7052]" />
+                <Switch defaultChecked className="data-[state=checked]:bg-zinc-900" />
               </div>
             </CardContent>
           </Card>
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader>
-              <CardTitle className="text-base font-semibold">Account</CardTitle>
+              <CardTitle className="text-base font-semibold text-zinc-900">Account</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">

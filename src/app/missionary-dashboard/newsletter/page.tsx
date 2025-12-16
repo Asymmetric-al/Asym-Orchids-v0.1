@@ -54,14 +54,14 @@ const previousNewsletters = [
 function TemplateCard({ template }: { template: typeof templates[0] }) {
   const Icon = template.icon
   return (
-    <Card className="cursor-pointer hover:border-[#5d7052] hover:bg-[#5d7052]/5 transition-all group border shadow-none">
+    <Card className="cursor-pointer hover:border-zinc-400 hover:bg-zinc-50 transition-all group border-zinc-200 bg-white">
       <CardContent className="p-4 flex items-center gap-3">
-        <div className="h-10 w-10 rounded-lg bg-[#e8ebe5] flex items-center justify-center group-hover:bg-[#5d7052] transition-colors">
-          <Icon className="h-5 w-5 text-[#5d7052] group-hover:text-white transition-colors" />
+        <div className="h-10 w-10 rounded-lg bg-zinc-100 flex items-center justify-center group-hover:bg-zinc-900 transition-colors">
+          <Icon className="h-5 w-5 text-zinc-600 group-hover:text-white transition-colors" />
         </div>
         <div>
-          <p className="font-medium text-sm">{template.name}</p>
-          <p className="text-xs text-muted-foreground">{template.description}</p>
+          <p className="font-medium text-sm text-zinc-900">{template.name}</p>
+          <p className="text-xs text-zinc-500">{template.description}</p>
         </div>
       </CardContent>
     </Card>
@@ -76,7 +76,7 @@ function ComposeNewsletterDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="lg" className="gap-2 bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+        <Button size="lg" className="gap-2 bg-zinc-900 hover:bg-zinc-800 text-white">
           <Plus className="h-4 w-4" />
           Compose Newsletter
         </Button>
@@ -92,10 +92,10 @@ function ComposeNewsletterDialog() {
               <Users className="h-4 w-4 text-muted-foreground" />
               <span className="text-sm font-medium">Recipients</span>
             </div>
-            <div className="flex items-center gap-2">
-               <span className="text-sm text-muted-foreground">All Subscribers</span>
-               <Badge variant="secondary" className="bg-[#e8ebe5] text-[#5d7052]">42 recipients</Badge>
-            </div>
+              <div className="flex items-center gap-2">
+                 <span className="text-sm text-zinc-500">All Subscribers</span>
+                 <Badge variant="secondary" className="bg-zinc-100 text-zinc-700">42 recipients</Badge>
+              </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -167,7 +167,7 @@ Thank you for your continued support of our ministry..."
               <Eye className="mr-2 h-4 w-4" />
               Preview
             </Button>
-            <Button disabled={!subject || !content} className="bg-[#5d7052] hover:bg-[#4a5a42] text-white">
+            <Button disabled={!subject || !content} className="bg-zinc-900 hover:bg-zinc-800 text-white">
               <Send className="mr-2 h-4 w-4" />
               Send Newsletter
             </Button>
@@ -180,20 +180,20 @@ Thank you for your continued support of our ministry..."
 
 export default function NewsletterPage() {
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-8">
+    <div className="p-6 max-w-6xl mx-auto space-y-8 bg-zinc-50 min-h-full">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Newsletter</h1>
-          <p className="text-muted-foreground">Send updates to your supporters via email.</p>
+          <h1 className="text-2xl font-semibold tracking-tight text-zinc-900">Newsletter</h1>
+          <p className="text-zinc-500">Send updates to your supporters via email.</p>
         </div>
         <ComposeNewsletterDialog />
       </div>
 
       <div className="grid gap-8 lg:grid-cols-12">
         <div className="lg:col-span-8 space-y-6">
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <CardTitle className="text-base font-semibold text-zinc-900 flex items-center gap-2">
                 Templates
               </CardTitle>
             </CardHeader>
@@ -206,9 +206,9 @@ export default function NewsletterPage() {
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader>
-              <CardTitle className="text-base font-semibold">Previous Newsletters</CardTitle>
+              <CardTitle className="text-base font-semibold text-zinc-900">Previous Newsletters</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
@@ -218,8 +218,8 @@ export default function NewsletterPage() {
                     className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/30 transition-colors"
                   >
                     <div className="flex items-center gap-4">
-                      <div className="h-9 w-9 rounded-lg bg-[#e8ebe5] flex items-center justify-center shrink-0">
-                        <CheckCircle2 className="h-4 w-4 text-[#5d7052]" />
+                      <div className="h-9 w-9 rounded-lg bg-zinc-100 flex items-center justify-center shrink-0">
+                        <CheckCircle2 className="h-4 w-4 text-zinc-600" />
                       </div>
                       <div>
                         <p className="font-medium text-sm">{newsletter.subject}</p>
@@ -232,7 +232,7 @@ export default function NewsletterPage() {
                             <Users className="h-3 w-3" />
                             {newsletter.recipients}
                           </span>
-                          <span className="flex items-center gap-1 text-[#5d7052] font-medium">
+                          <span className="flex items-center gap-1 text-emerald-600 font-medium">
                             <Eye className="h-3 w-3" />
                             {Math.round((newsletter.opened / newsletter.recipients) * 100)}%
                           </span>
@@ -255,48 +255,48 @@ export default function NewsletterPage() {
         </div>
 
         <div className="lg:col-span-4 space-y-6">
-          <Card className="border shadow-none bg-muted/20">
+          <Card className="border-zinc-200 bg-zinc-50">
             <CardHeader className="pb-2">
-              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Stats Overview</CardTitle>
+              <CardTitle className="text-sm font-semibold uppercase tracking-wider text-zinc-500">Stats Overview</CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="text-center">
-                <p className="text-4xl font-bold tracking-tight">42</p>
-                <p className="text-sm text-muted-foreground">Active subscribers</p>
+                <p className="text-4xl font-bold tracking-tight text-zinc-900">42</p>
+                <p className="text-sm text-zinc-500">Active subscribers</p>
               </div>
-              <div className="grid grid-cols-2 gap-4 border-t border-border/50 pt-4">
+              <div className="grid grid-cols-2 gap-4 border-t border-zinc-200 pt-4">
                 <div className="text-center">
-                  <p className="text-xl font-bold">12</p>
-                  <p className="text-xs text-muted-foreground">Sent YTD</p>
+                  <p className="text-xl font-bold text-zinc-900">12</p>
+                  <p className="text-xs text-zinc-500">Sent YTD</p>
                 </div>
                 <div className="text-center">
-                  <p className="text-xl font-bold text-[#5d7052]">78%</p>
-                  <p className="text-xs text-muted-foreground">Avg Open Rate</p>
+                  <p className="text-xl font-bold text-emerald-600">78%</p>
+                  <p className="text-xs text-zinc-500">Avg Open Rate</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border shadow-none">
+          <Card className="border-zinc-200 bg-white">
             <CardHeader className="pb-3">
-              <CardTitle className="text-base font-semibold">Tips for Success</CardTitle>
+              <CardTitle className="text-base font-semibold text-zinc-900">Tips for Success</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3.5 text-sm">
               <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
-                <p className="text-muted-foreground">Keep subject lines under 50 characters for better open rates</p>
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+                <p className="text-zinc-500">Keep subject lines under 50 characters for better open rates</p>
               </div>
               <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
-                <p className="text-muted-foreground">Include a personal story or testimony to connect with donors</p>
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+                <p className="text-zinc-500">Include a personal story or testimony to connect with donors</p>
               </div>
               <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
-                <p className="text-muted-foreground">Add photos to increase engagement and readability</p>
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+                <p className="text-zinc-500">Add photos to increase engagement and readability</p>
               </div>
               <div className="flex items-start gap-2.5">
-                <CheckCircle2 className="h-4 w-4 text-[#5d7052] mt-0.5 shrink-0" />
-                <p className="text-muted-foreground">Send consistently (monthly recommended)</p>
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5 shrink-0" />
+                <p className="text-zinc-500">Send consistently (monthly recommended)</p>
               </div>
             </CardContent>
           </Card>
