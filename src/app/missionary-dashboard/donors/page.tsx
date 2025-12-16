@@ -4,6 +4,7 @@ import * as React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -367,11 +368,9 @@ export default function DonorsPage() {
                   ))}
                 </DropdownMenuContent>
               </DropdownMenu>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-                <Button size="icon" className="h-9 w-9 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm">
+                <RippleButton size="icon" className="h-9 w-9 bg-zinc-900 hover:bg-zinc-800 text-white shadow-sm">
                   <Plus className="h-4 w-4" />
-                </Button>
-              </motion.div>
+                </RippleButton>
             </div>
           </div>
           <div className="relative group">
@@ -504,35 +503,29 @@ export default function DonorsPage() {
                   <h2 className="text-lg font-semibold text-zinc-900">{selectedDonor.name}</h2>
                   {getStatusBadge(selectedDonor.status)}
                 </div>
-                <div className="flex items-center gap-2">
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button 
+                  <div className="flex items-center gap-2">
+                    <RippleButton 
                       variant="outline" 
                       size="sm" 
                       className="h-9 text-sm font-medium gap-2 border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700"
                       onClick={() => setIsNoteDialogOpen(true)}
                     >
                       <Pencil className="h-3.5 w-3.5" /> Note
-                    </Button>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button 
+                    </RippleButton>
+                    <RippleButton 
                       variant="outline" 
                       size="sm" 
                       className="h-9 text-sm font-medium gap-2 border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700"
                     >
                       <Phone className="h-3.5 w-3.5" /> Call
-                    </Button>
-                  </motion.div>
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                    <Button 
+                    </RippleButton>
+                    <RippleButton 
                       size="sm" 
                       className="h-9 text-sm font-medium gap-2 bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm"
                     >
                       <Mail className="h-3.5 w-3.5" /> Email
-                    </Button>
-                  </motion.div>
-                </div>
+                    </RippleButton>
+                  </div>
               </motion.div>
 
               <ScrollArea className="flex-1">
@@ -650,16 +643,14 @@ export default function DonorsPage() {
                                   <Check className="h-3.5 w-3.5" /> Create Task
                                 </Button>
                               </div>
-                              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                                <Button 
+                                <RippleButton 
                                   size="sm" 
                                   className="h-8 text-xs bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm"
                                   onClick={handlePostActivity}
                                   disabled={!activityInput.trim()}
                                 >
                                   Post Activity <Send className="h-3 w-3 ml-1.5" />
-                                </Button>
-                              </motion.div>
+                                </RippleButton>
                             </div>
                           </div>
                         </motion.div>
@@ -929,12 +920,10 @@ export default function DonorsPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
               >
-                <Button className="bg-zinc-900 text-white hover:bg-zinc-800 px-6 h-11 shadow-md">
+                <RippleButton className="bg-zinc-900 text-white hover:bg-zinc-800 px-6 h-11 shadow-md">
                   <Plus className="mr-2 h-4 w-4" /> Add New Partner
-                </Button>
+                </RippleButton>
               </motion.div>
             </motion.div>
           )}
@@ -958,12 +947,12 @@ export default function DonorsPage() {
             />
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700">
+            <RippleButton variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700">
               Cancel
-            </Button>
-            <Button onClick={handleAddNote} className="bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm">
+            </RippleButton>
+            <RippleButton onClick={handleAddNote} className="bg-zinc-900 text-white hover:bg-zinc-800 shadow-sm">
               Save Note
-            </Button>
+            </RippleButton>
           </DialogFooter>
         </DialogContent>
       </Dialog>
