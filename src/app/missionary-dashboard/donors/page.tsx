@@ -87,6 +87,8 @@ interface Donor {
   activities: Activity[]
 }
 
+const STATUS_FILTERS: Array<Donor['status'] | 'All'> = ['All', 'Active', 'New', 'Lapsed', 'At Risk']
+
 const generateActivities = (donorId: string): Activity[] => {
   return [
     { id: `act-${donorId}-1`, type: 'gift', date: '2023-10-24T10:00:00', title: 'Donation Received', amount: 200, status: 'Succeeded' },
@@ -183,6 +185,12 @@ const DONORS_DATA: Donor[] = [
 
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }).format(value)
+}
+
+const formatRelativeDate = (value: string) => {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return '—'
+  return formatDistanceToNow(date, { addSuffix: true })
 }
 
 const getStatusColor = (status: Donor['status']) => {
@@ -292,45 +300,100 @@ const activityVariants = {
 }
 
 export default function DonorsPage() {
+  const [donors, setDonors] = React.useState<Donor[]>(DONORS_DATA)
   const [selectedDonorId, setSelectedDonorId] = React.useState<string | null>(null)
   const [searchTerm, setSearchTerm] = React.useState('')
-  const [statusFilter, setStatusFilter] = React.useState<string>('All')
+  const [statusFilter, setStatusFilter] = React.useState<Donor['status'] | 'All'>('All')
   const [activeTab, setActiveTab] = React.useState('timeline')
   const [noteInput, setNoteInput] = React.useState('')
   const [isNoteDialogOpen, setIsNoteDialogOpen] = React.useState(false)
   const [activityInput, setActivityInput] = React.useState('')
   const [copiedField, setCopiedField] = React.useState<string | null>(null)
+  const copyTimeoutRef = React.useRef<number | null>(null)
 
   const filteredDonors = React.useMemo(() => {
-    return DONORS_DATA.filter(donor => {
-      const matchesSearch = donor.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                            donor.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            donor.location.toLowerCase().includes(searchTerm.toLowerCase())
+    const term = searchTerm.toLowerCase().trim()
+    return donors.filter(donor => {
+      const matchesSearch =
+        donor.name.toLowerCase().includes(term) ||
+        donor.email.toLowerCase().includes(term) ||
+        donor.location.toLowerCase().includes(term)
       const matchesStatus = statusFilter === 'All' || donor.status === statusFilter
       return matchesSearch && matchesStatus
     })
-  }, [searchTerm, statusFilter])
+  }, [donors, searchTerm, statusFilter])
 
-  const selectedDonor = React.useMemo(() => 
-    DONORS_DATA.find(d => d.id === selectedDonorId), 
-  [selectedDonorId])
+  const selectedDonor = React.useMemo(
+    () => donors.find(d => d.id === selectedDonorId),
+    [donors, selectedDonorId]
+  )
 
-  const handleAddNote = () => {
-    console.log(`Adding note to donor ${selectedDonorId}: ${noteInput}`)
+  const updateDonorActivities = React.useCallback((donorId: string, activity: Activity) => {
+    setDonors(prev =>
+      prev.map(donor =>
+        donor.id === donorId
+          ? {
+              ...donor,
+              activities: [activity, ...donor.activities].sort(
+                (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+              ),
+            }
+          : donor
+      )
+    )
+  }, [])
+
+  const handleAddNote = React.useCallback(() => {
+    if (!selectedDonorId || !noteInput.trim()) return
+    updateDonorActivities(selectedDonorId, {
+      id: `act-${selectedDonorId}-${Date.now()}`,
+      type: 'note',
+      date: new Date().toISOString(),
+      title: 'Note added',
+      description: noteInput.trim(),
+    })
     setNoteInput('')
     setIsNoteDialogOpen(false)
-  }
+    setActiveTab('timeline')
+  }, [noteInput, selectedDonorId, updateDonorActivities])
 
-  const handleCopy = (text: string, field: string) => {
-    navigator.clipboard.writeText(text)
-    setCopiedField(field)
-    setTimeout(() => setCopiedField(null), 2000)
-  }
-
-  const handlePostActivity = () => {
-    console.log(`Posting activity: ${activityInput}`)
+  const handlePostActivity = React.useCallback(() => {
+    if (!selectedDonorId || !activityInput.trim()) return
+    updateDonorActivities(selectedDonorId, {
+      id: `act-${selectedDonorId}-${Date.now()}`,
+      type: 'note',
+      date: new Date().toISOString(),
+      title: 'New update',
+      description: activityInput.trim(),
+    })
     setActivityInput('')
-  }
+  }, [activityInput, selectedDonorId, updateDonorActivities])
+
+  const handleCopy = React.useCallback(
+    async (text: string, field: string) => {
+      if (!text) return
+      try {
+        if (navigator?.clipboard?.writeText) {
+          await navigator.clipboard.writeText(text)
+        } else {
+          throw new Error('Clipboard API unavailable')
+        }
+        setCopiedField(field)
+        if (copyTimeoutRef.current) window.clearTimeout(copyTimeoutRef.current)
+        copyTimeoutRef.current = window.setTimeout(() => setCopiedField(null), 2000)
+      } catch (error) {
+        console.error('Copy failed', error)
+        setCopiedField(null)
+      }
+    },
+    []
+  )
+
+  React.useEffect(() => {
+    return () => {
+      if (copyTimeoutRef.current) window.clearTimeout(copyTimeoutRef.current)
+    }
+  }, [])
 
   return (
     <div className="flex h-[calc(100vh-4rem)] bg-zinc-50/50">
@@ -356,14 +419,14 @@ export default function DonorsPage() {
                 <DropdownMenuContent align="end" className="w-48 bg-white border-zinc-200">
                   <DropdownMenuLabel className="text-zinc-600">Filter Status</DropdownMenuLabel>
                   <DropdownMenuSeparator className="bg-zinc-100" />
-                  {['All', 'Active', 'New', 'Lapsed', 'At Risk'].map(s => (
+                  {STATUS_FILTERS.map(status => (
                     <DropdownMenuCheckboxItem 
-                      key={s} 
-                      checked={statusFilter === s}
-                      onCheckedChange={() => setStatusFilter(s)}
+                      key={status} 
+                      checked={statusFilter === status}
+                      onCheckedChange={() => setStatusFilter(status)}
                       className="text-zinc-700"
                     >
-                      {s}
+                      {status}
                     </DropdownMenuCheckboxItem>
                   ))}
                 </DropdownMenuContent>
@@ -452,7 +515,7 @@ export default function DonorsPage() {
                           {donor.name}
                         </span>
                         <span className="text-[11px] text-zinc-400 whitespace-nowrap ml-2">
-                          {formatDistanceToNow(new Date(donor.lastGiftDate), { addSuffix: true })}
+                          {formatRelativeDate(donor.lastGiftDate)}
                         </span>
                       </div>
                       <div className="flex items-center justify-between">
@@ -950,7 +1013,7 @@ export default function DonorsPage() {
             <RippleButton variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="h-7 px-3 text-xs font-medium border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700">
               Cancel
             </RippleButton>
-            <RippleButton onClick={handleAddNote} className="h-7 px-3 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800">
+            <RippleButton onClick={handleAddNote} disabled={!noteInput.trim()} className="h-7 px-3 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800 disabled:opacity-70">
               Save Note
             </RippleButton>
           </DialogFooter>
