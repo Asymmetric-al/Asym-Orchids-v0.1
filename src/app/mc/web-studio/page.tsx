@@ -19,7 +19,7 @@ export default function WebStudioPage() {
               <Globe className="h-5 w-5" />
             </div>
             <CardTitle className="text-base">Public Site</CardTitle>
-            <CardDescription>Manage your organization's public-facing website pages</CardDescription>
+            <CardDescription>Manage your organization&apos;s public-facing website pages</CardDescription>
           </CardHeader>
           <CardContent>
             <Link href="/mc/web-studio/pages">

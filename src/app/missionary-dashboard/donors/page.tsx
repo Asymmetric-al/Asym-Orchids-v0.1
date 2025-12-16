@@ -302,16 +302,16 @@ const useMediaQuery = (query: string) => {
       mediaQuery.addEventListener('change', handleChange)
     } else {
       // Safari < 14 fallback
-      // @ts-ignore
-      mediaQuery.addListener(handleChange)
+        // @ts-expect-error Safari < 14 API
+        mediaQuery.addListener(handleChange)
     }
 
     return () => {
       if (mediaQuery.removeEventListener) {
         mediaQuery.removeEventListener('change', handleChange)
       } else {
-        // @ts-ignore
-        mediaQuery.removeListener(handleChange)
+        // @ts-expect-error Safari < 14 API
+          mediaQuery.removeListener(handleChange)
       }
     }
   }, [query])
