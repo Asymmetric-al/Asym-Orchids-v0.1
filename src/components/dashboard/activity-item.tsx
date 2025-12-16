@@ -17,11 +17,11 @@ export interface ActivityItemProps {
 }
 
 const colorClasses = {
-  emerald: 'bg-emerald-100 text-emerald-700',
-  blue: 'bg-blue-100 text-blue-700',
-  violet: 'bg-violet-100 text-violet-700',
-  amber: 'bg-amber-100 text-amber-700',
-  rose: 'bg-rose-100 text-rose-700'
+  emerald: 'bg-emerald-50 text-emerald-700',
+  blue: 'bg-blue-50 text-blue-700',
+  violet: 'bg-violet-50 text-violet-700',
+  amber: 'bg-amber-50 text-amber-700',
+  rose: 'bg-rose-50 text-rose-700'
 } as const
 
 export const ActivityItem = memo(function ActivityItem({
@@ -35,27 +35,27 @@ export const ActivityItem = memo(function ActivityItem({
 }: ActivityItemProps) {
   return (
     <div
-      className='group flex cursor-pointer items-center gap-3 px-6 py-3 transition-colors hover:bg-muted/50'
+      className='group flex cursor-pointer items-center gap-3 px-6 py-2.5 transition-colors hover:bg-zinc-50'
       onClick={onClick}
     >
-      <Avatar className='size-8 border'>
+      <Avatar className='size-8 border border-zinc-200'>
         <AvatarFallback className={cn('text-xs font-medium', colorClasses[colorVariant])}>
           {initials}
         </AvatarFallback>
       </Avatar>
       <div className='min-w-0 flex-1'>
         <div className='flex items-center gap-2'>
-          <p className='truncate text-sm font-medium'>{action}</p>
-          <Badge className='bg-primary/10 text-primary h-4 border-0 px-1 text-[10px] font-medium'>
+          <p className='truncate text-sm font-medium text-zinc-900'>{action}</p>
+          <Badge variant='secondary' className='h-4 bg-zinc-100 border-0 px-1.5 text-[10px] font-medium text-zinc-600'>
             {time}
           </Badge>
         </div>
-        <p className='text-muted-foreground text-xs'>
-          <span className='font-medium text-foreground'>{detail}</span>
+        <p className='text-xs text-zinc-500'>
+          <span className='font-medium text-zinc-700'>{detail}</span>
           {name && <span> from {name}</span>}
         </p>
       </div>
-      <ChevronRightIcon className='text-muted-foreground size-4 transition-colors group-hover:text-foreground' />
+      <ChevronRightIcon className='size-4 text-zinc-400 transition-colors group-hover:text-zinc-600' />
     </div>
   )
 })

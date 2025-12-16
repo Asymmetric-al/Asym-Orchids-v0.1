@@ -25,11 +25,11 @@ export const TaskItem = memo(function TaskItem({
   onMenuClick
 }: TaskItemProps) {
   return (
-    <div className='group flex cursor-pointer items-start gap-3 px-6 py-3 transition-colors hover:bg-muted/50'>
+    <div className='group flex cursor-pointer items-start gap-3 px-6 py-2.5 transition-colors hover:bg-zinc-50'>
       <div className={cn('mt-1.5 size-2 shrink-0 rounded-full', priorityColors[priority])} />
       <div className='min-w-0 flex-1'>
-        <p className='text-sm font-medium transition-colors group-hover:text-primary'>{title}</p>
-        <div className='text-muted-foreground mt-0.5 flex items-center gap-1 text-xs'>
+        <p className='text-sm font-medium text-zinc-700 group-hover:text-zinc-900'>{title}</p>
+        <div className='mt-0.5 flex items-center gap-1 text-xs text-zinc-500'>
           <ClockIcon className='size-3' />
           <span>{dueDate}</span>
         </div>
@@ -37,7 +37,7 @@ export const TaskItem = memo(function TaskItem({
       <Button
         variant='ghost'
         size='icon'
-        className='size-6 opacity-0 transition-opacity group-hover:opacity-100'
+        className='size-6 text-zinc-400 opacity-0 transition-opacity group-hover:opacity-100'
         onClick={(e) => {
           e.stopPropagation()
           onMenuClick?.()

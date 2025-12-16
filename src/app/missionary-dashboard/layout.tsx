@@ -57,16 +57,16 @@ function NavLink({ item, collapsed = false }: { item: typeof navItems[0]; collap
     <Link
       href={item.href}
       className={cn(
-        'group flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
+        'group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
         isActive
-          ? 'bg-emerald-50 text-emerald-700'
-          : 'text-slate-500 hover:bg-slate-100/80 hover:text-slate-900',
+          ? 'bg-zinc-100 text-zinc-900'
+          : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900',
         collapsed && 'justify-center px-2'
       )}
     >
       <Icon className={cn(
-        'h-5 w-5 shrink-0 transition-colors',
-        isActive ? 'text-emerald-600' : 'text-slate-400 group-hover:text-slate-600'
+        'h-[18px] w-[18px] shrink-0',
+        isActive ? 'text-zinc-900' : 'text-zinc-500 group-hover:text-zinc-700'
       )} />
       {!collapsed && <span>{item.label}</span>}
     </Link>
@@ -75,31 +75,40 @@ function NavLink({ item, collapsed = false }: { item: typeof navItems[0]; collap
 
 function Sidebar({ className }: { className?: string }) {
   return (
-    <aside className={cn('flex h-full flex-col border-r border-slate-200/60 bg-white/80 backdrop-blur-xl supports-[backdrop-filter]:bg-white/60', className)}>
-      <div className="flex h-16 items-center px-6">
-        <Link href="/missionary-dashboard" className="flex items-center gap-2.5 group">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-600 text-white shadow-sm transition-transform group-hover:scale-105">
-            <LayoutDashboard className="h-5 w-5" />
+    <aside className={cn('flex h-full flex-col border-r border-zinc-200 bg-white', className)}>
+      <div className="flex h-14 items-center border-b border-zinc-200 px-5">
+        <Link href="/missionary-dashboard" className="flex items-center gap-2.5">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-white">
+            <LayoutDashboard className="h-4 w-4" />
           </div>
-          <span className="font-bold text-lg tracking-tight text-slate-900">Missionary</span>
+          <div className="flex flex-col">
+            <span className="text-sm font-semibold text-zinc-900">GIVEHOPE</span>
+            <span className="text-[10px] font-medium uppercase tracking-wider text-zinc-500">Fieldworker Dashboard</span>
+          </div>
         </Link>
       </div>
 
-      <ScrollArea className="flex-1 px-4 py-4">
+      <ScrollArea className="flex-1 px-3 py-4">
         <div className="space-y-6">
+          <nav className="flex flex-col gap-1">
+            {navItems.slice(0, 2).map((item) => (
+              <NavLink key={item.href} item={item} />
+            ))}
+          </nav>
+          
           <div className="space-y-1">
-            <p className="px-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Overview</p>
+            <p className="px-3 text-[11px] font-medium uppercase tracking-wider text-zinc-400">Analytics</p>
             <nav className="flex flex-col gap-1">
-              {navItems.slice(0, 4).map((item) => (
+              {navItems.slice(2, 5).map((item) => (
                 <NavLink key={item.href} item={item} />
               ))}
             </nav>
           </div>
-          
+
           <div className="space-y-1">
-            <p className="px-2 text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">Management</p>
+            <p className="px-3 text-[11px] font-medium uppercase tracking-wider text-zinc-400">Communication</p>
             <nav className="flex flex-col gap-1">
-              {navItems.slice(4).map((item) => (
+              {navItems.slice(5).map((item) => (
                 <NavLink key={item.href} item={item} />
               ))}
             </nav>
@@ -107,7 +116,7 @@ function Sidebar({ className }: { className?: string }) {
         </div>
       </ScrollArea>
 
-      <div className="border-t border-slate-200/60 px-4 py-4">
+      <div className="border-t border-zinc-200 px-3 py-3">
         <nav className="flex flex-col gap-1">
           {bottomNavItems.map((item) => (
             <NavLink key={item.href} item={item} />
@@ -120,73 +129,72 @@ function Sidebar({ className }: { className?: string }) {
 
 function TopBar() {
   return (
-    <header className="sticky top-0 z-40 flex h-16 items-center justify-between border-b border-slate-200/60 bg-white/80 px-6 backdrop-blur-md supports-[backdrop-filter]:bg-white/60">
-      <div className="flex items-center gap-4 lg:hidden">
+    <header className="sticky top-0 z-40 flex h-14 items-center justify-between border-b border-zinc-200 bg-white px-4 lg:px-6">
+      <div className="flex items-center gap-3 lg:hidden">
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="lg:hidden -ml-2 text-slate-500 hover:text-slate-900 hover:bg-slate-100">
+            <Button variant="ghost" size="icon" className="lg:hidden h-8 w-8 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100">
               <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
-          <SheetContent side="left" className="w-72 p-0 border-r-slate-200">
+          <SheetContent side="left" className="w-64 p-0 border-r-zinc-200">
             <Sidebar />
           </SheetContent>
         </Sheet>
       </div>
 
       <div className="hidden lg:flex lg:flex-1 lg:items-center lg:gap-4">
-        <div className="relative max-w-sm flex-1">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+        <div className="relative max-w-xs flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
           <input
             type="search"
-            placeholder="Search donors, transactions, or tasks..."
-            className="h-10 w-full rounded-xl border-none bg-slate-100 pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:bg-white transition-all"
+            placeholder="Search..."
+            className="h-9 w-full rounded-lg border border-zinc-200 bg-white pl-9 pr-4 text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-200 transition-all"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        <Button variant="ghost" size="icon" className="text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-xl relative">
-          <Bell className="h-5 w-5" />
-          <span className="absolute top-2.5 right-2.5 h-2 w-2 rounded-full bg-rose-500 border-2 border-white" />
+      <div className="flex items-center gap-2">
+        <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 relative">
+          <Bell className="h-[18px] w-[18px]" />
+          <span className="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-rose-500" />
         </Button>
-        <div className="h-6 w-px bg-slate-200 mx-1" />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="flex items-center gap-3 px-2 py-1.5 h-auto hover:bg-slate-100 rounded-xl">
-              <Avatar className="h-9 w-9 border-2 border-white shadow-sm">
+            <Button variant="ghost" className="flex items-center gap-2 px-2 py-1 h-auto hover:bg-zinc-100 rounded-lg">
+              <Avatar className="h-8 w-8 border border-zinc-200">
                 <AvatarImage src="/placeholder-avatar.jpg" />
-                <AvatarFallback className="bg-emerald-100 text-emerald-700 font-bold">
+                <AvatarFallback className="bg-zinc-100 text-zinc-700 text-xs font-medium">
                   SM
                 </AvatarFallback>
               </Avatar>
-              <div className="hidden md:flex flex-col items-start text-sm">
-                <span className="font-semibold text-slate-900">Sarah Mitchell</span>
-                <span className="text-xs text-slate-500">Missionary</span>
+              <div className="hidden md:flex flex-col items-start">
+                <span className="text-sm font-medium text-zinc-900">Sarah Mitchell</span>
+                <span className="text-xs text-zinc-500">Missionary</span>
               </div>
-              <ChevronDown className="h-4 w-4 text-slate-400" />
+              <ChevronDown className="h-4 w-4 text-zinc-400" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 rounded-xl border-slate-200 p-2">
+          <DropdownMenuContent align="end" className="w-56 rounded-lg border-zinc-200 p-1.5">
             <div className="px-2 py-2">
-              <p className="text-sm font-medium text-slate-900">Sarah Mitchell</p>
-              <p className="text-xs text-slate-500">sarah.mitchell@example.com</p>
+              <p className="text-sm font-medium text-zinc-900">Sarah Mitchell</p>
+              <p className="text-xs text-zinc-500">sarah.mitchell@example.com</p>
             </div>
-            <DropdownMenuSeparator className="bg-slate-100" />
-            <DropdownMenuItem asChild className="rounded-lg focus:bg-slate-100 cursor-pointer">
+            <DropdownMenuSeparator className="bg-zinc-100" />
+            <DropdownMenuItem asChild className="rounded-md focus:bg-zinc-100 cursor-pointer">
               <Link href="/missionary-dashboard/profile">
-                <User className="mr-2 h-4 w-4 text-slate-500" />
+                <User className="mr-2 h-4 w-4 text-zinc-500" />
                 Profile
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem asChild className="rounded-lg focus:bg-slate-100 cursor-pointer">
+            <DropdownMenuItem asChild className="rounded-md focus:bg-zinc-100 cursor-pointer">
               <Link href="/missionary-dashboard/settings">
-                <Settings className="mr-2 h-4 w-4 text-slate-500" />
+                <Settings className="mr-2 h-4 w-4 text-zinc-500" />
                 Settings
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-slate-100" />
-            <DropdownMenuItem className="text-rose-600 focus:text-rose-700 focus:bg-rose-50 rounded-lg cursor-pointer">
+            <DropdownMenuSeparator className="bg-zinc-100" />
+            <DropdownMenuItem className="text-rose-600 focus:text-rose-700 focus:bg-rose-50 rounded-md cursor-pointer">
               <LogOut className="mr-2 h-4 w-4" />
               Sign out
             </DropdownMenuItem>
@@ -210,11 +218,11 @@ export default function MissionaryDashboardLayout({
       enableSystem={false}
       disableTransitionOnChange
     >
-      <div className="flex h-screen overflow-hidden bg-slate-50/50">
-        <Sidebar className="hidden w-[280px] lg:flex" />
+      <div className="flex h-screen overflow-hidden bg-zinc-50">
+        <Sidebar className="hidden w-64 lg:flex" />
         <div className="flex flex-1 flex-col overflow-hidden">
           <TopBar />
-          <main className="flex-1 overflow-y-auto bg-slate-50/50">
+          <main className="flex-1 overflow-y-auto">
             {children}
           </main>
         </div>

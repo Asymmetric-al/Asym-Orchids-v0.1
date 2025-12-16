@@ -2,7 +2,6 @@
 
 import { memo } from 'react'
 import { Card, CardContent } from '@/components/ui/card'
-import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { TrendingUpIcon, TrendingDownIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import type { LucideIcon } from 'lucide-react'
@@ -28,21 +27,19 @@ export const StatCard = memo(function StatCard({
   className
 }: StatCardProps) {
   return (
-    <Card className={cn('shadow-none', className)}>
-      <CardContent className='flex items-center gap-3 px-4 py-3'>
-        <Avatar className='size-8.5 rounded-sm'>
-          <AvatarFallback className='bg-primary/10 text-primary shrink-0 rounded-sm'>
-            <Icon className='size-5' />
-          </AvatarFallback>
-        </Avatar>
+    <Card className={cn('border-zinc-200 bg-white', className)}>
+      <CardContent className='flex items-center gap-3 p-4'>
+        <div className='flex size-9 items-center justify-center rounded-md bg-zinc-100'>
+          <Icon className='size-4 text-zinc-600' />
+        </div>
         <div className='flex flex-col gap-0.5'>
-          <span className='text-muted-foreground text-sm font-medium'>{title}</span>
-          <span className='text-lg font-medium'>{value}</span>
+          <span className='text-xs font-medium text-zinc-500'>{title}</span>
+          <span className='text-lg font-semibold text-zinc-900'>{value}</span>
           {change && (
             <div
               className={cn(
                 'flex items-center gap-1 text-xs font-medium',
-                change.type === 'increase' ? 'text-primary' : 'text-rose-600'
+                change.type === 'increase' ? 'text-emerald-600' : 'text-rose-600'
               )}
             >
               {change.type === 'increase' ? (
