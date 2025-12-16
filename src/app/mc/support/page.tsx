@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Inbox, Users, Tag, Zap, BookOpen, Clock, AlertCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -61,7 +61,7 @@ export default function SupportHubPage() {
         <CardContent>
           <p className="text-sm text-amber-700">2 tickets approaching first reply SLA. Review immediately.</p>
           <Link href="/mc/support/tickets?filter=sla-warning">
-            <Button variant="outline" size="sm" className="mt-2">View Urgent</Button>
+            <RippleButton variant="outline" size="sm" className="h-7 mt-2 text-xs font-medium">View Urgent</RippleButton>
           </Link>
         </CardContent>
       </Card>
@@ -77,7 +77,7 @@ export default function SupportHubPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/support/inbox">
-              <Button variant="outline" size="sm" className="w-full">Open Inbox</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Open Inbox</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -92,7 +92,7 @@ export default function SupportHubPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/support/contacts">
-              <Button variant="outline" size="sm" className="w-full">View Contacts</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Contacts</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -107,7 +107,7 @@ export default function SupportHubPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/support/tags">
-              <Button variant="outline" size="sm" className="w-full">Manage Tags</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Tags</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -122,7 +122,7 @@ export default function SupportHubPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/support/macros">
-              <Button variant="outline" size="sm" className="w-full">View Macros</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Macros</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -137,7 +137,7 @@ export default function SupportHubPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/support/knowledge">
-              <Button variant="outline" size="sm" className="w-full">Browse Docs</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Browse Docs</RippleButton>
             </Link>
           </CardContent>
         </Card>

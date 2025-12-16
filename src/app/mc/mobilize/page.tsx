@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Rocket, Users, ClipboardList, Calendar, GraduationCap, CheckCircle2, ArrowRight, Clock } from 'lucide-react'
 import { Progress } from '@/components/ui/progress'
@@ -61,7 +61,7 @@ export default function MobilizePage() {
         <CardContent>
           <p className="text-sm text-amber-700">5 checklist items are past SLA. Review and escalate to team leads.</p>
           <Link href="/mc/mobilize/overdue">
-            <Button variant="outline" size="sm" className="mt-2">View Overdue</Button>
+            <RippleButton variant="outline" size="sm" className="h-7 mt-2 text-xs font-medium">View Overdue</RippleButton>
           </Link>
         </CardContent>
       </Card>
@@ -77,7 +77,7 @@ export default function MobilizePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/mobilize/pipeline">
-              <Button variant="outline" size="sm" className="w-full">View Pipeline</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Pipeline</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -92,7 +92,7 @@ export default function MobilizePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/mobilize/checklists">
-              <Button variant="outline" size="sm" className="w-full">Manage Checklists</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Checklists</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -107,7 +107,7 @@ export default function MobilizePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/mobilize/interviews">
-              <Button variant="outline" size="sm" className="w-full">View Interviews</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Interviews</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -122,7 +122,7 @@ export default function MobilizePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/mobilize/training">
-              <Button variant="outline" size="sm" className="w-full">View Training</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Training</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -137,7 +137,7 @@ export default function MobilizePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/mobilize/onboarding">
-              <Button variant="outline" size="sm" className="w-full">View Onboarding</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Onboarding</RippleButton>
             </Link>
           </CardContent>
         </Card>

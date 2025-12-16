@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Heart, Users, MessageCircle, ClipboardList, AlertTriangle, BookOpen, Calendar, UserCheck } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -74,7 +74,7 @@ export default function MemberCarePage() {
             </div>
           </div>
           <Link href="/mc/care/alerts">
-            <Button variant="outline" size="sm" className="mt-3">Review All Alerts</Button>
+            <RippleButton variant="outline" size="sm" className="h-7 mt-3 text-xs font-medium">Review All Alerts</RippleButton>
           </Link>
         </CardContent>
       </Card>
@@ -90,7 +90,7 @@ export default function MemberCarePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/care/list">
-              <Button variant="outline" size="sm" className="w-full">View List</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View List</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -105,7 +105,7 @@ export default function MemberCarePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/care/check-ins">
-              <Button variant="outline" size="sm" className="w-full">Manage Check-ins</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Check-ins</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -120,7 +120,7 @@ export default function MemberCarePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/care/prayers">
-              <Button variant="outline" size="sm" className="w-full">View Requests</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Requests</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -135,7 +135,7 @@ export default function MemberCarePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/care/plans">
-              <Button variant="outline" size="sm" className="w-full">Manage Plans</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Plans</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -150,7 +150,7 @@ export default function MemberCarePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/care/alerts">
-              <Button variant="outline" size="sm" className="w-full">View Alerts</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Alerts</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -165,7 +165,7 @@ export default function MemberCarePage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/care/resources">
-              <Button variant="outline" size="sm" className="w-full">Browse Resources</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Browse Resources</RippleButton>
             </Link>
           </CardContent>
         </Card>

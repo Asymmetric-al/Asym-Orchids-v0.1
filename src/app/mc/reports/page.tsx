@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { BarChart3, Library, Calendar, Send, Star, FileDown, Filter, Plus } from 'lucide-react'
 
@@ -62,7 +62,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/reports/new">
-              <Button variant="outline" size="sm" className="w-full">New Report</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">New Report</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -77,7 +77,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/reports/library">
-              <Button variant="outline" size="sm" className="w-full">View Library</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Library</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -92,7 +92,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/reports/schedules">
-              <Button variant="outline" size="sm" className="w-full">Manage Schedules</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Schedules</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -107,7 +107,7 @@ export default function ReportsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/reports/destinations">
-              <Button variant="outline" size="sm" className="w-full">Configure</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Configure</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -125,21 +125,21 @@ export default function ReportsPage() {
               <p className="text-sm font-medium">Gift.new this month.finance.weekly</p>
               <p className="text-xs text-muted-foreground">Last run: 2 days ago</p>
             </div>
-            <Button variant="ghost" size="sm">Run</Button>
+            <RippleButton variant="ghost" size="sm" className="h-7 px-2.5 text-xs font-medium">Run</RippleButton>
           </div>
           <div className="flex items-center justify-between py-2 border-b">
             <div>
               <p className="text-sm font-medium">Person.active donors.fundraising.monthly</p>
               <p className="text-xs text-muted-foreground">Last run: 1 week ago</p>
             </div>
-            <Button variant="ghost" size="sm">Run</Button>
+            <RippleButton variant="ghost" size="sm" className="h-7 px-2.5 text-xs font-medium">Run</RippleButton>
           </div>
           <div className="flex items-center justify-between py-2">
             <div>
               <p className="text-sm font-medium">Contribution.reconciliation.finance.daily</p>
               <p className="text-xs text-muted-foreground">Last run: today</p>
             </div>
-            <Button variant="ghost" size="sm">Run</Button>
+            <RippleButton variant="ghost" size="sm" className="h-7 px-2.5 text-xs font-medium">Run</RippleButton>
           </div>
         </CardContent>
       </Card>

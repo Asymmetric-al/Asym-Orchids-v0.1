@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { PenTool, FileText, Send, CheckCircle, Search, Download } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -53,7 +53,7 @@ export default function SignStudioPage() {
         <CardContent>
           <div className="flex gap-2">
             <Input placeholder="Search by signer name, email, or document ID..." className="max-w-md" />
-            <Button>Search</Button>
+            <RippleButton className="h-7 px-3 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800">Search</RippleButton>
           </div>
         </CardContent>
       </Card>
@@ -69,7 +69,7 @@ export default function SignStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/sign/templates">
-              <Button variant="outline" size="sm" className="w-full">Manage Templates</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Templates</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -84,7 +84,7 @@ export default function SignStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/sign/active">
-              <Button variant="outline" size="sm" className="w-full">View Active</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Active</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -99,7 +99,7 @@ export default function SignStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/sign/completed">
-              <Button variant="outline" size="sm" className="w-full">View Completed</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Completed</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -114,7 +114,7 @@ export default function SignStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/sign/export">
-              <Button variant="outline" size="sm" className="w-full">Export Documents</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Export Documents</RippleButton>
             </Link>
           </CardContent>
         </Card>

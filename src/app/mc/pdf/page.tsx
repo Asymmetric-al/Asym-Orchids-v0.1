@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { FileText, Palette, Database, Receipt, Calendar, Package } from 'lucide-react'
 
@@ -23,7 +23,7 @@ export default function PDFStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/pdf/templates">
-              <Button variant="outline" size="sm" className="w-full">Manage Templates</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Templates</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -38,7 +38,7 @@ export default function PDFStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/pdf/themes">
-              <Button variant="outline" size="sm" className="w-full">Edit Themes</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Edit Themes</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -53,7 +53,7 @@ export default function PDFStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/pdf/bindings">
-              <Button variant="outline" size="sm" className="w-full">Configure Bindings</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Configure Bindings</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -68,7 +68,7 @@ export default function PDFStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/pdf/templates/new?type=receipt">
-              <Button variant="outline" size="sm" className="w-full">Create Receipt</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Create Receipt</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -83,7 +83,7 @@ export default function PDFStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/pdf/packs/new?type=year-end">
-              <Button variant="outline" size="sm" className="w-full">Build Pack</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Build Pack</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -98,7 +98,7 @@ export default function PDFStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/pdf/packs">
-              <Button variant="outline" size="sm" className="w-full">View Packs</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Packs</RippleButton>
             </Link>
           </CardContent>
         </Card>

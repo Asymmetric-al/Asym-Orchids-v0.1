@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Zap, Link2, AlertTriangle, History, Play, RefreshCw, Clock, CheckCircle } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -63,7 +63,7 @@ export default function AutomationsPage() {
         <CardContent>
           <p className="text-sm text-amber-700">8 automation runs failed in the last 24 hours. Review and retry.</p>
           <Link href="/mc/automations/runs?status=failed">
-            <Button variant="outline" size="sm" className="mt-2">Review Failed</Button>
+            <RippleButton variant="outline" size="sm" className="h-7 mt-2 text-xs font-medium">Review Failed</RippleButton>
           </Link>
         </CardContent>
       </Card>
@@ -79,7 +79,7 @@ export default function AutomationsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/automations/flows">
-              <Button variant="outline" size="sm" className="w-full">View Flows</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Flows</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -94,7 +94,7 @@ export default function AutomationsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/automations/connections">
-              <Button variant="outline" size="sm" className="w-full">Manage</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -109,7 +109,7 @@ export default function AutomationsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/automations/runs?status=failed">
-              <Button variant="outline" size="sm" className="w-full">View Errors</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Errors</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -124,7 +124,7 @@ export default function AutomationsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/automations/logs">
-              <Button variant="outline" size="sm" className="w-full">View Logs</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Logs</RippleButton>
             </Link>
           </CardContent>
         </Card>

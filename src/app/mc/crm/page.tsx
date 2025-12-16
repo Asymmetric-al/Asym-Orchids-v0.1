@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Users, Building2, Home, ClipboardList, Activity, Search } from 'lucide-react'
 import { Input } from '@/components/ui/input'
@@ -23,7 +23,7 @@ export default function CRMPage() {
         <CardContent>
           <div className="flex gap-2">
             <Input placeholder="Search by name, email, phone, or ID..." className="max-w-md" />
-            <Button>Search</Button>
+            <RippleButton className="h-7 px-3 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800">Search</RippleButton>
           </div>
         </CardContent>
       </Card>
@@ -39,7 +39,7 @@ export default function CRMPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/crm/people">
-              <Button variant="outline" size="sm" className="w-full">View All People</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View All People</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -54,7 +54,7 @@ export default function CRMPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/crm/churches">
-              <Button variant="outline" size="sm" className="w-full">View Churches</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Churches</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -69,7 +69,7 @@ export default function CRMPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/crm/households">
-              <Button variant="outline" size="sm" className="w-full">View Households</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Households</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -84,7 +84,7 @@ export default function CRMPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/crm/activity">
-              <Button variant="outline" size="sm" className="w-full">View Activity</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Activity</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -99,7 +99,7 @@ export default function CRMPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/crm/tasks">
-              <Button variant="outline" size="sm" className="w-full">View Tasks</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Tasks</RippleButton>
             </Link>
           </CardContent>
         </Card>

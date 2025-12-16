@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -139,11 +140,11 @@ const RevenueSection = memo(function RevenueSection() {
             <p className='text-xs text-zinc-500'>Monthly revenue for the current year</p>
           </div>
         </div>
-        <Button variant='ghost' size='sm' className='h-7 text-xs text-zinc-600 hover:text-zinc-900' asChild>
-          <Link href='/mc/reports'>
-            View Report <ArrowUpRightIcon className='ml-1 size-3' />
-          </Link>
-        </Button>
+          <RippleButton variant='ghost' size='sm' className='h-7 px-2.5 text-xs font-medium text-zinc-600 hover:text-zinc-900' asChild>
+            <Link href='/mc/reports'>
+              View Report <ArrowUpRightIcon className='ml-1 size-3' />
+            </Link>
+          </RippleButton>
       </CardHeader>
       <CardContent>
         <RevenueChart data={[...REVENUE_DATA]} />
@@ -202,11 +203,11 @@ const ActivitySection = memo(function ActivitySection() {
             <p className='text-xs text-zinc-500'>Latest actions across your organization</p>
           </div>
         </div>
-        <Button variant='ghost' size='sm' className='h-7 text-xs text-zinc-600 hover:text-zinc-900' asChild>
-          <Link href='/mc/reports'>
-            View All <ArrowUpRightIcon className='ml-1 size-3' />
-          </Link>
-        </Button>
+          <RippleButton variant='ghost' size='sm' className='h-7 px-2.5 text-xs font-medium text-zinc-600 hover:text-zinc-900' asChild>
+            <Link href='/mc/reports'>
+              View All <ArrowUpRightIcon className='ml-1 size-3' />
+            </Link>
+          </RippleButton>
       </CardHeader>
       <CardContent className='p-0'>
         <div className='divide-y divide-zinc-100'>
@@ -215,13 +216,13 @@ const ActivitySection = memo(function ActivitySection() {
           ))}
         </div>
         <div className='border-t border-zinc-100 p-4'>
-          <Button variant='outline' size='sm' className='h-8 w-full border-dashed border-zinc-300 text-xs text-zinc-600' asChild>
-            <Link href='/mc/reports'>
-              View all activity
-              <ChevronRightIcon className='ml-1 size-3' />
-            </Link>
-          </Button>
-        </div>
+            <RippleButton variant='outline' size='sm' className='h-7 w-full border-dashed border-zinc-300 text-xs font-medium text-zinc-600' asChild>
+              <Link href='/mc/reports'>
+                View all activity
+                <ChevronRightIcon className='ml-1 size-3' />
+              </Link>
+            </RippleButton>
+          </div>
       </CardContent>
     </Card>
   )
@@ -240,9 +241,9 @@ const TasksSection = memo(function TasksSection() {
             <p className='text-xs text-zinc-500'>Your scheduled items</p>
           </div>
         </div>
-        <Button variant='ghost' size='icon' className='size-7 text-zinc-500 hover:text-zinc-700'>
-          <PlusIcon className='size-4' />
-        </Button>
+          <RippleButton variant='ghost' size='icon' className='h-7 w-7 text-zinc-500 hover:text-zinc-700'>
+            <PlusIcon className='size-4' />
+          </RippleButton>
       </CardHeader>
       <CardContent className='p-0'>
         <div className='divide-y divide-zinc-100'>
@@ -251,11 +252,11 @@ const TasksSection = memo(function TasksSection() {
           ))}
         </div>
         <div className='border-t border-zinc-100 p-4'>
-          <Button variant='outline' size='sm' className='h-8 w-full border-dashed border-zinc-300 text-xs text-zinc-600'>
-            View all tasks
-            <ChevronRightIcon className='ml-1 size-3' />
-          </Button>
-        </div>
+            <RippleButton variant='outline' size='sm' className='h-7 w-full border-dashed border-zinc-300 text-xs font-medium text-zinc-600'>
+              View all tasks
+              <ChevronRightIcon className='ml-1 size-3' />
+            </RippleButton>
+          </div>
       </CardContent>
     </Card>
   )
@@ -301,20 +302,20 @@ export default function MissionControlPage() {
           <h1 className='text-xl font-semibold text-zinc-900'>Dashboard Overview</h1>
           <p className='text-sm text-zinc-500'>Here&apos;s what&apos;s happening with your mission today</p>
         </div>
-        <div className='flex items-center gap-2'>
-          <Button variant='outline' size='sm' className='h-8 gap-1.5 border-zinc-200 text-zinc-700'>
-            <CalendarIcon className='size-3.5' />
-            {today}
-          </Button>
-          <Button variant='outline' size='sm' className='h-8 gap-1.5 border-zinc-200 text-zinc-700'>
-            <FilterIcon className='size-3.5' />
-            <span className='hidden sm:inline'>Filter</span>
-          </Button>
-          <Button size='sm' className='h-8 gap-1.5 bg-zinc-900 hover:bg-zinc-800'>
-            <PlusIcon className='size-3.5' />
-            <span className='hidden sm:inline'>New Update</span>
-          </Button>
-        </div>
+          <div className='flex items-center gap-2'>
+            <RippleButton variant='outline' size='sm' className='h-7 px-2.5 gap-1.5 border-zinc-200 text-xs font-medium text-zinc-700'>
+              <CalendarIcon className='size-3' />
+              {today}
+            </RippleButton>
+            <RippleButton variant='outline' size='sm' className='h-7 px-2.5 gap-1.5 border-zinc-200 text-xs font-medium text-zinc-700'>
+              <FilterIcon className='size-3' />
+              <span className='hidden sm:inline'>Filter</span>
+            </RippleButton>
+            <RippleButton size='sm' className='h-7 px-2.5 gap-1.5 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800'>
+              <PlusIcon className='size-3' />
+              <span className='hidden sm:inline'>New Update</span>
+            </RippleButton>
+          </div>
       </div>
 
       <StatsGrid />

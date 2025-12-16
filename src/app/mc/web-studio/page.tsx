@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Globe, FileText, Users, ExternalLink } from 'lucide-react'
 
@@ -23,9 +23,9 @@ export default function WebStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/web-studio/pages">
-              <Button variant="outline" size="sm" className="w-full">
-                Manage Pages <ExternalLink className="ml-2 h-3 w-3" />
-              </Button>
+<RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">
+                  Manage Pages <ExternalLink className="ml-2 h-3 w-3" />
+                </RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -40,9 +40,9 @@ export default function WebStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/web-studio/pages/give">
-              <Button variant="outline" size="sm" className="w-full">
-                Edit Give Page <ExternalLink className="ml-2 h-3 w-3" />
-              </Button>
+<RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">
+                  Edit Give Page <ExternalLink className="ml-2 h-3 w-3" />
+                </RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -57,9 +57,9 @@ export default function WebStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/web-studio/missionaries">
-              <Button variant="outline" size="sm" className="w-full">
-                View Missionaries <ExternalLink className="ml-2 h-3 w-3" />
-              </Button>
+<RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">
+                  View Missionaries <ExternalLink className="ml-2 h-3 w-3" />
+                </RippleButton>
             </Link>
           </CardContent>
         </Card>

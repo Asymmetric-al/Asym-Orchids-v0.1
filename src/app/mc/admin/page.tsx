@@ -3,7 +3,7 @@
 import { TilePage } from '@/components/mission-control/tiles/TilePage'
 import { getTileById } from '@/lib/mission-control/tiles'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Settings, Globe, Key, Sparkles, Download, Activity, Shield, CheckCircle, AlertCircle, ArrowRight } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'

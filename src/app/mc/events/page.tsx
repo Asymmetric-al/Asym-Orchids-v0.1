@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { CalendarDays, Users, Mic2, DollarSign, Ticket, Tag, UserCheck, QrCode, TrendingUp } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -83,7 +83,7 @@ export default function EventsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/events/list">
-              <Button variant="outline" size="sm" className="w-full">View Events</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Events</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -98,7 +98,7 @@ export default function EventsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/events/sessions">
-              <Button variant="outline" size="sm" className="w-full">Manage Sessions</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Sessions</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -113,7 +113,7 @@ export default function EventsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/events/budgets">
-              <Button variant="outline" size="sm" className="w-full">View Budgets</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Budgets</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -128,7 +128,7 @@ export default function EventsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/events/registration">
-              <Button variant="outline" size="sm" className="w-full">Configure</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Configure</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -143,7 +143,7 @@ export default function EventsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/events/discounts">
-              <Button variant="outline" size="sm" className="w-full">Manage Discounts</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Discounts</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -158,7 +158,7 @@ export default function EventsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/events/attendees">
-              <Button variant="outline" size="sm" className="w-full">View Attendees</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Attendees</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -173,7 +173,7 @@ export default function EventsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/events/checkin">
-              <Button variant="outline" size="sm" className="w-full">Check-in Portal</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Check-in Portal</RippleButton>
             </Link>
           </CardContent>
         </Card>

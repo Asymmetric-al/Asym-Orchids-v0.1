@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { Mail, Layout, Palette, Variable, Shield, FileText, Send } from 'lucide-react'
 
@@ -53,7 +53,7 @@ export default function EmailStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/email/campaigns">
-              <Button variant="outline" size="sm" className="w-full">View Campaigns</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Campaigns</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -68,7 +68,7 @@ export default function EmailStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/email/templates">
-              <Button variant="outline" size="sm" className="w-full">Manage Templates</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Manage Templates</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -83,7 +83,7 @@ export default function EmailStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/email/brand">
-              <Button variant="outline" size="sm" className="w-full">Edit Styles</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Edit Styles</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -98,7 +98,7 @@ export default function EmailStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/email/variables">
-              <Button variant="outline" size="sm" className="w-full">Configure</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Configure</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -113,7 +113,7 @@ export default function EmailStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/email/auth">
-              <Button variant="outline" size="sm" className="w-full">Auth Settings</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Auth Settings</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -128,7 +128,7 @@ export default function EmailStudioPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/email/logs">
-              <Button variant="outline" size="sm" className="w-full">View Logs</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Logs</RippleButton>
             </Link>
           </CardContent>
         </Card>

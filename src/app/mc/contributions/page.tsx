@@ -3,7 +3,7 @@
 import { TilePage } from '@/features/mission-control'
 import { getTileById } from '@/config'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { RippleButton } from '@/components/ui/ripple-button'
 import Link from 'next/link'
 import { DollarSign, CreditCard, Building, FileCheck, AlertTriangle, TrendingUp } from 'lucide-react'
 
@@ -64,7 +64,7 @@ export default function ContributionsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/contributions/all">
-              <Button variant="outline" size="sm" className="w-full">View Feed</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Feed</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -79,7 +79,7 @@ export default function ContributionsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/contributions/batches/new">
-              <Button variant="outline" size="sm" className="w-full">New Batch</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">New Batch</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -94,7 +94,7 @@ export default function ContributionsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/contributions/sources">
-              <Button variant="outline" size="sm" className="w-full">View Sources</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">View Sources</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -109,7 +109,7 @@ export default function ContributionsPage() {
           </CardHeader>
           <CardContent>
             <Link href="/mc/contributions/reconcile">
-              <Button variant="outline" size="sm" className="w-full">Reconcile</Button>
+              <RippleButton variant="outline" size="sm" className="h-7 w-full text-xs font-medium">Reconcile</RippleButton>
             </Link>
           </CardContent>
         </Card>
@@ -124,7 +124,7 @@ export default function ContributionsPage() {
         <CardContent>
           <p className="text-sm text-amber-700">2 active Stripe disputes require attention</p>
           <Link href="/mc/contributions/disputes">
-            <Button variant="outline" size="sm" className="mt-2">View Disputes</Button>
+            <RippleButton variant="outline" size="sm" className="h-7 mt-2 text-xs font-medium">View Disputes</RippleButton>
           </Link>
         </CardContent>
       </Card>
