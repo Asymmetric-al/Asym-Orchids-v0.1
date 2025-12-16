@@ -418,17 +418,17 @@ export default function MissionaryDashboardPage() {
             <h1 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">Dashboard</h1>
             <p className="mt-0.5 text-sm text-zinc-500">Overview of your ministry support.</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2 sm:justify-end">
             <Button
               variant="outline"
               size="sm"
-              className="h-9 border-zinc-200 px-3 text-xs font-medium text-zinc-700"
+              className="h-9 w-full border-zinc-200 px-3 text-xs font-medium text-zinc-700 sm:w-auto"
             >
               Report
             </Button>
             <Button
               size="sm"
-              className="h-9 gap-1.5 bg-zinc-900 px-3 text-xs font-medium text-white hover:bg-zinc-800"
+              className="h-9 w-full gap-1.5 bg-zinc-900 px-3 text-xs font-medium text-white hover:bg-zinc-800 sm:w-auto"
             >
               <PlusIcon className="size-3.5" />
               Add Donation
@@ -436,7 +436,7 @@ export default function MissionaryDashboardPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4">
           {metricsData.map((metric, index) => (
             <MetricCard key={metric.title} metric={metric} index={index} />
           ))}
