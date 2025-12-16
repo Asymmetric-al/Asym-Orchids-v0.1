@@ -349,7 +349,7 @@ export default function DonorsPage() {
             <div className="flex gap-2">
               <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100">
+                    <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100">
                       <Filter className="h-3.5 w-3.5" />
                     </Button>
                   </DropdownMenuTrigger>
@@ -375,12 +375,12 @@ export default function DonorsPage() {
           </div>
           <div className="relative group">
             <Search className="absolute left-3 top-2 h-4 w-4 text-zinc-400 group-focus-within:text-zinc-600 transition-colors" />
-            <Input 
-              placeholder="Search partners..." 
-              className="pl-9 bg-white border-zinc-300 focus:border-zinc-400 focus:ring-1 focus:ring-zinc-200 h-8 text-sm transition-all placeholder:text-zinc-400" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+              <Input 
+                placeholder="Search partners..." 
+                className="pl-9 bg-white border-zinc-300 focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 h-8 text-sm text-zinc-900 transition-all placeholder:text-zinc-500" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
           </div>
         </div>
 
@@ -494,7 +494,7 @@ export default function DonorsPage() {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="lg:hidden h-7 w-7 -ml-2 text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100"
+                      className="lg:hidden h-7 w-7 -ml-2 text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100"
                       onClick={() => setSelectedDonorId(null)}
                     >
                       <ArrowLeft className="h-4 w-4" />
@@ -507,7 +507,7 @@ export default function DonorsPage() {
                     <RippleButton 
                       variant="outline" 
                       size="sm" 
-                      className="h-7 px-2.5 text-xs font-medium gap-1.5 border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600"
+                      className="h-7 px-2.5 text-xs font-medium gap-1.5 border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700"
                       onClick={() => setIsNoteDialogOpen(true)}
                     >
                       <Pencil className="h-3 w-3" /> Note
@@ -515,7 +515,7 @@ export default function DonorsPage() {
                     <RippleButton 
                       variant="outline" 
                       size="sm" 
-                      className="h-7 px-2.5 text-xs font-medium gap-1.5 border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600"
+                      className="h-7 px-2.5 text-xs font-medium gap-1.5 border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700"
                     >
                       <Phone className="h-3 w-3" /> Call
                     </RippleButton>
@@ -605,13 +605,13 @@ export default function DonorsPage() {
                     <div className="border-b border-zinc-200">
                       <TabsList className="bg-transparent h-auto p-0 gap-8">
                         {['Timeline', 'Contact Info', 'Giving History'].map(tab => (
-                          <TabsTrigger 
-                            key={tab} 
-                            value={tab.toLowerCase().replace(' ', '-')}
-                            className="relative bg-transparent border-b-2 border-transparent data-[state=active]:border-zinc-800 data-[state=active]:text-zinc-800 data-[state=active]:shadow-none rounded-none px-0 py-2 text-xs font-medium text-zinc-400 hover:text-zinc-600 transition-colors"
-                          >
-                            {tab}
-                          </TabsTrigger>
+                            <TabsTrigger 
+                              key={tab} 
+                              value={tab.toLowerCase().replace(' ', '-')}
+                              className="relative bg-transparent border-b-2 border-transparent data-[state=active]:border-zinc-900 data-[state=active]:text-zinc-900 data-[state=active]:shadow-none rounded-none px-0 py-2 text-xs font-medium text-zinc-500 hover:text-zinc-700 transition-colors"
+                            >
+                              {tab}
+                            </TabsTrigger>
                         ))}
                       </TabsList>
                     </div>
@@ -630,16 +630,16 @@ export default function DonorsPage() {
                           <div className="flex-1 space-y-3">
                             <Textarea 
                               placeholder="Log a call, meeting notes, or task..." 
-                              className="min-h-[70px] border-zinc-300 bg-white focus:border-zinc-400 focus:ring-1 focus:ring-zinc-200 resize-none transition-all text-sm placeholder:text-zinc-400"
+                              className="min-h-[70px] border-zinc-300 bg-white focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 resize-none transition-all text-sm text-zinc-900 placeholder:text-zinc-500"
                               value={activityInput}
                               onChange={(e) => setActivityInput(e.target.value)}
                             />
                             <div className="flex justify-between items-center">
                               <div className="flex gap-0.5">
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-[11px] text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 gap-1">
+                                <Button variant="ghost" size="sm" className="h-6 px-2 text-[11px] text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 gap-1">
                                   <Phone className="h-3 w-3" /> Log Call
                                 </Button>
-                                <Button variant="ghost" size="sm" className="h-6 px-2 text-[11px] text-zinc-500 hover:text-zinc-800 hover:bg-zinc-100 gap-1">
+                                <Button variant="ghost" size="sm" className="h-6 px-2 text-[11px] text-zinc-600 hover:text-zinc-900 hover:bg-zinc-100 gap-1">
                                   <Check className="h-3 w-3" /> Task
                                 </Button>
                               </div>
@@ -735,7 +735,7 @@ export default function DonorsPage() {
                                     <Button 
                                       variant="ghost" 
                                       size="icon" 
-                                      className="h-8 w-8 text-zinc-400 hover:text-blue-600 hover:bg-blue-50" 
+                                      className="h-8 w-8 text-zinc-500 hover:text-blue-600 hover:bg-blue-50" 
                                       onClick={() => handleCopy(selectedDonor.email, 'email')}
                                     >
                                       {copiedField === 'email' ? (
@@ -763,7 +763,7 @@ export default function DonorsPage() {
                                     <Button 
                                       variant="ghost" 
                                       size="icon" 
-                                      className="h-8 w-8 text-zinc-400 hover:text-emerald-600 hover:bg-emerald-50" 
+                                      className="h-8 w-8 text-zinc-500 hover:text-emerald-600 hover:bg-emerald-50" 
                                       onClick={() => handleCopy(selectedDonor.phone, 'phone')}
                                     >
                                       {copiedField === 'phone' ? (
@@ -801,7 +801,7 @@ export default function DonorsPage() {
                                     </div>
                                   </div>
                                   <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-400 hover:text-zinc-900 hover:bg-zinc-100">
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-zinc-500 hover:text-zinc-900 hover:bg-zinc-100">
                                       <ExternalLink className="h-3.5 w-3.5" />
                                     </Button>
                                   </motion.div>
@@ -855,9 +855,9 @@ export default function DonorsPage() {
                                       </td>
                                       <td className="px-6 py-4 text-right">
                                         <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                                          <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-zinc-100 rounded-full">
-                                            <Download className="h-4 w-4 text-zinc-400 hover:text-zinc-900" />
-                                          </Button>
+                                        <Button variant="ghost" size="sm" className="h-8 w-8 p-0 hover:bg-zinc-100 rounded-full">
+                                          <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
+                                        </Button>
                                         </motion.div>
                                       </td>
                                     </motion.tr>
@@ -943,11 +943,11 @@ export default function DonorsPage() {
               value={noteInput} 
               onChange={(e) => setNoteInput(e.target.value)} 
               placeholder="Type your note here..." 
-              className="min-h-[120px] resize-none border-zinc-300 bg-white focus:border-zinc-400 focus:ring-1 focus:ring-zinc-200 text-sm placeholder:text-zinc-400"
+              className="min-h-[120px] resize-none border-zinc-300 bg-white focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300 text-sm text-zinc-900 placeholder:text-zinc-500"
             />
           </div>
           <DialogFooter>
-            <RippleButton variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="h-7 px-3 text-xs font-medium border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-600">
+            <RippleButton variant="outline" onClick={() => setIsNoteDialogOpen(false)} className="h-7 px-3 text-xs font-medium border-zinc-300 bg-white hover:bg-zinc-50 text-zinc-700">
               Cancel
             </RippleButton>
             <RippleButton onClick={handleAddNote} className="h-7 px-3 text-xs font-medium bg-zinc-900 text-white hover:bg-zinc-800">
