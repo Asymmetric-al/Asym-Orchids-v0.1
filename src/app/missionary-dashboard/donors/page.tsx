@@ -20,19 +20,10 @@ import {
   DialogDescription,
 } from '@/components/ui/dialog'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-  DropdownMenuCheckboxItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-} from '@/components/ui/dropdown-menu'
-import {
   Search,
   Mail,
   Phone,
   MapPin,
-  Filter,
   Plus,
   Download,
   Heart,
@@ -400,55 +391,56 @@ export default function DonorsPage() {
     }
   }, [])
 
+  React.useEffect(() => {
+    setActiveTab('timeline')
+    setActivityInput('')
+    setNoteInput('')
+    setIsNoteDialogOpen(false)
+  }, [selectedDonorId])
+
   return (
-    <div className="grid h-[calc(100vh-4rem)] grid-cols-1 bg-zinc-50/50 lg:grid-cols-[380px_1fr]">
+    <div className="grid min-h-[calc(100vh-3.5rem)] grid-cols-1 bg-zinc-50 lg:grid-cols-[360px_1fr]">
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
         className={`flex h-full flex-col border-r border-zinc-200 bg-white ${selectedDonorId ? 'hidden lg:flex' : 'flex'}`}
       >
-        <div className="sticky top-0 z-20 space-y-4 border-b border-zinc-100 bg-white p-5">
-          <div className="flex items-center justify-between">
+        <div className="sticky top-0 z-20 space-y-3 border-b border-zinc-100 bg-white p-5">
+          <div className="flex items-center justify-between gap-3">
             <div>
               <h2 className="text-lg font-semibold text-zinc-900">Partners</h2>
               <p className="text-sm text-zinc-500">{filteredDonors.length} contacts</p>
             </div>
-            <div className="flex gap-2">
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon" className="h-7 w-7 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900">
-                    <Filter className="h-3.5 w-3.5" />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 border-zinc-200 bg-white">
-                  <DropdownMenuLabel className="text-zinc-600">Filter Status</DropdownMenuLabel>
-                  <DropdownMenuSeparator className="bg-zinc-100" />
-                  {STATUS_FILTERS.map(status => (
-                    <DropdownMenuCheckboxItem 
-                      key={status} 
-                      checked={statusFilter === status}
-                      onCheckedChange={() => setStatusFilter(status)}
-                      className="text-zinc-700"
-                    >
-                      {status}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-              <RippleButton size="icon" className="h-7 w-7 rounded-md bg-zinc-900 text-white hover:bg-zinc-800">
-                <Plus className="h-3.5 w-3.5" />
-              </RippleButton>
-            </div>
+            <RippleButton size="icon" className="h-8 w-8 rounded-md bg-zinc-900 text-white hover:bg-zinc-800" aria-label="Add partner">
+              <Plus className="h-3.5 w-3.5" />
+            </RippleButton>
           </div>
-          <div className="relative group">
-            <Search className="absolute left-3 top-2 h-4 w-4 text-zinc-400 transition-colors group-focus-within:text-zinc-600" />
-            <Input 
-              placeholder="Search partners..." 
-              className="h-9 rounded-lg border-zinc-300 bg-white pl-9 text-sm text-zinc-900 placeholder:text-zinc-500 transition-all focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+
+          <div className="space-y-3">
+            <div className="relative group">
+              <Search className="absolute left-3 top-2 h-4 w-4 text-zinc-400 transition-colors group-focus-within:text-zinc-600" />
+              <Input 
+                placeholder="Search partners..." 
+                className="h-9 rounded-lg border-zinc-300 bg-white pl-9 text-sm text-zinc-900 placeholder:text-zinc-500 transition-all focus:border-zinc-500 focus:ring-1 focus:ring-zinc-300" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {STATUS_FILTERS.map((status) => (
+                <Button
+                  key={status}
+                  variant={statusFilter === status ? 'default' : 'secondary'}
+                  size="sm"
+                  className={`h-8 rounded-full border px-3 text-xs font-medium ${statusFilter === status ? 'border-zinc-900 bg-zinc-900 text-white hover:bg-zinc-800' : 'border-zinc-200 bg-white text-zinc-600 hover:border-zinc-300 hover:text-zinc-900'}`}
+                  onClick={() => setStatusFilter(status)}
+                  aria-pressed={statusFilter === status}
+                >
+                  {status}
+                </Button>
+              ))}
+            </div>
           </div>
         </div>
 
@@ -884,74 +876,106 @@ export default function DonorsPage() {
                         </motion.div>
                       </TabsContent>
 
-                      <TabsContent value="giving-history" className="mt-0">
-                        <motion.div
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <Card className="overflow-hidden border border-zinc-200 bg-white shadow-sm">
-                            <div className="overflow-x-auto">
-                              <table className="min-w-[720px] w-full text-left text-sm">
-                                <thead className="border-b border-zinc-200 bg-zinc-50 text-[11px] uppercase text-zinc-500">
-                                  <tr>
-                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Date</th>
-                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Type</th>
-                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Amount</th>
-                                    <th className="px-6 py-3.5 font-semibold tracking-wider">Status</th>
-                                    <th className="px-6 py-3.5 text-right font-semibold tracking-wider">Receipt</th>
-                                  </tr>
-                                </thead>
-                                <tbody className="divide-y divide-zinc-100">
-                                  {giftActivities.map((gift, index) => (
-                                    <motion.tr 
-                                      key={gift.id} 
-                                      initial={{ opacity: 0, y: 10 }}
-                                      animate={{ opacity: 1, y: 0 }}
-                                      transition={{ delay: index * 0.05 }}
-                                      className="transition-colors hover:bg-zinc-50/50"
-                                    >
-                                      <td className="px-6 py-4 font-medium text-zinc-900">
-                                        {format(new Date(gift.date), 'MMM d, yyyy')}
-                                      </td>
-                                      <td className="px-6 py-4 text-zinc-500">
-                                        Online Gift
-                                      </td>
-                                      <td className="px-6 py-4 font-semibold text-zinc-900">
-                                        {formatCurrency(gift.amount || 0)}
-                                      </td>
-                                      <td className="px-6 py-4">
-                                        <Badge variant="outline" className={`font-medium ${gift.status === 'Failed' ? 'border-red-200 bg-red-50 text-red-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
-                                          {gift.status}
-                                        </Badge>
-                                      </td>
-                                      <td className="px-6 py-4 text-right">
-                                        <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
-                                          <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0 hover:bg-zinc-100">
-                                            <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
-                                          </Button>
-                                        </motion.div>
-                                      </td>
-                                    </motion.tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                              {giftActivities.length === 0 && (
-                                <motion.div 
-                                  initial={{ opacity: 0 }}
-                                  animate={{ opacity: 1 }}
-                                  className="p-12 text-center text-zinc-400"
-                                >
-                                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100">
-                                    <Heart className="h-6 w-6 text-zinc-300" />
+                    <TabsContent value="giving-history" className="mt-0">
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="space-y-3"
+                      >
+                        {giftActivities.length > 0 ? (
+                          <>
+                            <div className="md:hidden space-y-3">
+                              {giftActivities.map((gift) => (
+                                <div key={gift.id} className="rounded-xl border border-zinc-200 bg-white p-4 shadow-sm">
+                                  <div className="flex items-start justify-between gap-4">
+                                    <div className="space-y-1">
+                                      <p className="text-sm font-semibold text-zinc-900">{format(new Date(gift.date), 'MMM d, yyyy')}</p>
+                                      <p className="text-xs text-zinc-500">Online Gift</p>
+                                    </div>
+                                    <div className="text-right space-y-1">
+                                      <p className="text-base font-semibold text-zinc-900">{formatCurrency(gift.amount || 0)}</p>
+                                      <Badge variant="outline" className={`font-medium ${gift.status === 'Failed' ? 'border-red-200 bg-red-50 text-red-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+                                        {gift.status}
+                                      </Badge>
+                                    </div>
                                   </div>
-                                  <p>No giving history available.</p>
-                                </motion.div>
-                              )}
+                                  <div className="mt-3 flex items-center justify-between text-xs text-zinc-500">
+                                    <span>{format(new Date(gift.date), 'h:mm a')}</span>
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full p-0 hover:bg-zinc-100">
+                                      <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
+                                    </Button>
+                                  </div>
+                                </div>
+                              ))}
                             </div>
+
+                            <Card className="hidden overflow-hidden border border-zinc-200 bg-white shadow-sm md:block">
+                              <div className="overflow-x-auto">
+                                <table className="min-w-[720px] w-full text-left text-sm">
+                                  <thead className="border-b border-zinc-200 bg-zinc-50 text-[11px] uppercase text-zinc-500">
+                                    <tr>
+                                      <th className="px-6 py-3.5 font-semibold tracking-wider">Date</th>
+                                      <th className="px-6 py-3.5 font-semibold tracking-wider">Type</th>
+                                      <th className="px-6 py-3.5 font-semibold tracking-wider">Amount</th>
+                                      <th className="px-6 py-3.5 font-semibold tracking-wider">Status</th>
+                                      <th className="px-6 py-3.5 text-right font-semibold tracking-wider">Receipt</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody className="divide-y divide-zinc-100">
+                                    {giftActivities.map((gift, index) => (
+                                      <motion.tr 
+                                        key={gift.id} 
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: index * 0.05 }}
+                                        className="transition-colors hover:bg-zinc-50/50"
+                                      >
+                                        <td className="px-6 py-4 font-medium text-zinc-900">
+                                          {format(new Date(gift.date), 'MMM d, yyyy')}
+                                        </td>
+                                        <td className="px-6 py-4 text-zinc-500">
+                                          Online Gift
+                                        </td>
+                                        <td className="px-6 py-4 font-semibold text-zinc-900">
+                                          {formatCurrency(gift.amount || 0)}
+                                        </td>
+                                        <td className="px-6 py-4">
+                                          <Badge variant="outline" className={`font-medium ${gift.status === 'Failed' ? 'border-red-200 bg-red-50 text-red-700' : 'border-emerald-200 bg-emerald-50 text-emerald-700'}`}>
+                                            {gift.status}
+                                          </Badge>
+                                        </td>
+                                        <td className="px-6 py-4 text-right">
+                                          <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.9 }}>
+                                            <Button variant="ghost" size="sm" className="h-8 w-8 rounded-full p-0 hover:bg-zinc-100">
+                                              <Download className="h-4 w-4 text-zinc-500 hover:text-zinc-900" />
+                                            </Button>
+                                          </motion.div>
+                                        </td>
+                                      </motion.tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </Card>
+                          </>
+                        ) : (
+                          <Card className="overflow-hidden border border-zinc-200 bg-white shadow-sm">
+                            <motion.div 
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              className="p-12 text-center text-zinc-400"
+                            >
+                              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100">
+                                <Heart className="h-6 w-6 text-zinc-300" />
+                              </div>
+                              <p>No giving history available.</p>
+                            </motion.div>
                           </Card>
-                        </motion.div>
-                      </TabsContent>
+                        )}
+                      </motion.div>
+                    </TabsContent>
+
                     </div>
                   </Tabs>
                 </div>
